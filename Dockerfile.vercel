@@ -33,6 +33,7 @@ RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/frankenphp \
 ENV PORT=80 \
     APP_ENV=production \
     APP_DEBUG=false \
+    APP_KEY=base64:sQGYZZIc3EfQV+U/LFYeI2WFw94hbpWVNlL3KS/8SL4= \
     LOG_CHANNEL=stderr \
     CACHE_STORE=array \
     SESSION_DRIVER=array \
