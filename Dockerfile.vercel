@@ -3,15 +3,6 @@ RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && install-php-extensions intl zip pdo_mysql pdo_pgsql opcache bcmath
 WORKDIR /app
 
-# Build Vite frontend assets with Node (Debian glibc for native Rollup/Tailwind binaries)
-FROM node:22-bookworm-slim AS frontend
-WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm ci || npm install
-COPY . .
-RUN npm run build
-
-# PHP dependencies
 FROM base AS dependencies
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
@@ -23,7 +14,6 @@ RUN composer install \
     --optimize-autoloader \
     --prefer-dist
 COPY . .
-COPY --from=frontend /app/public/build /app/public/build
 RUN mkdir -p \
     storage/framework/cache \
     storage/framework/sessions \
@@ -33,7 +23,6 @@ RUN mkdir -p \
     && php artisan event:cache \
     && php artisan view:cache
 
-# Runtime image
 FROM base AS runtime
 COPY --from=dependencies --chown=www-data:www-data /app /app
 COPY --chown=www-data:www-data Caddyfile /etc/frankenphp/Caddyfile

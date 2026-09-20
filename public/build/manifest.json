@@ -1,0 +1,83 @@
+{
+  "_dm-sans-400-normal-BwCSEQnW.woff": {
+    "file": "assets/dm-sans-400-normal-BwCSEQnW.woff",
+    "src": "_dm-sans-400-normal-BwCSEQnW.woff"
+  },
+  "_dm-sans-400-normal-CW0RaeGs.woff2": {
+    "file": "assets/dm-sans-400-normal-CW0RaeGs.woff2",
+    "src": "_dm-sans-400-normal-CW0RaeGs.woff2"
+  },
+  "_dm-sans-500-normal-B9HHJjqV.woff2": {
+    "file": "assets/dm-sans-500-normal-B9HHJjqV.woff2",
+    "src": "_dm-sans-500-normal-B9HHJjqV.woff2"
+  },
+  "_dm-sans-500-normal-Dr3UlScf.woff": {
+    "file": "assets/dm-sans-500-normal-Dr3UlScf.woff",
+    "src": "_dm-sans-500-normal-Dr3UlScf.woff"
+  },
+  "_dm-sans-600-normal-Aqo67rzb.woff2": {
+    "file": "assets/dm-sans-600-normal-Aqo67rzb.woff2",
+    "src": "_dm-sans-600-normal-Aqo67rzb.woff2"
+  },
+  "_dm-sans-600-normal-BmdmIIQ2.woff": {
+    "file": "assets/dm-sans-600-normal-BmdmIIQ2.woff",
+    "src": "_dm-sans-600-normal-BmdmIIQ2.woff"
+  },
+  "_dm-sans-700-normal-CUSSCpQX.woff": {
+    "file": "assets/dm-sans-700-normal-CUSSCpQX.woff",
+    "src": "_dm-sans-700-normal-CUSSCpQX.woff"
+  },
+  "_dm-sans-700-normal-DvUfVpUG.woff2": {
+    "file": "assets/dm-sans-700-normal-DvUfVpUG.woff2",
+    "src": "_dm-sans-700-normal-DvUfVpUG.woff2"
+  },
+  "_fonts-ICs6ZQmP.css": {
+    "file": "assets/fonts-ICs6ZQmP.css",
+    "src": "_fonts-ICs6ZQmP.css"
+  },
+  "_shadows-into-light-400-normal-C6MG6Ljx.woff": {
+    "file": "assets/shadows-into-light-400-normal-C6MG6Ljx.woff",
+    "src": "_shadows-into-light-400-normal-C6MG6Ljx.woff"
+  },
+  "_shadows-into-light-400-normal-DLUEKdH9.woff2": {
+    "file": "assets/shadows-into-light-400-normal-DLUEKdH9.woff2",
+    "src": "_shadows-into-light-400-normal-DLUEKdH9.woff2"
+  },
+  "_unna-400-normal-CSkUfG5x.woff2": {
+    "file": "assets/unna-400-normal-CSkUfG5x.woff2",
+    "src": "_unna-400-normal-CSkUfG5x.woff2"
+  },
+  "_unna-400-normal-nnJjvK5x.woff": {
+    "file": "assets/unna-400-normal-nnJjvK5x.woff",
+    "src": "_unna-400-normal-nnJjvK5x.woff"
+  },
+  "_unna-700-normal-B2DSiifz.woff2": {
+    "file": "assets/unna-700-normal-B2DSiifz.woff2",
+    "src": "_unna-700-normal-B2DSiifz.woff2"
+  },
+  "_unna-700-normal-Bpt8Byn2.woff": {
+    "file": "assets/unna-700-normal-Bpt8Byn2.woff",
+    "src": "_unna-700-normal-Bpt8Byn2.woff"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-CpXriYU_.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-BvRk9kiK.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/passkeys.js": {
+    "file": "assets/passkeys-ZWACIUjA.js",
+    "name": "passkeys",
+    "src": "resources/js/passkeys.js",
+    "isEntry": true
+  }
+}
