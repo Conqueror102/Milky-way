@@ -2,10 +2,10 @@
     auto_https off
     admin off
 
-    # Vercel's container has a small memory budget. FrankenPHP otherwise sizes
-    # its PHP thread pool from the host CPU count, which can OOM the container.
+    # Vercel gives this container a single CPU (GOMAXPROCS=1 in the runtime log).
+    # Keep the PHP thread pool small so it fits the container memory budget.
     frankenphp {
-        num_threads 4
+        num_threads 2
     }
 }
 
