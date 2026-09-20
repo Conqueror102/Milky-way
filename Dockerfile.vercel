@@ -19,6 +19,8 @@ RUN mkdir -p \
     storage/framework/sessions \
     storage/framework/views \
     bootstrap/cache \
+    database \
+    && touch database/database.sqlite \
     && composer dump-autoload --no-dev --classmap-authoritative \
     && php artisan event:cache \
     && php artisan view:cache
@@ -33,7 +35,7 @@ ENV PORT=80 \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
     CACHE_STORE=array \
-    SESSION_DRIVER=cookie \
+    SESSION_DRIVER=array \
     QUEUE_CONNECTION=sync
 USER www-data
 CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
