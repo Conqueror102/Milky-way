@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    /* Typography
+       sans   — Unna               : headings and the wordmark — the display voice
+       sub    — DM Sans            : supporting copy, buttons, nav, captions, product meta
+       script — Shadows Into Light : handwritten accents, one or two words at a time */
+    --font-sans: var(--font-unna), ui-serif, Georgia, 'Times New Roman', serif;
+    --font-sub: var(--font-dm-sans), var(--font-sans);
+    --font-script: var(--font-shadows-into-light), ui-rounded, cursive;
+
+    /* Deep Cosmic Blue — brand navy, anchored at 900 = #143452 */
+    --color-cosmic-50: #f3f8fd;
+    --color-cosmic-100: #e6eff9;
+    --color-cosmic-200: #cee0f3;
+    --color-cosmic-300: #b0cdec;
+    --color-cosmic-400: #8cb6e0;
+    --color-cosmic-500: #6f9fd0;
+    --color-cosmic-600: #5686b6;
+    --color-cosmic-700: #416d99;
+    --color-cosmic-800: #31567b;
+    --color-cosmic-900: #143452;
+    --color-cosmic-950: #122a42;
+
+    /* Soft Gold — brand accent, anchored at 400 = #C8A67B */
+    --color-gold-50: #fbf6f1;
+    --color-gold-100: #f4ece3;
+    --color-gold-200: #eadbc9;
+    --color-gold-300: #dec5a7;
+    --color-gold-400: #c8a67b;
+    --color-gold-500: #ba9360;
+    --color-gold-600: #a17a46;
+    --color-gold-700: #856233;
+    --color-gold-800: #6b4d24;
+    --color-gold-900: #563d1a;
+    --color-gold-950: #372409;
+
+    /* Cream — the page canvas, anchored at 50 = #FCFBF7 */
+    --color-cream-50: #fcfbf7;
+    --color-cream-100: #f0eee6;
+    --color-cream-200: #e1ded0;
+    --color-cream-300: #d0cab2;
+    --color-cream-400: #bab291;
+    --color-cream-500: #a59b75;
+    --color-cream-600: #8c825c;
+    --color-cream-700: #736a48;
+    --color-cream-800: #5b5336;
+    --color-cream-900: #494229;
+    --color-cream-950: #2e2916;
+
+    /* Brand semantics — use these so a rebrand is a three-line change */
+    --color-brand: var(--color-cosmic-900);
+    --color-brand-accent: var(--color-gold-400);
+    --color-canvas: var(--color-cream-50);
+    /* The hero photograph's own beige — scrims tinted with it blend into the image */
+    --color-sand: #dabb9f;
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    /* Flux + focus rings ride on the navy; gold fails contrast as a text/fill colour on light */
+    --color-accent: var(--color-cosmic-900);
+    --color-accent-content: var(--color-cosmic-900);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-gold-400);
+        --color-accent-content: var(--color-gold-300);
+        --color-accent-foreground: var(--color-cosmic-950);
+    }
+}
+
+@layer base {
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */
+@utility liquid-glass {
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border-width: 1px;
+    border-color: rgba(20, 52, 82, 0.06);
+    box-shadow: 0 10px 30px -8px rgba(20, 52, 82, 0.12);
+}
+
+@utility liquid-glass-cosmic {
+    background-color: rgba(20, 52, 82, 0.78);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-width: 1px;
+    border-color: rgba(200, 166, 123, 0.22);
+    box-shadow: 0 14px 32px -8px rgba(10, 24, 39, 0.3);
+}
+
+@utility liquid-glass-gold {
+    background-color: rgba(200, 166, 123, 0.15);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-width: 1px;
+    border-color: rgba(200, 166, 123, 0.28);
+    box-shadow: 0 8px 22px -6px rgba(200, 166, 123, 0.22);
+}

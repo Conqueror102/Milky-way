@@ -1,0 +1,80 @@
+@php
+    /**
+     * Each destination sits further out on its own orbit, so distance from the shop
+     * reads as distance on the page. Positions are percentages of the diagram box.
+     *
+     * @var array<int, array{label: string, left: float, top: float}>
+     */
+    $orbits = [
+        ['left' => 22.8, 'top' => 72.9],
+        ['left' => 36.2, 'top' => 57.9],
+        ['left' => 49.6, 'top' => 42.9],
+        ['left' => 63.0, 'top' => 27.9],
+    ];
+
+    $destinations = collect(config('milkyway.delivery_areas'))
+        ->take(count($orbits))
+        ->values()
+        ->map(fn ($label, $i) => $orbits[$i] + ['label' => $label]);
+@endphp
+
+<section id="delivery" class="bg-cosmic-950 py-10 lg:py-14">
+    <div class="mx-auto grid max-w-7xl items-center gap-10 px-6 sm:px-8 lg:grid-cols-2 lg:gap-16">
+
+        {{-- The ask --}}
+        <div>
+            <div class="flex items-center gap-3">
+                <span class="h-px w-10 bg-gold-400/50"></span>
+                <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-400 uppercase">
+                    Delivery
+                </span>
+            </div>
+
+            <h2 class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
+                We deliver well past
+                <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-400">Lagos</span>
+            </h2>
+
+            <p class="font-sub mt-5 max-w-md text-base leading-relaxed text-cream-50/65 lg:text-lg">
+                We cater to customers within and outside Lagos, subject to arrangement and
+                destination. Tell us where you are and we will work it out.
+            </p>
+
+            <x-site.whatsapp-link
+                message="Hello Milky Way Cosmetics Stores. I would like to ask about delivery to [your area]."
+                class="font-sub mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-cream-50 px-8 py-4 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white"
+            >
+                <x-icon name="whatsapp" class="size-5 text-cosmic-900" />
+                Ask about delivery
+            </x-site.whatsapp-link>
+        </div>
+
+        {{-- Reach, drawn as orbits out from the shop --}}
+        <div class="relative aspect-[4/3] w-full">
+            <svg class="absolute inset-0 size-full" viewBox="0 0 400 300" fill="none" aria-hidden="true">
+                @foreach ([80, 150, 220, 290] as $radius)
+                    <circle cx="30" cy="270" r="{{ $radius }}"
+                        stroke="currentColor" stroke-width="1" stroke-dasharray="4 6"
+                        class="text-gold-400/35" />
+                @endforeach
+                <circle cx="30" cy="270" r="16" class="text-gold-400/20" fill="currentColor" />
+                <circle cx="30" cy="270" r="6" class="text-gold-400" fill="currentColor" />
+            </svg>
+
+            <p class="font-sub absolute top-[90%] left-[13%] -translate-y-1/2 text-[0.62rem] leading-snug tracking-[0.16em] whitespace-nowrap text-cream-50/50 uppercase">
+                The shop &middot; Amuwo-Odofin
+            </p>
+
+            @foreach ($destinations as $destination)
+                <span
+                    class="font-sub absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-cream-50 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-cosmic-900 shadow-lg shadow-cosmic-950/40"
+                    style="left: {{ $destination['left'] }}%; top: {{ $destination['top'] }}%"
+                >{{ $destination['label'] }}</span>
+            @endforeach
+
+            <span class="font-sub absolute top-[6%] right-0 rounded-full border border-gold-400/40 px-3.5 py-1.5 text-xs font-medium text-gold-400">
+                Other locations &mdash; ask us
+            </span>
+        </div>
+    </div>
+</section>
