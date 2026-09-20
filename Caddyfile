@@ -1,10 +1,25 @@
 {
     auto_https off
     admin off
+
+    # Vercel's container has a small memory budget. FrankenPHP otherwise sizes
+    # its PHP thread pool from the host CPU count, which can OOM the container.
+    frankenphp {
+        num_threads 4
+    }
 }
 
 :{$PORT:80} {
     root * /app/public
     encode zstd gzip
-    php_server
+
+    # PHP-free liveness probe. If this responds, the container and its HTTP
+    # routing are healthy and any 500 elsewhere is coming from PHP.
+    handle /__alive {
+        respond "caddy-ok" 200
+    }
+
+    handle {
+        php_server
+    }
 }

@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV') ?: 'production',
 
     /*
     |--------------------------------------------------------------------------
@@ -97,7 +97,9 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
-    'key' => env('APP_KEY'),
+    // A blank APP_KEY in the hosting platform would otherwise override the
+    // key baked in at build time and take the whole app down.
+    'key' => env('APP_KEY') ?: env('APP_KEY_FALLBACK'),
 
     'previous_keys' => [
         ...array_filter(
