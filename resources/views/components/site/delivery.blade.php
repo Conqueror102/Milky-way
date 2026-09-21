@@ -23,24 +23,26 @@
 
         {{-- The ask --}}
         <div>
-            <div class="flex items-center gap-3">
+            <div data-reveal class="flex items-center gap-3">
                 <span class="h-px w-10 bg-gold-400/50"></span>
                 <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-400 uppercase">
                     Delivery
                 </span>
             </div>
 
-            <h2 class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
+            <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
                 We deliver well past
                 <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-400">Lagos</span>
             </h2>
 
-            <p class="font-sub mt-5 max-w-md text-base leading-relaxed text-cream-50/65 lg:text-lg">
+            <p data-reveal style="--d:300" class="font-sub mt-5 max-w-md text-base leading-relaxed text-cream-50/65 lg:text-lg">
                 We cater to customers within and outside Lagos, subject to arrangement and
                 destination. Tell us where you are and we will work it out.
             </p>
 
             <x-site.whatsapp-link
+                data-reveal
+                style="--d:450"
                 message="Hello Milky Way Cosmetics Stores. I would like to ask about delivery to [your area]."
                 class="font-sub mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-cream-50 px-8 py-4 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white"
             >
@@ -50,15 +52,15 @@
         </div>
 
         {{-- Reach, drawn as orbits out from the shop --}}
-        <div class="relative aspect-[4/3] w-full">
+        <div data-reveal="trigger" data-orbits class="relative aspect-[4/3] w-full">
             <svg class="absolute inset-0 size-full" viewBox="0 0 400 300" fill="none" aria-hidden="true">
                 @foreach ([80, 150, 220, 290] as $radius)
                     <circle cx="30" cy="270" r="{{ $radius }}"
                         stroke="currentColor" stroke-width="1" stroke-dasharray="4 6"
-                        class="text-gold-400/35" />
+                        class="orbit-ring text-gold-400/35" style="--i: {{ $loop->index }}" />
                 @endforeach
-                <circle cx="30" cy="270" r="16" class="text-gold-400/20" fill="currentColor" />
-                <circle cx="30" cy="270" r="6" class="text-gold-400" fill="currentColor" />
+                <circle cx="30" cy="270" r="16" class="orbit-core text-gold-400/20" fill="currentColor" />
+                <circle cx="30" cy="270" r="6" class="orbit-core text-gold-400" fill="currentColor" />
             </svg>
 
             <p class="font-sub absolute top-[90%] left-[13%] -translate-y-1/2 text-[0.62rem] leading-snug tracking-[0.16em] whitespace-nowrap text-cream-50/50 uppercase">
@@ -67,8 +69,8 @@
 
             @foreach ($destinations as $destination)
                 <span
-                    class="font-sub absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-cream-50 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-cosmic-900 shadow-lg shadow-cosmic-950/40"
-                    style="left: {{ $destination['left'] }}%; top: {{ $destination['top'] }}%"
+                    class="orbit-pill font-sub absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-cream-50 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-cosmic-900 shadow-lg shadow-cosmic-950/40"
+                    style="left: {{ $destination['left'] }}%; top: {{ $destination['top'] }}%; --i: {{ $loop->index }}"
                 >{{ $destination['label'] }}</span>
             @endforeach
 

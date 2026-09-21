@@ -120,3 +120,27 @@ test('the contact section carries the address, hours and dialable phone', functi
         ->assertSee('tel:'.config('milkyway.phone_dial'), escape: false)
         ->assertSee('https://www.google.com/maps/search/?api=1&amp;query='.rawurlencode(config('milkyway.map_query')), escape: false);
 });
+
+test('every scrolling section opts in to the reveal system', function () {
+    $html = $this->get(route('home'))->assertOk()->getContent();
+
+    foreach (['shop', 'why', 'who', 'wholesale', 'how', 'delivery', 'about', 'contact'] as $id) {
+        preg_match('/<section id="'.$id.'".*?<\/section>/s', $html, $section);
+
+        expect($section)->not->toBeEmpty("Section #{$id} is missing")
+            ->and($section[0])->toContain('data-reveal');
+    }
+});
+
+test('the hero enters with css alone and the layout guards the scripted reveals', function () {
+    $html = $this->get(route('home'))->assertOk()->getContent();
+
+    expect($html)
+        ->toContain('data-enter')
+        ->toContain("document.documentElement.classList.add('motion-ready')")
+        ->toContain('prefers-reduced-motion: reduce');
+
+    preg_match('/<section id="top".*?<\/section>/s', $html, $hero);
+
+    expect($hero[0])->not->toContain('data-reveal');
+});

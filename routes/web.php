@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/health', static fn (): JsonResponse => response()->json(['status' => 'ok']));
 
 Route::view('/', 'home')->name('home');
-Route::view('__preview', '__preview');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');

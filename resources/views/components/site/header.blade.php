@@ -28,14 +28,19 @@
             @endforeach
         </nav>
 
-        {{-- Wordmark --}}
-        <a href="{{ route('home') }}" class="col-start-2 flex items-center gap-2.5 justify-self-center">
-            <span class="grid size-9 place-items-center rounded-full bg-cosmic-900 text-gold-400">
-                <x-site.logo-mark class="size-5" />
-            </span>
+        {{-- Wordmark, in its own glass pill at every size to match the nav and menu button --}}
+        <a
+            href="{{ route('home') }}"
+            aria-label="{{ config('app.name') }} home"
+            class="liquid-glass col-start-2 flex items-center gap-2 justify-self-center rounded-full py-1 pr-4 pl-2.5 lg:gap-2.5 lg:py-1.5 lg:pr-5 lg:pl-3"
+        >
+            <picture>
+                <source type="image/webp" srcset="/images/logo.webp" />
+                <img src="/images/logo.png" alt="" width="242" height="171" class="h-8 w-auto lg:h-10" />
+            </picture>
             <span class="flex flex-col leading-none">
-                <span class="text-[0.9rem] font-bold tracking-[0.16em] text-cosmic-900 uppercase">Milky Way</span>
-                <span class="font-sub mt-1 text-[0.58rem] tracking-[0.3em] text-cosmic-900/55 uppercase">Cosmetics</span>
+                <span class="text-[0.82rem] font-bold tracking-[0.16em] text-cosmic-900 uppercase lg:text-[0.9rem]">Milky Way</span>
+                <span class="font-sub mt-1 text-[0.52rem] tracking-[0.3em] text-cosmic-900/55 uppercase lg:text-[0.58rem]">Cosmetics</span>
             </span>
         </a>
 

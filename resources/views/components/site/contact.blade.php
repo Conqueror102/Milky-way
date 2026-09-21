@@ -23,20 +23,20 @@
 
         {{-- Where, when, how --}}
         <div>
-            <div class="flex items-center gap-3">
+            <div data-reveal class="flex items-center gap-3">
                 <span class="h-px w-10 bg-gold-300/50"></span>
                 <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-300 uppercase">
                     Contact
                 </span>
             </div>
 
-            <h2 class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
+            <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
                 Come and see
                 <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-300">us</span>
             </h2>
 
-            <dl class="mt-8 grid gap-6">
-                <div class="flex gap-4">
+            <dl data-stagger="120" data-stagger-from="250" class="mt-8 grid gap-6">
+                <div data-reveal class="flex gap-4">
                     <x-icon name="map-marker-alt-solid" class="mt-0.5 size-5 shrink-0 text-gold-300" />
                     <div>
                         <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cream-50/45 uppercase">The shop</dt>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
 
-                <div class="flex gap-4">
+                <div data-reveal class="flex gap-4">
                     <x-icon name="clock-solid" class="mt-0.5 size-5 shrink-0 text-gold-300" />
                     <div>
                         <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cream-50/45 uppercase">Opening hours</dt>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                <div class="flex gap-4">
+                <div data-reveal class="flex gap-4">
                     <x-icon name="phone-solid" class="mt-0.5 size-5 shrink-0 text-gold-300" />
                     <div>
                         <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cream-50/45 uppercase">Phone</dt>
@@ -67,7 +67,7 @@
                 </div>
             </dl>
 
-            <div class="mt-9 flex flex-wrap gap-3">
+            <div data-reveal style="--d:650" class="mt-9 flex flex-wrap gap-3">
                 <a
                     href="tel:{{ config('milkyway.phone_dial') }}"
                     class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full bg-cream-50 px-7 py-3.5 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white"
@@ -93,7 +93,7 @@
         </div>
 
         {{-- Map, loaded lazily so it never blocks the page --}}
-        <div class="overflow-hidden rounded-[1.5rem] bg-black/25 ring-1 ring-cream-50/15">
+        <div data-reveal="right" style="--d:250" class="overflow-hidden rounded-[1.5rem] bg-black/25 ring-1 ring-cream-50/15">
             <iframe
                 src="{{ $embed }}"
                 title="Map showing Milky Way Cosmetics Stores at {{ config('milkyway.address.line') }}"

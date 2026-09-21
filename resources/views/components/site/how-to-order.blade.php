@@ -13,7 +13,7 @@
     {{-- Fills the space beside the heading: three portraits dropping out of the
          section above, the centre one hanging lower. --}}
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 hidden lg:block">
-        <div class="mx-auto flex max-w-7xl items-start justify-end gap-3 px-6 sm:px-8">
+        <div data-stagger="160" data-stagger-from="200" class="mx-auto flex max-w-7xl items-start justify-end gap-3 px-6 sm:px-8">
             @foreach (['a' => 'h-60', 'b' => 'h-80', 'c' => 'h-60'] as $plate => $height)
                 <picture>
                     <source type="image/webp" srcset="/images/how/{{ $plate }}.webp" />
@@ -21,7 +21,7 @@
                         src="/images/how/{{ $plate }}.jpg"
                         alt=""
                         loading="lazy"
-                        class="{{ $height }} w-[7.5rem] rounded-b-[1.5rem] object-cover xl:w-[8.5rem]"
+                        data-reveal="down" class="{{ $height }} w-[7.5rem] rounded-b-[1.5rem] object-cover xl:w-[8.5rem]"
                     />
                 </picture>
             @endforeach
@@ -31,16 +31,16 @@
     <div class="relative mx-auto max-w-5xl px-6 sm:px-8">
 
         {{-- Heading --}}
-        <span class="font-sub inline-block rounded-full bg-gold-300 px-4 py-2 text-sm font-semibold text-cosmic-900">
+        <span data-reveal class="font-sub inline-block rounded-full bg-gold-300 px-4 py-2 text-sm font-semibold text-cosmic-900">
             How it works
         </span>
 
-        <h2 class="mt-5 max-w-lg text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.15] font-bold tracking-[-0.01em] text-cosmic-900">
+        <h2 data-reveal="lines" style="--d:120" class="mt-5 max-w-lg text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.15] font-bold tracking-[-0.01em] text-cosmic-900">
             From browsing to your
             <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-700">doorstep</span>
         </h2>
 
-        <p class="font-sub mt-5 max-w-lg text-base leading-relaxed text-cosmic-900/60 lg:text-lg">
+        <p data-reveal style="--d:300" class="font-sub mt-5 max-w-lg text-base leading-relaxed text-cosmic-900/60 lg:text-lg">
             There is no checkout to fight with. You message us, we confirm what is in stock
             and what it costs, then we arrange delivery.
         </p>
@@ -51,7 +51,7 @@
                 @php $onLeft = $loop->odd; @endphp
 
                 <li>
-                    <article @class([
+                    <article data-reveal="{{ $onLeft ? 'left' : 'right' }}" @class([
                         'relative overflow-hidden rounded-2xl py-7 pr-7 pl-18 ring-1 ring-cosmic-900/5',
                         'bg-gold-100' => $onLeft,
                         'bg-cream-100' => ! $onLeft,
@@ -84,7 +84,7 @@
                     {{-- Dashed elbow into the next card. Drawn with borders rather than SVG so
                          the dashes keep their shape at any width. --}}
                     @unless ($loop->last)
-                        <div aria-hidden="true" class="relative h-8 lg:h-14">
+                        <div data-reveal="fade" style="--d:350" aria-hidden="true" class="relative h-8 lg:h-14">
                             <span @class([
                                 'absolute top-0 h-full border-dashed border-gold-500/70 border-t-2',
                                 'left-[46%] w-[12%] rounded-tr-2xl border-r-2' => $onLeft,
@@ -105,6 +105,7 @@
 
         <div class="mt-12">
             <x-site.whatsapp-link
+                data-reveal
                 class="font-sub inline-flex items-center justify-center gap-3 rounded-full bg-cosmic-900 px-8 py-4 text-sm font-semibold text-cream-50 transition duration-200 hover:bg-cosmic-950"
             >
                 <x-icon name="whatsapp" class="size-5 text-gold-400" />

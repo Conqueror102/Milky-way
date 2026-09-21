@@ -88,13 +88,13 @@
         {{-- Heading and category navigation on the same line --}}
         <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div class="max-w-xl shrink-0">
-                <div class="flex items-center gap-3">
+                <div data-reveal class="flex items-center gap-3">
                     <span class="h-px w-10 bg-gold-400/50"></span>
                     <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-400 uppercase">
                         Shop by category
                     </span>
                 </div>
-                <h2 class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
+                <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
                     One store, every
                     <span class="font-script tracking-[-0.03em] text-gold-400">beauty</span> need
                 </h2>
@@ -145,15 +145,16 @@
         </div>
 
         {{-- The panel --}}
-        <div class="mt-6 grid gap-3 rounded-[2rem] bg-cream-50 p-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,45%)]">
+        <div data-reveal="scale" style="--d:150" class="mt-6 grid gap-3 rounded-[2rem] bg-cream-50 p-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,45%)]">
 
             {{-- Card grid --}}
             <div class="relative order-2 rounded-[1.5rem] lg:order-1">
                 <div class="lg:max-h-[42rem] lg:overflow-y-auto lg:py-1 lg:pl-1 lg:pr-2.5 [scrollbar-width:thin] [scrollbar-color:#c8a67b80_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gold-500/40 hover:[&::-webkit-scrollbar-thumb]:bg-gold-500/80">
-                <div class="grid gap-3.5 sm:grid-cols-2">
+                <div data-stagger="110" data-stagger-from="350" class="grid gap-3.5 sm:grid-cols-2">
                     @foreach ($categories as $category)
                         {{-- PORTRAIT CARD WITH IMAGE BEHIND & GLOSSY FADE GLASS EFFECT --}}
                         <article
+                            data-reveal
                             x-on:click="active = '{{ $category['key'] }}'"
                             :class="active === '{{ $category['key'] }}' ? 'ring-2 ring-cosmic-900' : 'ring-1 ring-cosmic-900/8'"
                             class="flex cursor-pointer flex-col rounded-[1.5rem] rounded-b-[2.25rem] bg-white p-3 shadow-[0_12px_32px_-14px_rgba(20,52,82,0.3)] transition duration-200"
@@ -200,6 +201,7 @@
             <div
                 x-on:mouseenter="pause()"
                 x-on:mouseleave="play()"
+                data-reveal="right" style="--d:300"
                 class="relative order-1 isolate flex min-h-[22rem] flex-col overflow-hidden rounded-[1.5rem] p-7 lg:order-2 lg:min-h-0 lg:p-8"
             >
                 {{-- Server-rendered base: the first slide, and the no-JS fallback --}}

@@ -24,13 +24,13 @@
     {{-- Heading, in the headroom above the composition --}}
     <div class="relative px-6 pt-24 pb-4 sm:px-8 lg:absolute lg:inset-x-0 lg:top-0 lg:pb-0 lg:pt-28">
         <div class="mx-auto max-w-7xl">
-            <div class="flex items-center gap-3">
+            <div data-reveal class="flex items-center gap-3">
                 <span class="h-px w-10 bg-gold-400/50"></span>
                 <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-400 uppercase">
                     Who we serve
                 </span>
             </div>
-            <h2 class="mt-3 text-[clamp(1.6rem,2.6vw,2.5rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
+            <h2 data-reveal="lines" style="--d:120" class="mt-3 text-[clamp(1.6rem,2.6vw,2.5rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
                 Who can shop with
                 <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-400">us?</span>
             </h2>
@@ -46,18 +46,18 @@
             srcset="/images/audience/tall-640.jpg 640w, /images/audience/tall-900.jpg 900w"
             sizes="100vw"
             alt="The Milky Way Cosmetics mark surrounded by the people it serves: someone applying skincare, a shopper, a wholesale buyer, an entrepreneur, a reseller, a makeup artist, a spa client and a salon stylist"
-            class="w-full"
+            data-reveal="zoom" class="w-full"
         />
     </picture>
 
     {{-- Pills, pinned to their branches on lg --}}
-    <ul class="pointer-events-none absolute inset-0 hidden lg:block">
+    <ul data-stagger="110" data-stagger-from="500" class="pointer-events-none absolute inset-0 hidden lg:block">
         @foreach ($branches as $branch)
             <li
                 class="absolute -translate-x-1/2 -translate-y-1/2"
                 style="left: {{ $branch['x'] }}%; top: {{ $branch['y'] }}%"
             >
-                <span class="font-sub block rounded-full bg-sand px-[1.1em] py-[0.55em] text-center text-[clamp(0.78rem,1.05vw,1.15rem)] font-semibold whitespace-nowrap text-cosmic-900 shadow-lg shadow-cosmic-950/25">
+                <span data-reveal="pop" class="font-sub block rounded-full bg-sand px-[1.1em] py-[0.55em] text-center text-[clamp(0.78rem,1.05vw,1.15rem)] font-semibold whitespace-nowrap text-cosmic-900 shadow-lg shadow-cosmic-950/25">
                     {{ $branch['label'] }}
                 </span>
             </li>
@@ -66,9 +66,9 @@
 
     {{-- Below lg the artwork is too narrow to carry labels, so they list underneath --}}
     <div class="px-6 pb-12 sm:px-8 lg:hidden">
-        <ul class="mx-auto flex max-w-7xl flex-wrap gap-2">
+        <ul data-stagger="70" class="mx-auto flex max-w-7xl flex-wrap justify-center gap-2">
             @foreach ($branches as $branch)
-                <li class="font-sub rounded-full bg-sand px-4 py-2.5 text-sm font-semibold text-cosmic-900">
+                <li data-reveal class="font-sub rounded-full bg-sand px-3.5 py-2 text-xs font-semibold text-cosmic-900 sm:px-4 sm:py-2.5 sm:text-sm">
                     {{ $branch['label'] }}
                 </li>
             @endforeach

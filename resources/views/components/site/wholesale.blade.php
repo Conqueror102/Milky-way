@@ -26,26 +26,27 @@
         <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:gap-16">
 
             {{-- The pitch --}}
-            <div>
-                <div class="flex items-center gap-3">
+            <div data-stagger="110">
+                <div data-reveal class="flex items-center gap-3">
                     <span class="h-px w-10 bg-cosmic-900/40"></span>
                     <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-cosmic-900/70 uppercase">
                         Wholesale
                     </span>
                 </div>
 
-                <h2 class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-900">
+                <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-900">
                     Stock your beauty
                     <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-cosmic-900">business</span>
                 </h2>
 
-                <p class="font-sub mt-5 text-base leading-relaxed text-cosmic-900/75 lg:text-lg">
+                <p data-reveal style="--d:300" class="font-sub mt-5 text-base leading-relaxed text-cosmic-900/75 lg:text-lg">
                     Retailer, reseller, salon owner, spa operator or beauty entrepreneur &mdash;
                     you can buy here in bulk. Starting out or restocking, message us and we will
                     tell you what we have and what it costs.
                 </p>
 
                 <x-site.whatsapp-link
+                    data-reveal
                     :message="$enquiry"
                     class="font-sub mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-cosmic-900 px-8 py-4 text-sm font-semibold text-cream-50 transition duration-200 hover:bg-cosmic-950"
                 >
@@ -53,12 +54,12 @@
                     Get wholesale prices
                 </x-site.whatsapp-link>
 
-                <p class="font-sub mt-4 max-w-sm text-sm leading-relaxed text-cosmic-900/60">
+                <p data-reveal class="font-sub mt-4 max-w-sm text-sm leading-relaxed text-cosmic-900/60">
                     Opens WhatsApp with a message you can fill in. {{ config('milkyway.hours') }}.
                 </p>
 
                 {{-- What we have instead of stockist logos: facts --}}
-                <dl class="mt-9 grid gap-5 border-t border-cosmic-900/15 pt-7 sm:grid-cols-3">
+                <dl data-reveal class="mt-9 grid gap-5 border-t border-cosmic-900/15 pt-7 sm:grid-cols-3">
                     <div>
                         <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cosmic-900/55 uppercase">Delivers to</dt>
                         <dd class="font-sub mt-1.5 text-sm font-medium text-cosmic-900">{{ implode(' · ', config('milkyway.delivery_areas')) }}</dd>
@@ -77,8 +78,8 @@
             </div>
 
             {{-- Both sides of the conversation --}}
-            <div class="grid gap-4 sm:grid-cols-2">
-                <div class="rounded-[1.5rem] bg-cream-50 p-6 ring-1 ring-cosmic-900/10 shadow-[0_10px_28px_-16px_rgba(20,52,82,0.35)] lg:p-7">
+            <div data-stagger="150" data-stagger-from="250" class="grid gap-4 sm:grid-cols-2">
+                <div data-reveal="right" class="rounded-[1.5rem] bg-cream-50 p-6 ring-1 ring-cosmic-900/10 shadow-[0_10px_28px_-16px_rgba(20,52,82,0.35)] lg:p-7">
                     <div class="flex items-center gap-2.5">
                         <x-icon name="check-solid" class="size-4 text-gold-700" />
                         <h3 class="font-sub text-sm font-bold tracking-[0.14em] text-cosmic-900 uppercase">Ask us about</h3>
@@ -93,7 +94,7 @@
                     </ul>
                 </div>
 
-                <div class="rounded-[1.5rem] bg-cosmic-900 p-6 lg:p-7">
+                <div data-reveal="right" class="rounded-[1.5rem] bg-cosmic-900 p-6 lg:p-7">
                     <div class="flex items-center gap-2.5">
                         <x-icon name="pen-solid" class="size-4 text-gold-400" />
                         <h3 class="font-sub text-sm font-bold tracking-[0.14em] text-cream-50 uppercase">Tell us</h3>
@@ -112,7 +113,7 @@
                 </div>
 
                 {{-- Fills the foot of the two cards and shows the kind of stock on offer --}}
-                <div class="overflow-hidden rounded-[1.5rem] sm:col-span-2">
+                <div data-reveal="clip" class="overflow-hidden rounded-[1.5rem] sm:col-span-2">
                     <picture>
                         <source type="image/webp" srcset="/images/wholesale-strip-800.webp 800w, /images/wholesale-strip-1200.webp 1200w" sizes="(min-width: 1024px) 45vw, 100vw" />
                         <img

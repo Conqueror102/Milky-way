@@ -7,23 +7,23 @@
 
         {{-- Heading --}}
         <div class="max-w-2xl">
-            <div class="flex items-center gap-3">
+            <div data-reveal class="flex items-center gap-3">
                 <span class="h-px w-10 bg-gold-500/60"></span>
                 <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-700 uppercase">
                     About us
                 </span>
             </div>
 
-            <h2 class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-900">
+            <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-900">
                 Based in Lagos. Stocked for
                 <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-700">everyone</span>
             </h2>
         </div>
 
-        <div class="mt-10 grid gap-4 lg:mt-12 lg:grid-cols-12">
+        <div data-stagger="130" data-stagger-from="200" class="mt-10 grid gap-4 lg:mt-12 lg:grid-cols-12">
 
             {{-- The statement --}}
-            <div class="flex flex-col justify-between rounded-[1.5rem] bg-cosmic-900 p-7 lg:col-span-7 lg:p-9">
+            <div data-reveal class="flex flex-col justify-between rounded-[1.5rem] bg-cosmic-900 p-7 lg:col-span-7 lg:p-9">
                 <p class="font-sub text-base leading-relaxed text-cream-50/80 lg:text-lg">
                     Milky Way Cosmetics Stores is a beauty, cosmetics and personal-care business in
                     Amuwo-Odofin, Lagos. We distribute health, beauty, skincare, body-enhancement and
@@ -43,7 +43,7 @@
             </div>
 
             {{-- Image --}}
-            <div class="relative min-h-[18rem] overflow-hidden rounded-[1.5rem] lg:col-span-5">
+            <div data-reveal="scale" class="relative min-h-[18rem] overflow-hidden rounded-[1.5rem] lg:col-span-5">
                 <picture>
                     <source type="image/webp" srcset="/images/about/store-520.webp 520w, /images/about/store-800.webp 800w" sizes="(min-width: 1024px) 40vw, 100vw" />
                     <img
@@ -58,7 +58,7 @@
             </div>
 
             {{-- Where --}}
-            <div class="rounded-[1.5rem] bg-white p-7 ring-1 ring-cosmic-900/8 lg:col-span-4">
+            <div data-reveal class="rounded-[1.5rem] bg-white p-7 ring-1 ring-cosmic-900/8 lg:col-span-4">
                 <x-icon name="map-marker-alt-solid" class="size-6 text-gold-700" />
                 <h3 class="font-sub mt-4 text-sm font-bold tracking-[0.18em] text-cosmic-900 uppercase">Where to find us</h3>
                 <p class="font-sub mt-3 text-base leading-relaxed text-cosmic-900/65">
@@ -68,7 +68,7 @@
             </div>
 
             {{-- What --}}
-            <div class="rounded-[1.5rem] bg-white p-7 ring-1 ring-cosmic-900/8 lg:col-span-4">
+            <div data-reveal class="rounded-[1.5rem] bg-white p-7 ring-1 ring-cosmic-900/8 lg:col-span-4">
                 <x-icon name="layer-group-solid" class="size-6 text-gold-700" />
                 <h3 class="font-sub mt-4 text-sm font-bold tracking-[0.18em] text-cosmic-900 uppercase">What we distribute</h3>
                 <ul class="mt-4 flex flex-wrap gap-2">
@@ -79,7 +79,7 @@
             </div>
 
             {{-- How far --}}
-            <div class="rounded-[1.5rem] bg-white p-7 ring-1 ring-cosmic-900/8 lg:col-span-4">
+            <div data-reveal class="rounded-[1.5rem] bg-white p-7 ring-1 ring-cosmic-900/8 lg:col-span-4">
                 <x-icon name="truck-solid" class="size-6 text-gold-700" />
                 <h3 class="font-sub mt-4 text-sm font-bold tracking-[0.18em] text-cosmic-900 uppercase">How far we reach</h3>
                 <p class="font-sub mt-3 text-base leading-relaxed text-cosmic-900/65">
