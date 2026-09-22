@@ -4,28 +4,24 @@
     $embed = 'https://www.google.com/maps?q='.$mapQuery.'&output=embed';
 @endphp
 
-<section id="contact" class="relative isolate overflow-hidden bg-gradient-to-b from-[#fdf6f0] via-[#fcf2e8] to-[#faede1] py-16 lg:py-24 border-t border-[#E56717]/15">
-    {{-- Soft ambient Papaya warmth blooms --}}
-    <div class="pointer-events-none absolute -top-32 right-1/4 h-96 w-96 rounded-full bg-[#E56717]/10 blur-3xl"></div>
-    <div class="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-[#E56717]/8 blur-3xl"></div>
-
+<section id="contact" class="relative isolate overflow-hidden bg-sand py-16 lg:py-24">
     <div class="relative z-10 mx-auto grid max-w-7xl gap-12 px-6 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16">
 
         {{-- Where, when, how --}}
         <div>
             <div data-reveal class="flex items-center gap-3">
-                <span class="h-px w-10 bg-[#E56717]/60"></span>
-                <span class="font-sub text-[0.68rem] font-bold tracking-[0.32em] text-[#E56717] uppercase">
+                <span class="h-px w-10 bg-cosmic-900/40"></span>
+                <span class="font-sub text-[0.68rem] font-bold tracking-[0.32em] text-cosmic-900 uppercase">
                     Contact Us
                 </span>
             </div>
 
             <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(2.1rem,3.6vw,3.2rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-950">
                 Come and see
-                <span class="font-script text-[1.25em] leading-[0.8] tracking-[-0.03em] text-[#E56717]">us</span>
+                <span class="font-script text-[1.25em] leading-[0.8] tracking-[-0.03em] text-cream-50">us</span>
             </h2>
 
-            <p data-reveal style="--d:180" class="font-sub mt-3 max-w-md text-sm sm:text-base text-cosmic-900/75 leading-relaxed">
+            <p data-reveal style="--d:180" class="font-sub mt-3 max-w-md text-sm sm:text-base text-cosmic-900/90 leading-relaxed">
                 Visit our physical store in Tradefair Complex, Lagos or get in touch directly for wholesale & retail orders.
             </p>
 
@@ -74,9 +70,9 @@
             <div data-reveal style="--d:650" class="mt-9 flex flex-wrap gap-3">
                 <a
                     href="tel:{{ config('milkyway.phone_dial') }}"
-                    class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full bg-[#E56717] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#E56717]/25 transition duration-200 hover:bg-[#ca4f0f] hover:scale-[1.02]"
+                    class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-[#E56717] shadow-lg shadow-cosmic-950/10 transition duration-200 hover:bg-cream-50 hover:scale-[1.02]"
                 >
-                    <x-icon name="phone-solid" class="size-4 text-white" />
+                    <x-icon name="phone-solid" class="size-4 text-[#E56717]" />
                     Call us
                 </a>
 

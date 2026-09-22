@@ -384,11 +384,11 @@
         </div>
 
         {{-- The panel --}}
-        <div data-reveal="scale" style="--d:150" class="mt-6 grid gap-3 rounded-[2rem] bg-cream-50 p-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,45%)]">
+        <div class="mt-6 grid gap-3 rounded-[2rem] bg-cream-50 p-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,45%)]">
 
             {{-- Card grid --}}
             <div class="relative order-2 rounded-[1.5rem] lg:order-1">
-                <div class="lg:max-h-[42rem] lg:overflow-y-auto lg:py-1 lg:pl-1 lg:pr-2.5 [scrollbar-width:thin] [scrollbar-color:#E5671780_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gold-500/40 hover:[&::-webkit-scrollbar-thumb]:bg-gold-500/80">
+                <div class="max-h-[30rem] overflow-y-auto py-1 pr-2 pl-1 sm:max-h-[36rem] lg:max-h-[42rem] lg:pr-2.5 [scrollbar-width:thin] [scrollbar-color:#E5671780_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gold-500/40 hover:[&::-webkit-scrollbar-thumb]:bg-gold-500/80">
                 <div class="grid gap-3.5 sm:grid-cols-2">
                     @foreach ($categories as $category)
                         @php $imagePath = $category['image'] ?? '/images/categories/'.$category['key']; @endphp
