@@ -21,6 +21,9 @@ return [
     'address' => [
         'line' => 'C003 Bornu Plaza, Tradefair Complex',
         'area' => 'Amuwo-Odofin, Lagos, Nigeria',
+        'locality' => 'Amuwo-Odofin',
+        'region' => 'Lagos',
+        'country' => 'NG',
     ],
 
     'hours' => 'Open 24 Hours, Monday to Sunday',
@@ -42,6 +45,25 @@ return [
         'instagram' => ['handle' => '@milky_cosmetics_sales', 'url' => 'https://instagram.com/milky_cosmetics_sales'],
         'tiktok' => ['handle' => '@milkywaycosmeticssales', 'url' => 'https://tiktok.com/@milkywaycosmeticssales'],
         'facebook' => ['handle' => 'Milkyway Cosmetics', 'url' => 'https://facebook.com/Milkyway-Cosmetics'],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Search & Sharing
+    |--------------------------------------------------------------------------
+    |
+    | Defaults for the homepage. `image` is a path under /public and is made
+    | absolute from APP_URL, so APP_URL must be the live domain in production.
+    |
+    */
+
+    'seo' => [
+        'title' => 'Milky Way Cosmetics Stores | Wholesale & Retail Beauty in Lagos',
+        'description' => 'Quality skincare, beauty, body enhancement and spa products at wholesale and retail prices. Shop with us or stock your salon, spa or beauty business from Amuwo-Odofin, Lagos.',
+        'image' => '/images/og-image.jpg',
+        'image_alt' => 'Milky Way Cosmetics Stores: Your Beauty. Our Passion.',
+        'locale' => 'en_NG',
+        'theme_color' => '#143452',
     ],
 
 ];

@@ -3,10 +3,25 @@
     'description' => null,
 ])
 
+@php
+    $seo = config('milkyway.seo');
+    $siteUrl = rtrim(config('app.url'), '/');
+
+    $documentTitle = filled($title) ? $title.' | '.config('app.name') : $seo['title'];
+    $metaDescription = $description ?? $seo['description'];
+    $canonical = $siteUrl.request()->getPathInfo();
+    $ogImage = $siteUrl.$seo['image'];
+    $robots = 'index, follow, max-image-preview:large';
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
+        @include('partials.seo')
+
+        {{-- The hero carousel's first product is the largest thing above the fold, so start fetching it at once --}}
+        <link rel="preload" as="image" href="/images/categories/skincare2/cosrx.jpg" fetchpriority="high" />
 
         {{-- Sets .motion-ready before first paint so revealed elements never flash. If the
              script that reveals them has not arrived within 4s (slow connection), it steps
@@ -19,15 +34,6 @@
                 }, 4000);
             }
         </script>
-
-        @if ($description)
-            <meta name="description" content="{{ $description }}" />
-            <meta property="og:description" content="{{ $description }}" />
-        @endif
-        <meta property="og:title" content="{{ $title ? $title.' - '.config('app.name') : config('app.name') }}" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="{{ url('/images/hero-model-1200.jpg') }}" />
-        <meta name="twitter:card" content="summary_large_image" />
     </head>
     <body class="min-h-screen bg-canvas font-sans text-cosmic-900 antialiased flex flex-col justify-between">
         <x-site.header />

@@ -4,62 +4,65 @@
     $embed = 'https://www.google.com/maps?q='.$mapQuery.'&output=embed';
 @endphp
 
-<section id="contact" class="relative isolate bg-cream-950 py-10 lg:py-14">
-    {{-- Paper texture under a warm dim, measured so cream text holds above 9:1 --}}
-    <picture>
-        <source type="image/webp" srcset="/images/paper-1000.webp 1000w, /images/paper-1600.webp 1600w" sizes="100vw" />
-        <img
-            src="/images/paper-1600.jpg"
-            srcset="/images/paper-1000.jpg 1000w, /images/paper-1600.jpg 1600w"
-            sizes="100vw"
-            alt=""
-            loading="lazy"
-            class="absolute inset-0 -z-20 size-full object-cover"
-        />
-    </picture>
-    <div class="absolute inset-0 -z-10 bg-black/55"></div>
+<section id="contact" class="relative isolate overflow-hidden bg-gradient-to-b from-[#fdf6f0] via-[#fcf2e8] to-[#faede1] py-16 lg:py-24 border-t border-[#E56717]/15">
+    {{-- Soft ambient Papaya warmth blooms --}}
+    <div class="pointer-events-none absolute -top-32 right-1/4 h-96 w-96 rounded-full bg-[#E56717]/10 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-[#E56717]/8 blur-3xl"></div>
 
-    <div class="mx-auto grid max-w-7xl gap-10 px-6 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16">
+    <div class="relative z-10 mx-auto grid max-w-7xl gap-12 px-6 sm:px-8 lg:grid-cols-2 lg:items-center lg:gap-16">
 
         {{-- Where, when, how --}}
         <div>
             <div data-reveal class="flex items-center gap-3">
-                <span class="h-px w-10 bg-gold-300/50"></span>
-                <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-300 uppercase">
-                    Contact
+                <span class="h-px w-10 bg-[#E56717]/60"></span>
+                <span class="font-sub text-[0.68rem] font-bold tracking-[0.32em] text-[#E56717] uppercase">
+                    Contact Us
                 </span>
             </div>
 
-            <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
+            <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(2.1rem,3.6vw,3.2rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-950">
                 Come and see
-                <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-300">us</span>
+                <span class="font-script text-[1.25em] leading-[0.8] tracking-[-0.03em] text-[#E56717]">us</span>
             </h2>
 
-            <dl data-stagger="120" data-stagger-from="250" class="mt-8 grid gap-6">
-                <div data-reveal class="flex gap-4">
-                    <x-icon name="map-marker-alt-solid" class="mt-0.5 size-5 shrink-0 text-gold-300" />
+            <p data-reveal style="--d:180" class="font-sub mt-3 max-w-md text-sm sm:text-base text-cosmic-900/75 leading-relaxed">
+                Visit our physical store in Tradefair Complex, Lagos or get in touch directly for wholesale & retail orders.
+            </p>
+
+            <dl data-stagger="120" data-stagger-from="250" class="mt-8 grid gap-4">
+                {{-- Shop --}}
+                <div data-reveal class="flex items-start gap-4 rounded-2xl bg-white/85 p-4.5 backdrop-blur-md ring-1 ring-[#E56717]/15 shadow-sm shadow-[#E56717]/5 transition duration-200 hover:bg-white hover:ring-[#E56717]/35 hover:shadow-md">
+                    <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-[#E56717] text-white shadow-md shadow-[#E56717]/25">
+                        <x-icon name="map-marker-alt-solid" class="size-5 text-white" />
+                    </span>
                     <div>
-                        <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cream-50/45 uppercase">The shop</dt>
-                        <dd class="font-sub mt-1.5 text-base leading-relaxed text-cream-50 lg:text-lg">
+                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">The Shop</dt>
+                        <dd class="font-sub mt-1 text-sm font-semibold leading-relaxed text-cosmic-950 sm:text-base">
                             {{ config('milkyway.address.line') }},<br>{{ config('milkyway.address.area') }}
                         </dd>
                     </div>
                 </div>
 
-                <div data-reveal class="flex gap-4">
-                    <x-icon name="clock-solid" class="mt-0.5 size-5 shrink-0 text-gold-300" />
+                {{-- Hours --}}
+                <div data-reveal class="flex items-start gap-4 rounded-2xl bg-white/85 p-4.5 backdrop-blur-md ring-1 ring-[#E56717]/15 shadow-sm shadow-[#E56717]/5 transition duration-200 hover:bg-white hover:ring-[#E56717]/35 hover:shadow-md">
+                    <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-[#E56717] text-white shadow-md shadow-[#E56717]/25">
+                        <x-icon name="clock-solid" class="size-5 text-white" />
+                    </span>
                     <div>
-                        <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cream-50/45 uppercase">Opening hours</dt>
-                        <dd class="font-sub mt-1.5 text-base text-cream-50 lg:text-lg">{{ config('milkyway.hours') }}</dd>
+                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">Opening Hours</dt>
+                        <dd class="font-sub mt-1 text-sm font-semibold text-cosmic-950 sm:text-base">{{ config('milkyway.hours') }}</dd>
                     </div>
                 </div>
 
-                <div data-reveal class="flex gap-4">
-                    <x-icon name="phone-solid" class="mt-0.5 size-5 shrink-0 text-gold-300" />
+                {{-- Phone --}}
+                <div data-reveal class="flex items-start gap-4 rounded-2xl bg-white/85 p-4.5 backdrop-blur-md ring-1 ring-[#E56717]/15 shadow-sm shadow-[#E56717]/5 transition duration-200 hover:bg-white hover:ring-[#E56717]/35 hover:shadow-md">
+                    <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-[#E56717] text-white shadow-md shadow-[#E56717]/25">
+                        <x-icon name="phone-solid" class="size-5 text-white" />
+                    </span>
                     <div>
-                        <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cream-50/45 uppercase">Phone</dt>
-                        <dd class="font-sub mt-1.5 text-base text-cream-50 lg:text-lg">
-                            <a href="tel:{{ config('milkyway.phone_dial') }}" class="underline-offset-4 hover:underline">
+                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">Phone & Enquiries</dt>
+                        <dd class="font-sub mt-1 text-sm font-semibold text-cosmic-950 sm:text-base">
+                            <a href="tel:{{ config('milkyway.phone_dial') }}" class="underline-offset-4 hover:underline hover:text-[#E56717] transition-colors">
                                 {{ config('milkyway.phone') }}
                             </a>
                         </dd>
@@ -67,16 +70,20 @@
                 </div>
             </dl>
 
+            {{-- CTA buttons --}}
             <div data-reveal style="--d:650" class="mt-9 flex flex-wrap gap-3">
                 <a
                     href="tel:{{ config('milkyway.phone_dial') }}"
-                    class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full bg-cream-50 px-7 py-3.5 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white"
-                >Call us</a>
+                    class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full bg-[#E56717] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#E56717]/25 transition duration-200 hover:bg-[#ca4f0f] hover:scale-[1.02]"
+                >
+                    <x-icon name="phone-solid" class="size-4 text-white" />
+                    Call us
+                </a>
 
                 <x-site.whatsapp-link
-                    class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full border border-cream-50/25 px-7 py-3.5 text-sm font-semibold text-cream-50 transition duration-200 hover:border-cream-50/60 hover:bg-cream-50/5"
+                    class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full bg-cosmic-900 px-7 py-3.5 text-sm font-semibold text-cream-50 shadow-md shadow-cosmic-950/15 transition duration-200 hover:bg-cosmic-950 hover:scale-[1.02]"
                 >
-                    <x-icon name="whatsapp" class="size-4 text-gold-300" />
+                    <x-icon name="whatsapp" class="size-4 text-[#25D366]" />
                     WhatsApp us
                 </x-site.whatsapp-link>
 
@@ -84,22 +91,22 @@
                     href="{{ $directions }}"
                     target="_blank"
                     rel="noopener"
-                    class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full border border-cream-50/25 px-7 py-3.5 text-sm font-semibold text-cream-50 transition duration-200 hover:border-cream-50/60 hover:bg-cream-50/5"
+                    class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full border border-[#E56717]/30 bg-white/90 px-7 py-3.5 text-sm font-semibold text-cosmic-950 shadow-sm backdrop-blur-md transition duration-200 hover:bg-white hover:border-[#E56717] hover:scale-[1.02]"
                 >
-                    <x-icon name="map-marker-alt-solid" class="size-4 text-gold-300" />
+                    <x-icon name="map-marker-alt-solid" class="size-4 text-[#E56717]" />
                     Get directions
                 </a>
             </div>
         </div>
 
-        {{-- Map, loaded lazily so it never blocks the page --}}
-        <div data-reveal="right" style="--d:250" class="overflow-hidden rounded-[1.5rem] bg-black/25 ring-1 ring-cream-50/15">
+        {{-- Map with rounded glass frame --}}
+        <div data-reveal="right" style="--d:250" class="overflow-hidden rounded-[2rem] bg-white/90 p-2.5 shadow-xl shadow-cosmic-950/8 backdrop-blur-md ring-1 ring-[#E56717]/20">
             <iframe
                 src="{{ $embed }}"
                 title="Map showing Milky Way Cosmetics Stores at {{ config('milkyway.address.line') }}"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
-                class="block h-[22rem] w-full border-0 lg:h-[28rem]"
+                class="block h-[22rem] w-full rounded-[1.5rem] border-0 lg:h-[28rem]"
             ></iframe>
         </div>
     </div>

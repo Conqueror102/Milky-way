@@ -144,3 +144,38 @@ test('the hero enters with css alone and the layout guards the scripted reveals'
 
     expect($hero[0])->not->toContain('data-reveal');
 });
+
+test('every real health & beauty product gets its own card, not a shared tile', function () {
+    $html = $this->get(route('home'))->assertOk()->getContent();
+
+    foreach ([
+        'Anua Niacinamide Serum' => '/images/categories/health/anua',
+        'Niiracell Glutathione' => '/images/categories/health/niiracell',
+        'Beefar Probiotic Gummies' => '/images/categories/health/beefar',
+        'NeoCell Collagen Peptides' => '/images/categories/health/neocell',
+        'Ginseng Six Treasures Tea' => '/images/categories/health/ginseng',
+        'Glutax Glutathione Injection' => '/images/categories/health/glutax',
+    ] as $name => $image) {
+        expect($html)->toContain('<h3 class="mt-4 px-0.5 text-base leading-tight font-bold text-cosmic-900">'.$name.'</h3>')
+            ->toContain($image.'.jpg')
+            ->toContain($image.'.webp');
+    }
+
+    // No category collapses six products into one tile any more.
+    expect($html)->not->toContain('grid h-full grid-cols-3');
+});
+
+test('every sexual enhancement product gets its own card', function () {
+    $html = $this->get(route('home'))->assertOk()->getContent();
+
+    foreach ([
+        'Erection Tea' => '/images/categories/sexual/tea',
+        'Men Power Gummies' => '/images/categories/sexual/menpower',
+        'X Power Coffee for Men' => '/images/categories/sexual/coffee',
+    ] as $name => $image) {
+        expect($html)->toContain('<h3 class="mt-4 px-0.5 text-base leading-tight font-bold text-cosmic-900">'.$name.'</h3>')
+            ->toContain($image.'.jpg')
+            ->toContain($image.'.webp')
+            ->toContain('>Sexual Enhancement<');
+    }
+});

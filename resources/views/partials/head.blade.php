@@ -2,12 +2,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <title>
-    {{ filled($title ?? null) ? $title.' - '.config('app.name', 'Laravel') : config('app.name', 'Laravel') }}
+    {{ $documentTitle ?? (filled($title ?? null) ? $title.' - '.config('app.name', 'Laravel') : config('app.name', 'Laravel')) }}
 </title>
 
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+{{-- Everything is kept out of search results unless a layout opts in by setting $robots --}}
+<meta name="robots" content="{{ $robots ?? 'noindex, nofollow' }}" />
+
+@include('partials.favicons')
 
 @fonts
 

@@ -1,0 +1,9 @@
+{{-- The declaration goes through echo: with short_open_tag on, a literal <?xml is parsed as PHP. --}}
+{!! '<'.'?xml version="1.0" encoding="UTF-8"?>' !!}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+@foreach ($urls as $url)
+    <url>
+        <loc>{{ $url }}</loc>
+    </url>
+@endforeach
+</urlset>

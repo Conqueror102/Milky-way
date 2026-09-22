@@ -30,18 +30,18 @@
     --color-cosmic-900: #143452;
     --color-cosmic-950: #122a42;
 
-    /* Soft Gold — brand accent, anchored at 400 = #C8A67B */
-    --color-gold-50: #fbf6f1;
-    --color-gold-100: #f4ece3;
-    --color-gold-200: #eadbc9;
-    --color-gold-300: #dec5a7;
-    --color-gold-400: #c8a67b;
-    --color-gold-500: #ba9360;
-    --color-gold-600: #a17a46;
-    --color-gold-700: #856233;
-    --color-gold-800: #6b4d24;
-    --color-gold-900: #563d1a;
-    --color-gold-950: #372409;
+    /* Exact Papaya Orange (#E56717) from user swatch */
+    --color-gold-50: #fdf6f0;
+    --color-gold-100: #fbe9db;
+    --color-gold-200: #f6d2b6;
+    --color-gold-300: #f0b58a;
+    --color-gold-400: #eb8b4c;
+    --color-gold-500: #E56717;
+    --color-gold-600: #ca4f0f;
+    --color-gold-700: #a73d10;
+    --color-gold-800: #873214;
+    --color-gold-900: #6f2c14;
+    --color-gold-950: #3c1307;
 
     /* Cream — the page canvas, anchored at 50 = #FCFBF7 */
     --color-cream-50: #fcfbf7;
@@ -58,10 +58,10 @@
 
     /* Brand semantics — use these so a rebrand is a three-line change */
     --color-brand: var(--color-cosmic-900);
-    --color-brand-accent: var(--color-gold-400);
+    --color-brand-accent: #E56717;
     --color-canvas: var(--color-cream-50);
     /* The hero photograph's own beige — scrims tinted with it blend into the image */
-    --color-sand: #dabb9f;
+    --color-sand: #E56717;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -135,17 +135,17 @@ select:focus[data-flux-control] {
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-width: 1px;
-    border-color: rgba(200, 166, 123, 0.22);
+    border-color: rgba(229, 103, 23, 0.22);
     box-shadow: 0 14px 32px -8px rgba(10, 24, 39, 0.3);
 }
 
 @utility liquid-glass-gold {
-    background-color: rgba(200, 166, 123, 0.15);
+    background-color: rgba(229, 103, 23, 0.15);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border-width: 1px;
-    border-color: rgba(200, 166, 123, 0.28);
-    box-shadow: 0 8px 22px -6px rgba(200, 166, 123, 0.22);
+    border-color: rgba(229, 103, 23, 0.28);
+    box-shadow: 0 8px 22px -6px rgba(229, 103, 23, 0.22);
 }
 
 /* ---------------------------------------------------------------------------

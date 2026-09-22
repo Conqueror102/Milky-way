@@ -45,12 +45,10 @@
             {{-- Image --}}
             <div data-reveal="scale" class="relative min-h-[18rem] overflow-hidden rounded-[1.5rem] lg:col-span-5">
                 <picture>
-                    <source type="image/webp" srcset="/images/about/store-520.webp 520w, /images/about/store-800.webp 800w" sizes="(min-width: 1024px) 40vw, 100vw" />
+                    <source type="image/webp" srcset="/images/categories/skincare2/drteals.webp" sizes="(min-width: 1024px) 40vw, 100vw" />
                     <img
-                        src="/images/about/store-800.jpg"
-                        srcset="/images/about/store-520.jpg 520w, /images/about/store-800.jpg 800w"
-                        sizes="(min-width: 1024px) 40vw, 100vw"
-                        alt="Foundation and lipstick from the Milky Way range, on navy silk"
+                        src="/images/categories/skincare2/drteals.jpg"
+                        alt="Dr Teal's body care range, part of Milky Way's real stock"
                         loading="lazy"
                         class="absolute inset-0 size-full object-cover"
                     />
