@@ -45,7 +45,7 @@
             src="/images/audience/tall-900.jpg"
             srcset="/images/audience/tall-640.jpg 640w, /images/audience/tall-900.jpg 900w"
             sizes="100vw"
-            alt="The Milky Way Cosmetics mark surrounded by the people it serves: someone applying skincare, a shopper, a wholesale buyer, an entrepreneur, a reseller, a makeup artist, a spa client and a salon stylist"
+            alt="The Milkyway Cosmetics mark surrounded by the people it serves: someone applying skincare, a shopper, a wholesale buyer, an entrepreneur, a reseller, a makeup artist, a spa client and a salon stylist"
             data-reveal="zoom" class="w-full"
         />
     </picture>

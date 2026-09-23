@@ -25,7 +25,7 @@
             {{-- The statement --}}
             <div data-reveal class="flex flex-col justify-between rounded-[1.5rem] bg-cosmic-900 p-7 lg:col-span-7 lg:p-9">
                 <p class="font-sub text-base leading-relaxed text-cream-50/80 lg:text-lg">
-                    Milky Way Cosmetics Stores is a beauty, cosmetics and personal-care business in
+                    Milkyway Cosmetics Stores is a beauty, cosmetics and personal-care business in
                     Amuwo-Odofin, Lagos. We distribute health, beauty, skincare, body-enhancement and
                     spa products &mdash; wholesale and retail &mdash; to individuals and to the
                     businesses that stock them.
@@ -48,7 +48,7 @@
                     <source type="image/webp" srcset="/images/categories/skincare2/drteals.webp" sizes="(min-width: 1024px) 40vw, 100vw" />
                     <img
                         src="/images/categories/skincare2/drteals.jpg"
-                        alt="Dr Teal's body care range, part of Milky Way's real stock"
+                        alt="Dr Teal's body care range, part of Milkyway's real stock"
                         loading="lazy"
                         class="absolute inset-0 size-full object-cover"
                     />

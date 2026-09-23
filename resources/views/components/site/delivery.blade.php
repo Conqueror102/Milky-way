@@ -43,7 +43,7 @@
             <x-site.whatsapp-link
                 data-reveal
                 style="--d:450"
-                message="Hello Milky Way Cosmetics Stores. I would like to ask about delivery to [your area]."
+                message="Hello Milkyway Cosmetics Stores. I would like to ask about delivery to [your area]."
                 class="font-sub mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-cream-50 px-8 py-4 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white"
             >
                 <x-icon name="whatsapp" class="size-5 text-cosmic-900" />

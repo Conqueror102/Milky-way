@@ -25,7 +25,7 @@ test('the category section lists every category', function () {
 
 test('each category card deep links to whatsapp with its own enquiry', function () {
     $expected = 'https://wa.me/'.config('milkyway.whatsapp.number')
-        .'?text='.rawurlencode('Hello Milky Way Cosmetics Stores, I would like to see what you have available under Spa & Massage.');
+        .'?text='.rawurlencode('Hello Milkyway Cosmetics Stores, I would like to see what you have available under Spa & Massage.');
 
     $this->get(route('home'))->assertSee($expected, escape: false);
 });
@@ -64,7 +64,7 @@ test('the audience section names everyone it serves', function () {
 
 test('the wholesale section opens whatsapp with a qualifying enquiry', function () {
     $expected = 'https://wa.me/'.config('milkyway.whatsapp.number').'?text='.rawurlencode(
-        'Hello Milky Way Cosmetics Stores. I run a [salon / shop / resale business] in [area] '
+        'Hello Milkyway Cosmetics Stores. I run a [salon / shop / resale business] in [area] '
         .'and I would like wholesale prices for [category]. I buy roughly [quantity] at a time.'
     );
 
@@ -94,7 +94,7 @@ test('the delivery section names every area it serves', function () {
 
     $response->assertSee(
         'https://wa.me/'.config('milkyway.whatsapp.number').'?text='.rawurlencode(
-            'Hello Milky Way Cosmetics Stores. I would like to ask about delivery to [your area].'
+            'Hello Milkyway Cosmetics Stores. I would like to ask about delivery to [your area].'
         ),
         escape: false
     );
@@ -140,7 +140,7 @@ test('the hero enters with css alone and the layout guards the scripted reveals'
         ->toContain("document.documentElement.classList.add('motion-ready')")
         ->toContain('prefers-reduced-motion: reduce');
 
-    preg_match('/<section id="top".*?<\/section>/s', $html, $hero);
+    preg_match('/<section\b[^>]*\bid="top"[^>]*>.*?<\/section>/s', $html, $hero);
 
     expect($hero[0])->not->toContain('data-reveal');
 });

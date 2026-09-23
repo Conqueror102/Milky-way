@@ -64,11 +64,13 @@
         <div class="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-[auto_minmax(0,1fr)_minmax(0,17rem)] lg:gap-14">
 
             {{-- The wordmark, set vertically as the section's spine --}}
-            <div class="hidden lg:flex lg:items-center lg:justify-center">
+            <div class="hidden lg:flex lg:items-center lg:justify-center lg:gap-3" aria-hidden="true">
                 <span
-                    aria-hidden="true"
                     data-reveal="left" style="--d:200" class="block whitespace-nowrap text-[clamp(5rem,11vw,10rem)] leading-[0.85] font-bold tracking-[-0.03em] text-cosmic-900 [writing-mode:vertical-rl] rotate-180"
-                >Milky Way</span>
+                >Milkyway</span>
+                <span
+                    data-reveal="left" style="--d:260" class="font-sub block whitespace-nowrap text-[clamp(0.65rem,1vw,0.85rem)] font-semibold tracking-[0.3em] text-cosmic-900/45 uppercase [writing-mode:vertical-rl] rotate-180"
+                >Cosmetics Stores</span>
             </div>
 
             {{-- Plates, first on small screens so the section opens on an image --}}

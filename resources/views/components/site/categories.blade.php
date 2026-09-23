@@ -428,7 +428,7 @@
                             </div>
 
                             <x-site.whatsapp-link
-                                :message="'Hello Milky Way Cosmetics Stores, I would like to see what you have available under '.$category['name'].'.'"
+                                :message="'Hello Milkyway Cosmetics Stores, I would like to see what you have available under '.$category['name'].'.'"
                                 class="font-sub mt-4 block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
                             >View products</x-site.whatsapp-link>
                         </article>

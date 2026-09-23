@@ -99,7 +99,7 @@
         <div data-reveal="right" style="--d:250" class="overflow-hidden rounded-[2rem] bg-white/90 p-2.5 shadow-xl shadow-cosmic-950/8 backdrop-blur-md ring-1 ring-[#E56717]/20">
             <iframe
                 src="{{ $embed }}"
-                title="Map showing Milky Way Cosmetics Stores at {{ config('milkyway.address.line') }}"
+                title="Map showing Milkyway Cosmetics Stores at {{ config('milkyway.address.line') }}"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
                 class="block h-[22rem] w-full rounded-[1.5rem] border-0 lg:h-[28rem]"

@@ -20,8 +20,8 @@
         @include('partials.head')
         @include('partials.seo')
 
-        {{-- The hero carousel's first product is the largest thing above the fold, so start fetching it at once --}}
-        <link rel="preload" as="image" href="/images/categories/skincare2/cosrx.jpg" fetchpriority="high" />
+        {{-- The hero photograph is the largest thing above the fold, so start fetching it at once --}}
+        <link rel="preload" as="image" type="image/webp" href="/images/hero/slide-1.webp" fetchpriority="high" />
 
         {{-- Sets .motion-ready before first paint so revealed elements never flash. If the
              script that reveals them has not arrived within 4s (slow connection), it steps

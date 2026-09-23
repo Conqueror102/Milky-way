@@ -16,7 +16,7 @@
         'Roughly how much you buy at a time',
     ];
 
-    $enquiry = 'Hello Milky Way Cosmetics Stores. I run a [salon / shop / resale business] in [area] '
+    $enquiry = 'Hello Milkyway Cosmetics Stores. I run a [salon / shop / resale business] in [area] '
         .'and I would like wholesale prices for [category]. I buy roughly [quantity] at a time.';
 @endphp
 

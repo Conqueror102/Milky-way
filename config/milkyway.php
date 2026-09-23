@@ -38,7 +38,7 @@ return [
 
     'whatsapp' => [
         'number' => '2348161823482',
-        'default_message' => 'Hello Milky Way Cosmetics Stores, I would like to make an enquiry about your products.',
+        'default_message' => 'Hello Milkyway Cosmetics Stores, I would like to make an enquiry about your products.',
     ],
 
     'socials' => [
@@ -58,10 +58,10 @@ return [
     */
 
     'seo' => [
-        'title' => 'Milky Way Cosmetics Stores | Wholesale & Retail Beauty in Lagos',
+        'title' => 'Milkyway Cosmetics Stores | Wholesale & Retail Beauty in Lagos',
         'description' => 'Quality skincare, beauty, body enhancement and spa products at wholesale and retail prices. Shop with us or stock your salon, spa or beauty business from Amuwo-Odofin, Lagos.',
         'image' => '/images/og-image.jpg',
-        'image_alt' => 'Milky Way Cosmetics Stores: Your Beauty. Our Passion.',
+        'image_alt' => 'Milkyway Cosmetics Stores: Your Beauty. Our Passion.',
         'locale' => 'en_NG',
         'theme_color' => '#143452',
     ],

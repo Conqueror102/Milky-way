@@ -45,19 +45,20 @@
                         <span class="grid size-9 place-items-center rounded-full bg-cosmic-900 text-gold-400 ring-1 ring-gold-400/30 group-hover:ring-gold-400/60 transition duration-200">
                             <x-site.logo-mark class="size-5" />
                         </span>
-                        <span class="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-cream-50 uppercase">
-                            MILKY WAY
+                        <span class="flex flex-col leading-none">
+                            <span class="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-cream-50 uppercase">MILKYWAY</span>
+                            <span class="font-sub mt-1 text-[0.62rem] font-semibold tracking-[0.25em] text-cream-50/55 uppercase sm:text-xs">Cosmetics Stores</span>
                         </span>
                     </a>
 
                     <p class="font-sub text-sm text-cream-100/70 leading-relaxed max-w-sm mt-4">
-                        Milky Way Cosmetics Stores supplies quality skincare, beauty, body enhancement and spa products at wholesale and retail prices, from Amuwo-Odofin, Lagos.
+                        Milkyway Cosmetics Stores supplies quality skincare, beauty, body enhancement and spa products at wholesale and retail prices, from Amuwo-Odofin, Lagos.
                     </p>
                 </div>
 
                 <div>
                     <x-site.whatsapp-link
-                        message="Hello Milky Way Cosmetics Stores, I would like to make an enquiry about your products."
+                        message="Hello Milkyway Cosmetics Stores, I would like to make an enquiry about your products."
                         class="inline-flex items-center gap-2.5 rounded-full bg-gold-400/10 hover:bg-gold-400/20 border border-gold-400/25 px-4 py-2 text-xs font-medium text-gold-300 hover:text-gold-200 transition duration-200"
                     >
                         <span class="size-2 rounded-full bg-gold-400 animate-pulse"></span>
@@ -131,7 +132,7 @@
         {{-- Divider & Copyright / Metadata Row --}}
         <div class="relative z-10 pt-8 pb-4 border-t border-gold-400/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-cream-100/50 font-sub">
             <div>
-                © {{ date('Y') }} Milky Way Cosmetics. All rights reserved.
+                © {{ date('Y') }} Milkyway Cosmetics. All rights reserved.
             </div>
             <div>
                 Tradefair Complex, Lagos · Wholesale & Retail
