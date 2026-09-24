@@ -21,7 +21,7 @@
         @include('partials.seo')
 
         {{-- The hero photograph is the largest thing above the fold, so start fetching it at once --}}
-        <link rel="preload" as="image" type="image/webp" href="/images/hero/slide-1.webp" fetchpriority="high" />
+        <link rel="preload" as="image" type="image/webp" href="/images/hero/slide-1.webp" imagesrcset="/images/hero/slide-1-640.webp 640w, /images/hero/slide-1.webp 1000w" imagesizes="(min-width: 1024px) 40rem, 100vw" fetchpriority="high" />
 
         {{-- Sets .motion-ready before first paint so revealed elements never flash. If the
              script that reveals them has not arrived within 4s (slow connection), it steps

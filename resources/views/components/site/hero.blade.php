@@ -25,6 +25,8 @@
     // copy only ever showed a random slice of a face.
     $frame = 'absolute inset-x-0 top-0 h-[46svh] w-full max-w-none object-cover [mask-image:linear-gradient(to_bottom,black_62%,transparent_100%)] sm:h-[50svh] lg:inset-x-auto lg:right-0';
 
+    $sizes = '(min-width: 1024px) 40rem, 100vw';
+
     $slides = [
         ['key' => 'slide-1', 'alt' => 'A woman smiling while applying raw shea butter to her face', 'pos' => 'object-[center_25%]', 'fit' => 'cover'],
         ['key' => 'slide-2', 'alt' => 'A woman checking a hand mirror while applying skincare cream', 'pos' => 'object-[35%_30%]', 'fit' => 'natural'],
@@ -55,21 +57,25 @@
 >
 
     {{-- Photographs, cross-fading. One <picture> per photo: the first is fetched at high
-         priority and matches the preload in the layout, so it is downloaded once and paints
-         at once; the rest start hidden and load quietly behind it. --}}
+         priority and matches the preload in the layout, so it is downloaded once. Every photo
+         stays hidden until it has fully arrived, then fades in, rather than painting in
+         line by line on a slow connection. The rest start hidden and load quietly behind it. --}}
     @foreach ($slides as $i => $item)
         <picture>
-            <source type="image/webp" srcset="/images/hero/{{ $item['key'] }}.webp" />
+            <source type="image/webp" srcset="/images/hero/{{ $item['key'] }}-640.webp 640w, /images/hero/{{ $item['key'] }}.webp 1000w" sizes="{{ $sizes }}" />
             <img
                 src="/images/hero/{{ $item['key'] }}.jpg"
+                srcset="/images/hero/{{ $item['key'] }}-640.jpg 640w, /images/hero/{{ $item['key'] }}.jpg 1000w"
+                sizes="{{ $sizes }}"
                 alt="{{ $item['alt'] }}"
+                onload="this.setAttribute('data-ready', '')"
                 @if ($i === 0)
                     fetchpriority="high"
                 @else
                     fetchpriority="low"
                 @endif
                 :class="slide === {{ $i }} ? 'opacity-100!' : 'opacity-0'"
-                class="{{ $frame }} -z-20 {{ $item['pos'] }} {{ $fits[$item['fit']] }} {{ $i === 0 ? '' : 'opacity-0' }} transition-opacity duration-1000 ease-out"
+                class="{{ $frame }} -z-20 {{ $item['pos'] }} {{ $fits[$item['fit']] }} {{ $i === 0 ? '' : 'opacity-0' }} [&:not([data-ready])]:opacity-0! transition-opacity duration-1000 ease-out"
             />
         </picture>
     @endforeach
