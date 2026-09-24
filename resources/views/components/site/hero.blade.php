@@ -54,25 +54,22 @@
     class="relative isolate flex h-[100svh] flex-col justify-end overflow-hidden bg-sand lg:justify-center"
 >
 
-    {{-- Photographs, cross-fading. The server-rendered base is slide one and the no-JS fallback;
-         once Alpine runs it fades out with the rest, so it never shows through a photo that
-         does not fill the whole frame. --}}
-    <img
-        src="/images/hero/{{ $slides[0]['key'] }}.jpg"
-        alt="{{ $slides[0]['alt'] }}"
-        fetchpriority="high"
-        :class="slide === 0 ? 'opacity-100' : 'opacity-0'"
-        class="{{ $frame }} -z-30 {{ $slides[0]['pos'] }} {{ $fits[$slides[0]['fit']] }} transition-opacity duration-1000 ease-out"
-    />
+    {{-- Photographs, cross-fading. One <picture> per photo: the first is fetched at high
+         priority and matches the preload in the layout, so it is downloaded once and paints
+         at once; the rest start hidden and load quietly behind it. --}}
     @foreach ($slides as $i => $item)
         <picture>
             <source type="image/webp" srcset="/images/hero/{{ $item['key'] }}.webp" />
             <img
                 src="/images/hero/{{ $item['key'] }}.jpg"
                 alt="{{ $item['alt'] }}"
-                loading="lazy"
-                :class="slide === {{ $i }} ? 'opacity-100' : 'opacity-0'"
-                class="{{ $frame }} -z-20 {{ $item['pos'] }} {{ $fits[$item['fit']] }} transition-opacity duration-1000 ease-out"
+                @if ($i === 0)
+                    fetchpriority="high"
+                @else
+                    fetchpriority="low"
+                @endif
+                :class="slide === {{ $i }} ? 'opacity-100!' : 'opacity-0'"
+                class="{{ $frame }} -z-20 {{ $item['pos'] }} {{ $fits[$item['fit']] }} {{ $i === 0 ? '' : 'opacity-0' }} transition-opacity duration-1000 ease-out"
             />
         </picture>
     @endforeach
