@@ -16,9 +16,14 @@
     // the viewport. 'natural' keeps a landscape photo at its own aspect ratio: forcing it
     // to fill the full height would scale it ~2.3x, which is what made it so soft.
     $fits = [
-        'cover' => 'sm:inset-0 sm:size-full sm:max-w-full lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[min(58%,40rem)] lg:max-w-none lg:[mask-image:linear-gradient(to_right,transparent_0%,black_32%)]',
-        'natural' => 'sm:top-1/2 sm:h-auto sm:w-[min(75%,40rem)] sm:max-w-none sm:-translate-y-1/2 lg:w-[min(58%,40rem)] sm:[mask-image:linear-gradient(to_right,transparent_0%,black_32%),linear-gradient(to_bottom,transparent_0%,black_20%,black_80%,transparent_100%)] sm:[mask-composite:intersect]',
+        'cover' => 'lg:h-full lg:w-[min(58%,40rem)] lg:[mask-image:linear-gradient(to_right,transparent_0%,black_32%)]',
+        'natural' => 'lg:top-1/2 lg:h-auto lg:w-[min(58%,40rem)] lg:-translate-y-1/2 lg:[mask-image:linear-gradient(to_right,transparent_0%,black_32%),linear-gradient(to_bottom,transparent_0%,black_20%,black_80%,transparent_100%)] lg:[mask-composite:intersect]',
     ];
+
+    // Below lg the photo is its own frame across the top of the screen with the copy
+    // underneath, fading into the orange along its bottom edge. Full-bleed behind the
+    // copy only ever showed a random slice of a face.
+    $frame = 'absolute inset-x-0 top-0 h-[46svh] w-full max-w-none object-cover [mask-image:linear-gradient(to_bottom,black_62%,transparent_100%)] sm:h-[50svh] lg:inset-x-auto lg:right-0';
 
     $slides = [
         ['key' => 'slide-1', 'alt' => 'A woman smiling while applying raw shea butter to her face', 'pos' => 'object-[center_25%]', 'fit' => 'cover'],
@@ -57,7 +62,7 @@
         alt="{{ $slides[0]['alt'] }}"
         fetchpriority="high"
         :class="slide === 0 ? 'opacity-100' : 'opacity-0'"
-        class="absolute top-0 right-0 -z-30 h-auto w-[170%] max-w-none object-cover {{ $slides[0]['pos'] }} {{ $fits[$slides[0]['fit']] }} transition-opacity duration-1000 ease-out"
+        class="{{ $frame }} -z-30 {{ $slides[0]['pos'] }} {{ $fits[$slides[0]['fit']] }} transition-opacity duration-1000 ease-out"
     />
     @foreach ($slides as $i => $item)
         <picture>
@@ -67,21 +72,13 @@
                 alt="{{ $item['alt'] }}"
                 loading="lazy"
                 :class="slide === {{ $i }} ? 'opacity-100' : 'opacity-0'"
-                class="absolute top-0 right-0 -z-20 h-auto w-[170%] max-w-none object-cover {{ $item['pos'] }} {{ $fits[$item['fit']] }} transition-opacity duration-1000 ease-out"
+                class="{{ $frame }} -z-20 {{ $item['pos'] }} {{ $fits[$item['fit']] }} transition-opacity duration-1000 ease-out"
             />
         </picture>
     @endforeach
 
     {{-- A soft brand-orange wash ties the four different photo backgrounds together --}}
     <div class="absolute inset-0 -z-10 bg-sand/15"></div>
-
-    {{-- Slanted fade below lg: the photograph carries on down the left while the copy
-         still lands on solid orange. --}}
-    <div class="absolute inset-0 -z-10 hidden bg-[linear-gradient(210deg,transparent_0%,transparent_18%,var(--color-sand)_38%)] sm:block lg:hidden"></div>
-
-    {{-- Phones: sized to the photo itself (127vw tall), sliding down and to the right so
-         the subject stays clear while the text side lands on solid orange. --}}
-    <div class="absolute inset-x-0 top-0 -z-10 h-[127vw] bg-[linear-gradient(232deg,transparent_0%,transparent_34%,var(--color-sand)_56%)] sm:hidden"></div>
 
     {{-- Desktop scrim --}}
     <div class="absolute inset-0 -z-10 hidden bg-gradient-to-r from-sand from-30% via-sand/90 via-46% to-transparent to-70% lg:block"></div>
@@ -124,9 +121,7 @@
                 </span>
             </h1>
 
-            {{-- Phones: everything from the paragraph down sits on a solid ground that fades in
-                 above it, so the photograph can run lower without ever sitting under text. --}}
-            <div class="max-sm:relative max-sm:isolate max-sm:before:absolute max-sm:before:-inset-x-6 max-sm:before:-top-10 max-sm:before:-bottom-9 max-sm:before:-z-10 max-sm:before:bg-[linear-gradient(to_bottom,transparent,var(--color-sand)_3.25rem)]">
+            <div>
                 {{-- Supporting copy --}}
                 <p data-enter style="--d:600" class="font-sub mt-6 max-lg:[@media(max-height:700px)]:mt-4 max-w-lg text-[0.95rem] leading-relaxed text-cosmic-900/90 sm:text-base lg:text-lg">
                     Skincare, beauty, body enhancement and spa products at
@@ -148,7 +143,7 @@
                 </div>
 
                 {{-- Assurance pills --}}
-                <ul data-enter style="--d:860" class="mt-7 max-lg:[@media(max-height:700px)]:mt-5 max-lg:[@media(max-height:700px)]:hidden flex flex-wrap items-center gap-2">
+                <ul data-enter style="--d:860" class="hidden sm:flex mt-7 max-lg:[@media(max-height:700px)]:mt-5 max-lg:[@media(max-height:700px)]:hidden flex-wrap items-center gap-2">
                     @foreach ($assurances as $assurance)
                         <li class="liquid-glass font-sub inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium text-cosmic-900/85 ring-1 ring-gold-400/30">
                             <x-icon :name="$assurance['icon']" class="size-4 text-gold-700" />
@@ -158,7 +153,7 @@
                 </ul>
 
                 {{-- Location marker --}}
-                <p data-enter style="--d:960" class="font-sub mt-6 inline-flex items-center gap-2 [@media(max-height:700px)]:hidden text-xs tracking-[0.12em] text-cosmic-900/55 uppercase">
+                <p data-enter style="--d:960" class="font-sub mt-6 hidden sm:inline-flex items-center gap-2 [@media(max-height:700px)]:hidden text-xs tracking-[0.12em] text-cosmic-900/55 uppercase">
                     <x-icon name="map-marker-alt-solid" class="size-4" />
                     {{ config('milkyway.address.area') }}
                 </p>
