@@ -9,13 +9,24 @@
     // single photo used to. Each has its own background tone (mustard, grey, neutral)
     // so there is no one colour that blends invisibly with all of them -- the fades
     // below lean on the brand orange instead.
+    //
+    // Sharpness is set by how far a photo is stretched past its native size. The sources
+    // are only ~500px wide, so on desktop the photo is capped at 40rem (about 1.3x native)
+    // and its own left edge dissolves into the orange, rather than being stretched across
+    // the viewport. 'natural' keeps a landscape photo at its own aspect ratio: forcing it
+    // to fill the full height would scale it ~2.3x, which is what made it so soft.
+    $fits = [
+        'cover' => 'sm:inset-0 sm:size-full sm:max-w-full lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[min(58%,40rem)] lg:max-w-none lg:[mask-image:linear-gradient(to_right,transparent_0%,black_32%)]',
+        'natural' => 'sm:top-1/2 sm:h-auto sm:w-[min(75%,40rem)] sm:max-w-none sm:-translate-y-1/2 lg:w-[min(58%,40rem)] sm:[mask-image:linear-gradient(to_right,transparent_0%,black_32%),linear-gradient(to_bottom,transparent_0%,black_20%,black_80%,transparent_100%)] sm:[mask-composite:intersect]',
+    ];
+
     $slides = [
-        ['key' => 'slide-1', 'alt' => 'A woman smiling while applying raw shea butter to her face', 'pos' => 'object-[center_25%]'],
-        ['key' => 'slide-2', 'alt' => 'A woman checking a hand mirror while applying skincare cream', 'pos' => 'object-[35%_30%]'],
+        ['key' => 'slide-1', 'alt' => 'A woman smiling while applying raw shea butter to her face', 'pos' => 'object-[center_25%]', 'fit' => 'cover'],
+        ['key' => 'slide-2', 'alt' => 'A woman checking a hand mirror while applying skincare cream', 'pos' => 'object-[35%_30%]', 'fit' => 'natural'],
         // slide-3 (towel + flowers) is dropped: it's almost entirely pale robe and white
         // towel, so against the orange wash it renders as a near-blank rectangle no
         // matter the crop -- not a framing problem, the photo itself doesn't work here.
-        ['key' => 'slide-4', 'alt' => 'Close-up of a woman applying a dollop of cream to her cheek', 'pos' => 'object-[center_32%]'],
+        ['key' => 'slide-4', 'alt' => 'Close-up of a woman applying a dollop of cream to her cheek', 'pos' => 'object-[center_32%]', 'fit' => 'cover'],
     ];
 @endphp
 
@@ -38,12 +49,15 @@
     class="relative isolate flex h-[100svh] flex-col justify-end overflow-hidden bg-sand lg:justify-center"
 >
 
-    {{-- Photographs, cross-fading. Server-rendered base is the first slide, and the no-JS fallback. --}}
+    {{-- Photographs, cross-fading. The server-rendered base is slide one and the no-JS fallback;
+         once Alpine runs it fades out with the rest, so it never shows through a photo that
+         does not fill the whole frame. --}}
     <img
         src="/images/hero/{{ $slides[0]['key'] }}.jpg"
         alt="{{ $slides[0]['alt'] }}"
         fetchpriority="high"
-        class="absolute top-0 right-0 -z-30 h-auto w-[170%] max-w-none object-cover {{ $slides[0]['pos'] }} sm:inset-0 sm:size-full sm:max-w-full lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[58%] lg:max-w-none"
+        :class="slide === 0 ? 'opacity-100' : 'opacity-0'"
+        class="absolute top-0 right-0 -z-30 h-auto w-[170%] max-w-none object-cover {{ $slides[0]['pos'] }} {{ $fits[$slides[0]['fit']] }} transition-opacity duration-1000 ease-out"
     />
     @foreach ($slides as $i => $item)
         <picture>
@@ -53,7 +67,7 @@
                 alt="{{ $item['alt'] }}"
                 loading="lazy"
                 :class="slide === {{ $i }} ? 'opacity-100' : 'opacity-0'"
-                class="absolute top-0 right-0 -z-20 h-auto w-[170%] max-w-none object-cover {{ $item['pos'] }} transition-opacity duration-1000 ease-out sm:inset-0 sm:size-full sm:max-w-full lg:inset-y-0 lg:left-auto lg:right-0 lg:w-[58%] lg:max-w-none"
+                class="absolute top-0 right-0 -z-20 h-auto w-[170%] max-w-none object-cover {{ $item['pos'] }} {{ $fits[$item['fit']] }} transition-opacity duration-1000 ease-out"
             />
         </picture>
     @endforeach

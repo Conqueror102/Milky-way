@@ -32,10 +32,12 @@
         ],
     ];
 
+    // Plates 2 and 3 are the same real photos the hero carousel uses. The crop is
+    // per-photo, since a 4:3 window over a tall portrait otherwise lands on the chin.
     $plates = [
-        ['key' => 'face-roller', 'alt' => 'A woman using a rose quartz face roller'],
-        ['key' => 'podium', 'alt' => 'Cosmetic bottles and tubes arranged on a display podium'],
-        ['key' => 'spa-massage', 'alt' => 'A woman receiving an oil massage in a spa'],
+        ['src' => '/images/showcase/face-roller', 'alt' => 'A woman using a rose quartz face roller', 'pos' => 'object-center'],
+        ['src' => '/images/hero/slide-1', 'alt' => 'A woman smiling while applying raw shea butter to her face', 'pos' => 'object-[center_15%]'],
+        ['src' => '/images/hero/slide-2', 'alt' => 'A woman checking a hand mirror while applying skincare cream', 'pos' => 'object-[65%_center]'],
     ];
 @endphp
 
@@ -77,12 +79,12 @@
             <div data-stagger="150" data-stagger-from="200" class="order-first grid grid-cols-3 gap-3 lg:order-none lg:col-start-3 lg:row-start-1 lg:flex lg:flex-col lg:gap-4">
                 @foreach ($plates as $plate)
                     <picture>
-                        <source type="image/webp" srcset="/images/showcase/{{ $plate['key'] }}.webp" />
+                        <source type="image/webp" srcset="{{ $plate['src'] }}.webp" />
                         <img
-                            src="/images/showcase/{{ $plate['key'] }}.jpg"
+                            src="{{ $plate['src'] }}.jpg"
                             alt="{{ $plate['alt'] }}"
                             loading="lazy"
-                            data-reveal="clip" class="aspect-square w-full rounded-xl object-cover lg:aspect-[4/3]"
+                            data-reveal="clip" class="aspect-square w-full rounded-xl object-cover {{ $plate['pos'] }} lg:aspect-[4/3]"
                         />
                     </picture>
                 @endforeach
