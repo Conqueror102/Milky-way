@@ -33,8 +33,8 @@
             <div class="flex items-center gap-4">
                 @if ($photo && $photo->isPreviewable())
                     <img src="{{ $photo->temporaryUrl() }}" alt="" class="size-24 rounded-lg object-cover">
-                @elseif ($product?->image_url)
-                    <img src="{{ $product->image_url }}" alt="" class="size-24 rounded-lg object-cover">
+                @elseif ($product?->imageSrc())
+                    <img src="{{ $product->imageSrc() }}" alt="" class="size-24 rounded-lg object-cover">
                 @else
                     <div class="size-24 rounded-lg bg-zinc-100 dark:bg-zinc-700"></div>
                 @endif

@@ -30,8 +30,8 @@
                 <flux:table.row :key="$product->id">
                     <flux:table.cell>
                         <div class="flex items-center gap-3">
-                            @if ($product->image_url)
-                                <img src="{{ $product->image_url }}" alt="" class="size-10 rounded-md object-cover" loading="lazy">
+                            @if ($product->imageSrc())
+                                <img src="{{ $product->imageSrc() }}" alt="" class="size-10 rounded-md object-cover" loading="lazy">
                             @else
                                 <div class="size-10 rounded-md bg-zinc-100 dark:bg-zinc-700"></div>
                             @endif
