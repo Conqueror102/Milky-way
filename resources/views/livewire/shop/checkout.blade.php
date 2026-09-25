@@ -33,8 +33,8 @@
             </div>
 
             <div>
-                <label for="customer_email" class="{{ $label }}">Email <span class="font-normal text-cosmic-900/50">(optional)</span></label>
-                <input id="customer_email" type="email" wire:model="customer_email" autocomplete="email" class="{{ $field }}" />
+                <label for="customer_email" class="{{ $label }}">Email <span class="font-normal text-cosmic-900/50">(for your receipt)</span></label>
+                <input id="customer_email" type="email" wire:model="customer_email" autocomplete="email" required class="{{ $field }}" />
                 @error('customer_email') <p class="{{ $error }}">{{ $message }}</p> @enderror
             </div>
 

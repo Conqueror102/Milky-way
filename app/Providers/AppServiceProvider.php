@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Payments\PaymentGateway;
+use App\Payments\PaystackGateway;
 use App\Services\Cloudinary;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
@@ -10,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use RuntimeException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,16 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(Cloudinary::class, fn (): Cloudinary => Cloudinary::fromConfig());
+
+        $this->app->singleton(PaystackGateway::class, fn () => new PaystackGateway(
+            (string) config('services.paystack.secret_key'),
+            (string) config('services.paystack.base_url'),
+        ));
+
+        $this->app->bind(PaymentGateway::class, fn () => match (config('milkyway.shop.payment_gateway')) {
+            'paystack' => $this->app->make(PaystackGateway::class),
+            default => throw new RuntimeException('No payment gateway is configured.'),
+        });
     }
 
     /**

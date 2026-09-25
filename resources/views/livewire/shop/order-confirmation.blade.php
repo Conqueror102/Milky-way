@@ -19,6 +19,10 @@
         @endif
     </p>
 
+    @if (session('payment_notice'))
+        <p class="font-sub mt-6 rounded-xl bg-red-100 px-4 py-3 text-sm text-red-800" role="status">{{ session('payment_notice') }}</p>
+    @endif
+
     {{-- Payment step --}}
     <div class="mt-8 rounded-[1.5rem] bg-cosmic-950 p-6 text-cream-50">
         <div class="font-sub flex items-center justify-between gap-4">
@@ -40,6 +44,8 @@
             >
                 Pay {{ $order->formattedSubtotal() }}
             </button>
+            @error('payment') <p class="font-sub mt-3 rounded-xl bg-red-100 px-3 py-2 text-sm text-red-800">{{ $message }}</p> @enderror
+            <p class="font-sub mt-3 text-center text-xs text-cream-50/60">Secure card, bank transfer and USSD payment by Paystack.</p>
         @else
             <button
                 type="button"

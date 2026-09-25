@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
+use RuntimeException;
 
 /**
  * Where checkout lands: the placed order, and the step that takes payment for it.
@@ -46,7 +47,16 @@ class OrderConfirmation extends Component
             return;
         }
 
-        $this->redirect(app(PaymentGateway::class)->checkoutUrl($this->order));
+        try {
+            $url = app(PaymentGateway::class)->checkoutUrl($this->order);
+        } catch (RuntimeException $e) {
+            report($e);
+            $this->addError('payment', "We couldn't start the payment just now. Please try again in a moment.");
+
+            return;
+        }
+
+        $this->redirect($url);
     }
 
     public function render(): View

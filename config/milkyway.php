@@ -76,15 +76,16 @@ return [
     | deployments and off everywhere else unless SHOP_DEMO_PRICES says so; it
     | never writes prices to the database.
     |
-    | payment_gateway names the online payment provider. Until one is set, the
-    | payment step shows the order total with payment marked as coming soon.
+    | payment_gateway names the online payment provider. Paystack switches on by
+    | itself once PAYSTACK_SECRET_KEY is set; until then the payment step shows
+    | the order total with payment marked as coming soon.
     |
     */
 
     'shop' => [
         'demo_prices' => (bool) env('SHOP_DEMO_PRICES', env('VERCEL_ENV') === 'preview'),
 
-        'payment_gateway' => env('SHOP_PAYMENT_GATEWAY'),
+        'payment_gateway' => env('SHOP_PAYMENT_GATEWAY', env('PAYSTACK_SECRET_KEY') ? 'paystack' : null),
     ],
 
 ];
