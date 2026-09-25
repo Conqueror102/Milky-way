@@ -35,6 +35,7 @@ class Index extends Component
         return Product::query()
             ->when($this->search !== '', fn ($query) => $query->where('name', 'like', "%{$this->search}%"))
             ->latest()
+            ->latest('id')
             ->paginate(15);
     }
 

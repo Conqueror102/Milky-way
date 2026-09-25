@@ -34,6 +34,7 @@ class Index extends Component
             ->withCount('items')
             ->when($this->status !== '', fn ($query) => $query->where('status', $this->status))
             ->latest()
+            ->latest('id')
             ->paginate(20);
     }
 
