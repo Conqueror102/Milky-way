@@ -5,8 +5,50 @@
     </a>
 
     <div class="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-14">
+        @php $gallery = $product->gallery(); @endphp
+
         <div class="rounded-[2rem] bg-white p-3 shadow-[0_12px_32px_-14px_rgba(20,52,82,0.3)] ring-1 ring-cosmic-900/8">
-            <x-shop.product-image :product="$product" loading="eager" class="aspect-square w-full rounded-[1.5rem]" />
+            @if ($gallery !== [])
+                {{-- Main photo, plus thumbnails when there are several; the first photo is server-rendered so it shows without JS. --}}
+                <div x-data="{ active: 0 }" wire:ignore>
+                    <div class="relative">
+                        @foreach ($gallery as $index => $image)
+                            <picture
+                                @if ($index > 0) x-cloak @endif
+                                x-show="active === {{ $index }}"
+                            >
+                                @if ($image['webp'])
+                                    <source type="image/webp" srcset="{{ $image['webp'] }}" />
+                                @endif
+                                <img
+                                    src="{{ $image['src'] }}"
+                                    alt="{{ $image['alt'] }}"
+                                    loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                    class="aspect-square w-full rounded-[1.5rem] object-cover"
+                                />
+                            </picture>
+                        @endforeach
+                    </div>
+
+                    @if (count($gallery) > 1)
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        @foreach ($gallery as $index => $image)
+                            <button
+                                type="button"
+                                x-on:click="active = {{ $index }}"
+                                :class="active === {{ $index }} ? 'ring-2 ring-cosmic-900' : 'ring-1 ring-cosmic-900/10 opacity-75 hover:opacity-100'"
+                                class="size-16 overflow-hidden rounded-xl transition sm:size-20"
+                            >
+                                <span class="sr-only">Show photo {{ $index + 1 }}</span>
+                                <img src="{{ $image['src'] }}" alt="" loading="lazy" class="size-full object-cover" />
+                            </button>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+            @else
+                <x-shop.product-image :product="$product" loading="eager" class="aspect-square w-full rounded-[1.5rem]" />
+            @endif
         </div>
 
         <div class="flex flex-col">
@@ -87,7 +129,7 @@
         <section class="mt-16 lg:mt-24">
             <h2 class="text-2xl font-bold text-cosmic-900">More in {{ $product->category }}</h2>
 
-            <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+            <div class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
                 @foreach ($this->related as $item)
                     <a href="{{ route('products.show', $item) }}" wire:key="related-{{ $item->id }}" class="group flex flex-col rounded-[1.5rem] bg-white p-3 ring-1 ring-cosmic-900/8 transition hover:ring-cosmic-900/25">
                         <x-shop.product-image :product="$item" class="aspect-square w-full rounded-[1rem]" />

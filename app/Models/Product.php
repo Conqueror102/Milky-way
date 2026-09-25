@@ -6,8 +6,10 @@ use App\Support\Money;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -26,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property int $sort_order
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Collection<int, ProductImage> $images
  */
 #[Fillable(['name', 'slug', 'category', 'type', 'description', 'price', 'image_url', 'image_public_id', 'image_path', 'stock', 'is_active', 'sort_order'])]
 class Product extends Model
@@ -51,6 +54,16 @@ class Product extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    /**
+     * Extra gallery photos, after the main image.
+     *
+     * @return HasMany<ProductImage, $this>
+     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order')->orderBy('id');
     }
 
     /**
@@ -104,5 +117,29 @@ class Product extends Model
     public function imageWebp(): ?string
     {
         return blank($this->image_url) && filled($this->image_path) ? $this->image_path.'.webp' : null;
+    }
+
+    /**
+     * Every photo for the product page: the main image first, then the gallery images.
+     *
+     * @return list<array{src: string, webp: string|null, alt: string}>
+     */
+    public function gallery(): array
+    {
+        $gallery = [];
+
+        if ($src = $this->imageSrc()) {
+            $gallery[] = ['src' => $src, 'webp' => $this->imageWebp(), 'alt' => $this->name];
+        }
+
+        foreach ($this->images as $image) {
+            $gallery[] = [
+                'src' => $image->url,
+                'webp' => null,
+                'alt' => $image->alt ?? $this->name.' photo '.(count($gallery) + 1),
+            ];
+        }
+
+        return $gallery;
     }
 }
