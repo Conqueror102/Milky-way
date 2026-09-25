@@ -17,6 +17,7 @@ function fillCheckout($component)
     return $component
         ->set('customer_name', 'Ada Obi')
         ->set('customer_phone', '+234 803 123 4567')
+        ->set('customer_email', 'ada@example.com')
         ->set('delivery_area', 'Lagos')
         ->set('delivery_address', '12 Allen Avenue, Ikeja');
 }
@@ -42,7 +43,7 @@ test('placing an order saves it with its items and empties the cart', function (
     expect($order->status)->toBe(OrderStatus::Pending)
         ->and($order->reference)->toStartWith('MW-')
         ->and($order->customer_name)->toBe('Ada Obi')
-        ->and($order->customer_email)->toBeNull()
+        ->and($order->customer_email)->toBe('ada@example.com')
         ->and($order->notes)->toBe('Call before delivery')
         ->and($order->subtotal)->toBe(12500)
         ->and($order->items)->toHaveCount(2)

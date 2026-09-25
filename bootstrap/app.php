@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Vercel terminates TLS at the edge and forwards X-Forwarded-* headers,
         // so the app must trust them to generate correct https URLs.
         $middleware->trustProxies(at: '*');
+
+        // Paystack signs its webhook instead; it can't send a CSRF token.
+        $middleware->validateCsrfTokens(except: ['payments/paystack/webhook']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
