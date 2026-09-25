@@ -20,6 +20,7 @@
             <flux:table.column>{{ __('Items') }}</flux:table.column>
             <flux:table.column>{{ __('Total') }}</flux:table.column>
             <flux:table.column>{{ __('Status') }}</flux:table.column>
+            <flux:table.column>{{ __('Payment') }}</flux:table.column>
             <flux:table.column>{{ __('Placed') }}</flux:table.column>
         </flux:table.columns>
 
@@ -33,11 +34,12 @@
                     <flux:table.cell>{{ $order->items_count }}</flux:table.cell>
                     <flux:table.cell>₦{{ number_format($order->subtotal) }}</flux:table.cell>
                     <flux:table.cell><flux:badge size="sm">{{ __($order->status->label()) }}</flux:badge></flux:table.cell>
+                    <flux:table.cell><x-admin.payment-badge :status="$order->payment_status" /></flux:table.cell>
                     <flux:table.cell>{{ $order->created_at?->diffForHumans() }}</flux:table.cell>
                 </flux:table.row>
             @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="6" class="text-center">{{ __('No orders yet.') }}</flux:table.cell>
+                    <flux:table.cell colspan="7" class="text-center">{{ __('No orders yet.') }}</flux:table.cell>
                 </flux:table.row>
             @endforelse
         </flux:table.rows>

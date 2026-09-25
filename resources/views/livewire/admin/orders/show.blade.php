@@ -2,7 +2,16 @@
     <div>
         <flux:link :href="route('admin.orders.index')" wire:navigate class="text-sm">{{ __('Back to orders') }}</flux:link>
         <flux:heading size="xl" level="1" class="mt-2">{{ __('Order :reference', ['reference' => $order->reference]) }}</flux:heading>
-        <flux:subheading>{{ __('Placed :date', ['date' => $order->created_at?->format('j M Y, g:i a')]) }}</flux:subheading>
+        <flux:subheading class="flex flex-wrap items-center gap-2">
+            {{ __('Placed :date', ['date' => $order->created_at?->format('j M Y, g:i a')]) }}
+            <x-admin.payment-badge :status="$order->payment_status" />
+            @if ($order->paid_at)
+                <span>{{ __('Paid :date', ['date' => $order->paid_at->format('j M Y, g:i a')]) }}</span>
+            @endif
+            @if ($order->payment_reference)
+                <span>{{ __('Ref :reference', ['reference' => $order->payment_reference]) }}</span>
+            @endif
+        </flux:subheading>
     </div>
 
     <div class="grid gap-6 sm:grid-cols-2">

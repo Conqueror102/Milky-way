@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Livewire\Admin\Orders\Index;
 use App\Livewire\Admin\Orders\Show;
 use App\Models\Order;
@@ -43,4 +44,16 @@ test('order status must be a known value', function () {
         ->set('status', 'teleported')
         ->call('updateStatus')
         ->assertHasErrors('status');
+});
+
+test('admins see each order\'s payment status', function () {
+    $order = Order::factory()->create([
+        'payment_status' => PaymentStatus::Paid,
+        'payment_reference' => 'PAY-123',
+        'paid_at' => now(),
+    ]);
+
+    Livewire::test(Index::class)->assertSee('Paid');
+
+    $this->get(route('admin.orders.show', $order))->assertOk()->assertSee('Paid')->assertSee('PAY-123');
 });

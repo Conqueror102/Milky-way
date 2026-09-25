@@ -24,7 +24,7 @@
 
         <div class="grid gap-6 sm:grid-cols-2">
             <flux:input wire:model="price" :label="__('Price (₦)')" :description="__('Leave empty to show Price on request.')" type="number" min="0" step="1" />
-            <flux:input wire:model="stock" :label="__('Stock')" type="number" min="0" step="1" required />
+            <flux:input wire:model="stock" :label="__('Stock')" :description="__('Leave empty if you don\'t track stock. At 0 it shows as sold out.')" type="number" min="0" step="1" />
         </div>
 
         <flux:field>

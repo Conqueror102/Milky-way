@@ -39,7 +39,15 @@
                         </div>
                     </flux:table.cell>
                     <flux:table.cell>{{ $product->price === null ? __('On request') : '₦'.number_format($product->price) }}</flux:table.cell>
-                    <flux:table.cell>{{ $product->stock }}</flux:table.cell>
+                    <flux:table.cell>
+                        @if ($product->stock === null)
+                            <span class="text-zinc-500">{{ __('Not tracked') }}</span>
+                        @elseif ($product->isSoldOut())
+                            <flux:badge color="red" size="sm">{{ __('Sold out') }}</flux:badge>
+                        @else
+                            {{ $product->stock }}
+                        @endif
+                    </flux:table.cell>
                     <flux:table.cell>
                         @if ($product->is_active)
                             <flux:badge color="green" size="sm">{{ __('Live') }}</flux:badge>

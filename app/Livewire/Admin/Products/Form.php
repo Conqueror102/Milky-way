@@ -36,7 +36,7 @@ class Form extends Component
 
     public string $price = '';
 
-    public string $stock = '0';
+    public string $stock = '';
 
     public bool $is_active = true;
 
@@ -83,7 +83,7 @@ class Form extends Component
             'type' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:5000'],
             'price' => ['nullable', 'integer', 'min:0'],
-            'stock' => ['required', 'integer', 'min:0'],
+            'stock' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['boolean'],
             'photo' => ['nullable', 'image', 'max:5120'],
             'photos' => ['array', 'max:10'],
@@ -203,7 +203,7 @@ class Form extends Component
             'type' => $validated['type'] ?: null,
             'description' => $validated['description'] ?: null,
             'price' => filled($validated['price']) ? (int) $validated['price'] : null,
-            'stock' => (int) $validated['stock'],
+            'stock' => filled($validated['stock']) ? (int) $validated['stock'] : null,
             'is_active' => $validated['is_active'],
         ])->save();
 

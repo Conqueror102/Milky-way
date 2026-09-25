@@ -245,3 +245,22 @@ test('deleting a product removes its gallery photos from Cloudinary', function (
     Http::assertSent(fn (Request $request) => $request['public_id'] === 'milky-way/products/main');
     Http::assertSent(fn (Request $request) => $request['public_id'] === 'milky-way/products/extra');
 });
+
+test('stock can be left empty to stop tracking it', function () {
+    $product = Product::factory()->create(['stock' => 4]);
+
+    Livewire::test(Form::class, ['product' => $product->fresh()])
+        ->set('stock', '')
+        ->call('save')
+        ->assertHasNoErrors();
+
+    expect($product->fresh()->stock)->toBeNull();
+
+    Livewire::test(Index::class)->assertSee('Not tracked');
+});
+
+test('sold out products are flagged in the list', function () {
+    Product::factory()->create(['stock' => 0, 'name' => 'Empty Shelf']);
+
+    Livewire::test(Index::class)->assertSee('Sold out');
+});
