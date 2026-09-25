@@ -56,7 +56,7 @@
     <form wire:submit="updateStatus" class="flex items-end gap-4">
         <flux:select wire:model="status" :label="__('Status')" class="max-w-48">
             @foreach (\App\Enums\OrderStatus::cases() as $option)
-                <flux:select.option :value="$option->value">{{ __(ucfirst($option->value)) }}</flux:select.option>
+                <flux:select.option :value="$option->value">{{ __($option->label()) }}</flux:select.option>
             @endforeach
         </flux:select>
 

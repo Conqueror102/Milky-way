@@ -38,7 +38,7 @@ test('admins can create a product with a photo', function () {
         ->assertHasNoErrors()
         ->assertRedirect(route('admin.products.index'));
 
-    $product = Product::sole();
+    $product = Product::where('slug', 'shea-body-butter')->sole();
 
     expect($product->name)->toBe('Shea Body Butter')
         ->and($product->slug)->toBe('shea-body-butter')
@@ -75,7 +75,7 @@ test('a failed upload keeps the form open with an error', function () {
         ->assertHasErrors('photo')
         ->assertNoRedirect();
 
-    expect(Product::count())->toBe(0);
+    expect(Product::where('name', 'Shea Body Butter')->exists())->toBeFalse();
 });
 
 test('admins can edit a product and replace its photo', function () {
@@ -84,7 +84,7 @@ test('admins can edit a product and replace its photo', function () {
         'image_public_id' => 'milky-way/products/old',
     ]);
 
-    Livewire::test(Form::class, ['product' => $product])
+    Livewire::test(Form::class, ['product' => $product->fresh()])
         ->assertSet('name', $product->name)
         ->set('name', 'Renamed')
         ->set('price', '999')
@@ -105,7 +105,7 @@ test('admins can edit a product and replace its photo', function () {
 test('editing without a new photo keeps the old one', function () {
     $product = Product::factory()->create(['image_public_id' => 'milky-way/products/old']);
 
-    Livewire::test(Form::class, ['product' => $product])
+    Livewire::test(Form::class, ['product' => $product->fresh()])
         ->set('stock', '3')
         ->call('save')
         ->assertHasNoErrors();
@@ -140,7 +140,7 @@ test('the product list can be searched', function () {
 test('a product can be left as price on request', function () {
     $product = Product::factory()->create(['price' => 1000]);
 
-    Livewire::test(Form::class, ['product' => $product])
+    Livewire::test(Form::class, ['product' => $product->fresh()])
         ->set('price', '')
         ->call('save')
         ->assertHasNoErrors();

@@ -8,7 +8,7 @@
         <flux:select wire:model.live="status" class="max-w-48">
             <flux:select.option value="">{{ __('All statuses') }}</flux:select.option>
             @foreach (\App\Enums\OrderStatus::cases() as $option)
-                <flux:select.option :value="$option->value">{{ __(ucfirst($option->value)) }}</flux:select.option>
+                <flux:select.option :value="$option->value">{{ __($option->label()) }}</flux:select.option>
             @endforeach
         </flux:select>
     </div>
@@ -32,7 +32,7 @@
                     <flux:table.cell>{{ $order->customer_name }}</flux:table.cell>
                     <flux:table.cell>{{ $order->items_count }}</flux:table.cell>
                     <flux:table.cell>₦{{ number_format($order->subtotal) }}</flux:table.cell>
-                    <flux:table.cell><flux:badge size="sm">{{ __(ucfirst($order->status->value)) }}</flux:badge></flux:table.cell>
+                    <flux:table.cell><flux:badge size="sm">{{ __($order->status->label()) }}</flux:badge></flux:table.cell>
                     <flux:table.cell>{{ $order->created_at?->diffForHumans() }}</flux:table.cell>
                 </flux:table.row>
             @empty
