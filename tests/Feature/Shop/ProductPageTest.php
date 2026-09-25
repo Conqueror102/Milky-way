@@ -2,6 +2,7 @@
 
 use App\Livewire\Shop\ProductPage;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Support\Cart;
 use Livewire\Livewire;
 
@@ -76,4 +77,42 @@ test('the shop section links each product to its page', function () {
 
 test('the existing catalogue is in the products table', function () {
     expect(Product::where('slug', 'anua-niacinamide-serum')->exists())->toBeTrue();
+});
+
+test('a product with extra photos shows a gallery with thumbnails', function () {
+    $product = Product::factory()->create([
+        'name' => 'Glow Serum',
+        'category' => 'Test Category',
+        'image_url' => 'https://res.cloudinary.com/demo/image/upload/front.jpg',
+    ]);
+    ProductImage::factory()->for($product)->create(['url' => 'https://res.cloudinary.com/demo/image/upload/back.jpg', 'sort_order' => 2]);
+    ProductImage::factory()->for($product)->create(['url' => 'https://res.cloudinary.com/demo/image/upload/side.jpg', 'sort_order' => 1]);
+
+    expect(array_column($product->gallery(), 'src'))->toBe([
+        'https://res.cloudinary.com/demo/image/upload/front.jpg',
+        'https://res.cloudinary.com/demo/image/upload/side.jpg',
+        'https://res.cloudinary.com/demo/image/upload/back.jpg',
+    ]);
+
+    $this->get(route('products.show', $product))
+        ->assertOk()
+        ->assertSee('https://res.cloudinary.com/demo/image/upload/back.jpg')
+        ->assertSee('Show photo 3');
+});
+
+test('a product with only its main image shows no thumbnails', function () {
+    $product = Product::factory()->create(['category' => 'Test Category', 'image_url' => 'https://res.cloudinary.com/demo/image/upload/front.jpg']);
+
+    $this->get(route('products.show', $product))
+        ->assertOk()
+        ->assertSee('https://res.cloudinary.com/demo/image/upload/front.jpg')
+        ->assertDontSee('Show photo');
+});
+
+test('gallery photos show even when the product has no main image', function () {
+    $product = Product::factory()->create(['category' => 'Test Category']);
+    ProductImage::factory()->for($product)->create(['url' => 'https://res.cloudinary.com/demo/image/upload/only.jpg']);
+
+    $this->get(route('products.show', $product))
+        ->assertSee('https://res.cloudinary.com/demo/image/upload/only.jpg');
 });
