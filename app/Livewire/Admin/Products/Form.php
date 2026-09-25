@@ -84,12 +84,15 @@ class Form extends Component
     /**
      * Categories already in use, offered as suggestions.
      *
-     * @return list<string>
+     * @return array<int, string>
      */
     #[Computed]
     public function categories(): array
     {
-        return Product::query()->distinct()->orderBy('category')->pluck('category')->all();
+        return Product::query()->distinct()->orderBy('category')->pluck('category')
+            ->map(fn (mixed $category): string => (string) $category)
+            ->values()
+            ->all();
     }
 
     public function save(Cloudinary $cloudinary): void
