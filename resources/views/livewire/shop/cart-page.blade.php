@@ -61,7 +61,7 @@
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-cream-50/70">Delivery</dt>
-                        <dd class="text-cream-50/70">Confirmed with you after ordering</dd>
+                        <dd class="text-cream-50/70">Arranged after payment</dd>
                     </div>
                 </dl>
 

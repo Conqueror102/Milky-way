@@ -1,11 +1,15 @@
 <?php
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Livewire\Shop\Checkout;
+use App\Livewire\Shop\OrderConfirmation;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Payments\PaymentGateway;
 use App\Support\Cart;
+use Illuminate\Support\Facades\DB;
 use Livewire\Livewire;
 
 function fillCheckout($component)
@@ -113,7 +117,9 @@ test('the confirmation page shows the order to the browser that placed it', func
         ->assertSee($order->reference)
         ->assertSee('3 &times; Glow Serum', escape: false)
         ->assertSee('₦7,500')
-        ->assertSee('https://wa.me/'.config('milkyway.whatsapp.number'), escape: false);
+        ->assertSee('Pay ₦7,500')
+        ->assertSee('Online payment is being set up')
+        ->assertDontSee('Send order on WhatsApp');
 });
 
 test('the confirmation page is hidden from anyone else', function () {
@@ -127,4 +133,59 @@ test('a signed in customer can reopen their own order', function () {
     $order = Order::factory()->create(['user_id' => $user->id]);
 
     $this->actingAs($user)->get(route('orders.show', $order))->assertOk();
+});
+
+test('an order starts unpaid', function () {
+    app(Cart::class)->add(Product::factory()->create());
+
+    fillCheckout(Livewire::test(Checkout::class))->call('placeOrder');
+
+    expect(Order::sole()->payment_status)->toBe(PaymentStatus::Unpaid);
+});
+
+test('placing an order takes the units out of stock', function () {
+    $tracked = Product::factory()->create(['stock' => 5]);
+    $untracked = Product::factory()->create(['stock' => null]);
+    app(Cart::class)->add($tracked, 3);
+    app(Cart::class)->add($untracked, 2);
+
+    fillCheckout(Livewire::test(Checkout::class))->call('placeOrder')->assertHasNoErrors();
+
+    expect($tracked->fresh()->stock)->toBe(2)
+        ->and($untracked->fresh()->stock)->toBeNull();
+});
+
+test('an order is refused when stock ran out after it was carted', function () {
+    $product = Product::factory()->create(['stock' => 3]);
+    app(Cart::class)->add($product, 3);
+
+    $component = fillCheckout(Livewire::test(Checkout::class));
+
+    // Someone else bought two while this shopper was filling in the form.
+    DB::table('products')->where('id', $product->id)->update(['stock' => 1]);
+
+    $component->call('placeOrder')->assertHasErrors('cart');
+
+    expect(Order::count())->toBe(0)
+        ->and($product->fresh()->stock)->toBe(1)
+        ->and(app(Cart::class)->count())->toBe(1);
+});
+
+test('the pay button hands the order to the payment gateway when one is set up', function () {
+    config(['milkyway.shop.payment_gateway' => 'fake']);
+    app()->instance(PaymentGateway::class, new class implements PaymentGateway
+    {
+        public function checkoutUrl(Order $order): string
+        {
+            return 'https://pay.example/'.$order->reference;
+        }
+    });
+
+    $order = Order::factory()->create(['subtotal' => 5000]);
+    session()->put(Checkout::PLACED_ORDERS_SESSION_KEY, [$order->reference]);
+
+    Livewire::test(OrderConfirmation::class, ['order' => $order])
+        ->assertSee('Pay ₦5,000')
+        ->call('pay')
+        ->assertRedirect('https://pay.example/'.$order->reference);
 });

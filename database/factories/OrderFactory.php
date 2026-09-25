@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -29,6 +30,7 @@ class OrderFactory extends Factory
             'delivery_address' => fake()->address(),
             'notes' => null,
             'subtotal' => 0,
+            'payment_status' => PaymentStatus::Unpaid,
         ];
     }
 }

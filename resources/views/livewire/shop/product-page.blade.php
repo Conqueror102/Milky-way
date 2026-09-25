@@ -61,9 +61,14 @@
 
             <h1 class="mt-4 text-[clamp(2rem,3.6vw,3rem)] leading-[1.08] font-bold tracking-[-0.01em] text-cosmic-900">{{ $product->name }}</h1>
 
-            <p class="mt-4 text-2xl font-bold text-gold-600">
-                {{ $product->formattedPrice() ?? 'Price on request' }}
-            </p>
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+                <p class="text-2xl font-bold text-gold-600">
+                    {{ $product->formattedPrice() ?? 'Price on request' }}
+                </p>
+                @if ($product->usesDemoPrice())
+                    <span class="font-sub rounded-full bg-gold-100 px-2.5 py-1 text-[0.65rem] font-semibold text-gold-800" title="Shown on preview sites only, until a real price is set">Preview price</span>
+                @endif
+            </div>
 
             @if ($product->description)
                 <p class="font-sub mt-5 max-w-prose text-base leading-relaxed text-cosmic-900/75">{{ $product->description }}</p>
@@ -86,6 +91,10 @@
                         </button>
                     </div>
 
+                    @if ($product->stock !== null && $product->stock <= 10)
+                        <p class="font-sub mt-3 text-sm font-semibold text-gold-700">Only {{ $product->stock }} left in stock</p>
+                    @endif
+
                     @error('quantity')
                         <p class="font-sub mt-3 text-sm text-red-700">{{ $message }}</p>
                     @enderror
@@ -99,23 +108,14 @@
                             <a href="{{ route('cart') }}" class="font-bold underline underline-offset-4 hover:text-cosmic-800">View cart</a>
                         </div>
                     @endif
+                @elseif ($product->isSoldOut())
+                    <p class="font-sub text-base font-semibold text-cosmic-900">Sold out</p>
+                    <p class="font-sub mt-1 text-sm text-cosmic-900/70">This product is out of stock at the moment. Check back soon.</p>
                 @else
                     <p class="font-sub text-sm leading-relaxed text-cosmic-900/70">
-                        We confirm the price of this product on request. Message us and we will get back to you with price and availability.
+                        This product isn't available to order online yet.
                     </p>
                 @endif
-
-                <x-site.whatsapp-link
-                    :message="'Hello Milkyway Cosmetics Stores, I would like to ask about '.$product->name.'.'"
-                    :class="Arr::toCssClasses([
-                        'font-sub mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition duration-200',
-                        'bg-cosmic-900 text-white hover:bg-cosmic-800' => ! $product->isPurchasable(),
-                        'bg-cosmic-900/6 text-cosmic-900 hover:bg-cosmic-900/10' => $product->isPurchasable(),
-                    ])"
-                >
-                    <x-icon name="whatsapp" class="size-4" />
-                    Ask about this product
-                </x-site.whatsapp-link>
             </div>
 
             <ul class="font-sub mt-6 grid gap-2 text-sm text-cosmic-900/70">

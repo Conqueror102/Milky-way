@@ -23,6 +23,10 @@ return new class extends Migration
             $table->text('delivery_address');
             $table->text('notes')->nullable();
             $table->unsignedInteger('subtotal');
+            $table->string('payment_status')->default('unpaid')->index();
+            $table->string('payment_provider')->nullable();
+            $table->string('payment_reference')->nullable()->unique();
+            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
 

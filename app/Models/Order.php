@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentStatus;
 use App\Support\Money;
 use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -25,12 +26,16 @@ use Illuminate\Support\Carbon;
  * @property string $delivery_address
  * @property string|null $notes
  * @property int $subtotal
+ * @property PaymentStatus $payment_status
+ * @property string|null $payment_provider
+ * @property string|null $payment_reference
+ * @property Carbon|null $paid_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, OrderItem> $items
  * @property-read User|null $user
  */
-#[Fillable(['reference', 'user_id', 'status', 'customer_name', 'customer_phone', 'customer_email', 'delivery_area', 'delivery_address', 'notes', 'subtotal'])]
+#[Fillable(['reference', 'user_id', 'status', 'customer_name', 'customer_phone', 'customer_email', 'delivery_area', 'delivery_address', 'notes', 'subtotal', 'payment_status', 'payment_provider', 'payment_reference', 'paid_at'])]
 class Order extends Model
 {
     /** @use HasFactory<OrderFactory> */
@@ -46,6 +51,8 @@ class Order extends Model
         return [
             'status' => OrderStatus::class,
             'subtotal' => 'integer',
+            'payment_status' => PaymentStatus::class,
+            'paid_at' => 'datetime',
         ];
     }
 
@@ -68,6 +75,11 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->payment_status === PaymentStatus::Paid;
     }
 
     public function formattedSubtotal(): string

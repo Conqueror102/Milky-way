@@ -4,26 +4,58 @@
     </div>
 
     <x-shop.page-heading eyebrow="Order {{ $order->reference }}" class="mt-6">
-        Thank you, <span class="font-script tracking-[-0.03em] text-gold-500">{{ Str::before($order->customer_name, ' ') ?: $order->customer_name }}</span>
+        @if ($order->isPaid())
+            Thank you, <span class="font-script tracking-[-0.03em] text-gold-500">{{ Str::before($order->customer_name, ' ') ?: $order->customer_name }}</span>
+        @else
+            One last <span class="font-script tracking-[-0.03em] text-gold-500">step</span>
+        @endif
     </x-shop.page-heading>
 
     <p class="font-sub mt-4 text-base leading-relaxed text-cosmic-900/75">
-        We have your order. We will call or WhatsApp you on <strong class="text-cosmic-900">{{ $order->customer_phone }}</strong> to confirm availability, delivery and payment.
-        For a faster reply, send us the order on WhatsApp now.
+        @if ($order->isPaid())
+            Your payment is confirmed. We will get your order ready and contact you on <strong class="text-cosmic-900">{{ $order->customer_phone }}</strong> about delivery.
+        @else
+            Your order is saved. Pay for it below and we will get it ready for delivery.
+        @endif
     </p>
 
-    <x-site.whatsapp-link
-        :message="$this->whatsappMessage()"
-        class="font-sub mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-cosmic-900 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-cosmic-800"
-    >
-        <x-icon name="whatsapp" class="size-4" />
-        Send order on WhatsApp
-    </x-site.whatsapp-link>
+    {{-- Payment step --}}
+    <div class="mt-8 rounded-[1.5rem] bg-cosmic-950 p-6 text-cream-50">
+        <div class="font-sub flex items-center justify-between gap-4">
+            <span class="text-cream-50/75">Amount to pay</span>
+            <span class="text-2xl font-bold">{{ $order->formattedSubtotal() }}</span>
+        </div>
 
-    <div class="mt-10 rounded-[1.5rem] bg-white p-5 ring-1 ring-cosmic-900/8 sm:p-6">
+        @if ($order->isPaid())
+            <p class="font-sub mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cream-50">
+                <x-icon name="check-circle-solid" class="size-5 text-gold-400" />
+                Paid
+            </p>
+        @elseif ($this->paymentsEnabled())
+            <button
+                type="button"
+                wire:click="pay"
+                wire:loading.attr="disabled"
+                class="font-sub mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-cream-50 px-6 py-3.5 text-sm font-bold text-cosmic-900 transition hover:bg-white disabled:opacity-60"
+            >
+                Pay {{ $order->formattedSubtotal() }}
+            </button>
+        @else
+            <button
+                type="button"
+                disabled
+                class="font-sub mt-6 flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-cream-50/20 px-6 py-3.5 text-sm font-bold text-cream-50/70"
+            >
+                Pay {{ $order->formattedSubtotal() }}
+            </button>
+            <p class="font-sub mt-3 text-center text-xs text-cream-50/60">Online payment is being set up. Your order is saved in the meantime.</p>
+        @endif
+    </div>
+
+    <div class="mt-6 rounded-[1.5rem] bg-white p-5 ring-1 ring-cosmic-900/8 sm:p-6">
         <div class="font-sub flex flex-wrap items-center justify-between gap-2 text-sm">
             <h2 class="font-sans text-xl font-bold text-cosmic-900">Order summary</h2>
-            <span class="rounded-full bg-cosmic-900/6 px-3 py-1 font-semibold text-cosmic-900/75">{{ $order->status->label() }}</span>
+            <span class="rounded-full bg-cosmic-900/6 px-3 py-1 font-semibold text-cosmic-900/75">{{ $order->payment_status->label() }}</span>
         </div>
 
         <ul class="font-sub mt-5 grid gap-3 text-sm">

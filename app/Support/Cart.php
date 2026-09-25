@@ -19,19 +19,25 @@ class Cart
 
     public function __construct(private Session $session) {}
 
-    public function add(Product $product, int $quantity = 1): void
+    /**
+     * Add units of a product, never beyond what's in stock. Returns how many were added.
+     */
+    public function add(Product $product, int $quantity = 1): int
     {
         if (! $product->isPurchasable() || $quantity < 1) {
-            return;
+            return 0;
         }
 
-        $items = $this->items();
+        $current = $this->quantityOf($product->id);
+        $new = min($current + $quantity, $product->maxOrderQuantity());
 
-        $this->put($product->id, ($items[$product->id] ?? 0) + $quantity);
+        $this->put($product->id, $new);
+
+        return max($new - $current, 0);
     }
 
     /**
-     * Set a line's quantity outright; zero or less removes it.
+     * Set a line's quantity outright, capped at what's in stock; zero or less removes it.
      */
     public function update(int $productId, int $quantity): void
     {
@@ -41,9 +47,16 @@ class Cart
             return;
         }
 
-        if (array_key_exists($productId, $this->items())) {
-            $this->put($productId, $quantity);
+        $product = Product::find($productId);
+
+        if ($product !== null && array_key_exists($productId, $this->items())) {
+            $this->put($productId, min($quantity, $product->maxOrderQuantity()));
         }
+    }
+
+    public function quantityOf(int $productId): int
+    {
+        return $this->items()[$productId] ?? 0;
     }
 
     public function remove(int $productId): void
@@ -62,7 +75,7 @@ class Cart
 
     /**
      * The cart's lines, in the order they were added. Products that have since been
-     * hidden, deleted or lost their price drop out here and from the session.
+     * hidden, deleted, sold out or lost their price drop out here and from the session.
      *
      * @return Collection<int, CartLine>
      */
@@ -76,18 +89,18 @@ class Cart
 
         $products = Product::query()->whereKey(array_keys($items))->get()->keyBy('id');
 
+        // Stock can drop while a cart is open, so each line is capped at what's left.
         $lines = collect($items)
             ->map(fn (int $quantity, int $productId) => ($product = $products->get($productId)) instanceof Product && $product->isPurchasable()
-                ? new CartLine($product, $quantity)
+                ? new CartLine($product, min($quantity, $product->maxOrderQuantity()))
                 : null)
             ->filter()
             ->values();
 
-        if ($lines->count() !== count($items)) {
-            $this->session->put(
-                self::SESSION_KEY,
-                $lines->mapWithKeys(fn (CartLine $line) => [$line->product->id => $line->quantity])->all(),
-            );
+        $kept = $lines->mapWithKeys(fn (CartLine $line) => [$line->product->id => $line->quantity])->all();
+
+        if ($kept !== $items) {
+            $this->session->put(self::SESSION_KEY, $kept);
         }
 
         return $lines;

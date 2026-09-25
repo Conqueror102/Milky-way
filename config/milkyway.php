@@ -66,4 +66,25 @@ return [
         'theme_color' => '#143452',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Shop
+    |--------------------------------------------------------------------------
+    |
+    | demo_prices gives every product without a price a stand-in price, so the
+    | cart and checkout can be tried end to end. It is on for Vercel preview
+    | deployments and off everywhere else unless SHOP_DEMO_PRICES says so; it
+    | never writes prices to the database.
+    |
+    | payment_gateway names the online payment provider. Until one is set, the
+    | payment step shows the order total with payment marked as coming soon.
+    |
+    */
+
+    'shop' => [
+        'demo_prices' => (bool) env('SHOP_DEMO_PRICES', env('VERCEL_ENV') === 'preview'),
+
+        'payment_gateway' => env('SHOP_PAYMENT_GATEWAY'),
+    ],
+
 ];
