@@ -12,7 +12,7 @@
         <flux:textarea wire:model="description" :label="__('Description')" rows="5" />
 
         <div class="grid gap-6 sm:grid-cols-2">
-            <flux:input wire:model="price" :label="__('Price (₦)')" type="number" min="0" step="1" required />
+            <flux:input wire:model="price" :label="__('Price (₦)')" :description="__('Leave empty to show Price on request.')" type="number" min="0" step="1" />
             <flux:input wire:model="stock" :label="__('Stock')" type="number" min="0" step="1" required />
         </div>
 

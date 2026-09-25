@@ -65,7 +65,7 @@ class Form extends Component
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('products', 'slug')->ignore($this->product)],
             'description' => ['nullable', 'string', 'max:5000'],
-            'price' => ['required', 'integer', 'min:0'],
+            'price' => ['nullable', 'integer', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
             'is_active' => ['boolean'],
             'photo' => ['nullable', 'image', 'max:5120'],
@@ -97,7 +97,7 @@ class Form extends Component
             'name' => $validated['name'],
             'slug' => $validated['slug'],
             'description' => $validated['description'] ?: null,
-            'price' => (int) $validated['price'],
+            'price' => filled($validated['price']) ? (int) $validated['price'] : null,
             'stock' => (int) $validated['stock'],
             'is_active' => $validated['is_active'],
         ])->save();

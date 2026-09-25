@@ -133,3 +133,16 @@ test('the product list can be searched', function () {
         ->assertSee('Shea Butter')
         ->assertDontSee('Rose Toner');
 });
+
+test('a product can be left as price on request', function () {
+    $product = Product::factory()->create(['price' => 1000]);
+
+    Livewire::test(Form::class, ['product' => $product])
+        ->set('price', '')
+        ->call('save')
+        ->assertHasNoErrors();
+
+    expect($product->refresh()->price)->toBeNull();
+
+    Livewire::test(Index::class)->assertSee('On request');
+});

@@ -38,7 +38,7 @@
                             <span class="font-medium">{{ $product->name }}</span>
                         </div>
                     </flux:table.cell>
-                    <flux:table.cell>₦{{ number_format($product->price) }}</flux:table.cell>
+                    <flux:table.cell>{{ $product->price === null ? __('On request') : '₦'.number_format($product->price) }}</flux:table.cell>
                     <flux:table.cell>{{ $product->stock }}</flux:table.cell>
                     <flux:table.cell>
                         @if ($product->is_active)

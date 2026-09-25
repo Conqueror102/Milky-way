@@ -9,7 +9,9 @@
         <div class="space-y-1">
             <flux:heading>{{ __('Customer') }}</flux:heading>
             <flux:text>{{ $order->customer_name }}</flux:text>
-            <flux:text>{{ $order->customer_email }}</flux:text>
+            @if ($order->customer_email)
+                <flux:text>{{ $order->customer_email }}</flux:text>
+            @endif
             @if ($order->customer_phone)
                 <flux:text>{{ $order->customer_phone }}</flux:text>
             @endif
