@@ -1,11 +1,14 @@
 @php
     $links = [
-        ['label' => 'Home', 'href' => '#top'],
-        ['label' => 'Shop', 'href' => '#shop'],
-        ['label' => 'Wholesale', 'href' => '#wholesale'],
-        ['label' => 'About', 'href' => '#about'],
-        ['label' => 'Contact', 'href' => '#contact'],
+        ['label' => 'Home', 'href' => route('home')],
+        ['label' => 'Shop', 'href' => route('home').'#shop'],
+        ['label' => 'Wholesale', 'href' => route('home').'#wholesale'],
+        ['label' => 'About', 'href' => route('home').'#about'],
+        ['label' => 'Contact', 'href' => route('home').'#contact'],
     ];
+
+    // The shop pages share this header; only the homepage marks Home as current.
+    $onHome = request()->routeIs('home');
 @endphp
 
 {{-- No containing bar: a single glass pill holds the nav, and the wordmark floats bare
@@ -21,8 +24,8 @@
                     href="{{ $link['href'] }}"
                     @class([
                         'font-sub rounded-full px-4 py-2 text-sm font-medium transition duration-200',
-                        'bg-cosmic-900 text-cream-50' => $loop->first,
-                        'text-cosmic-900/75 hover:bg-white/60 hover:text-cosmic-900' => ! $loop->first,
+                        'bg-cosmic-900 text-cream-50' => $onHome && $loop->first,
+                        'text-cosmic-900/75 hover:bg-white/60 hover:text-cosmic-900' => ! ($onHome && $loop->first),
                     ])
                 >{{ $link['label'] }}</a>
             @endforeach
@@ -44,18 +47,22 @@
             </span>
         </a>
 
-        {{-- Mobile toggle --}}
-        <button
-            type="button"
-            x-on:click="open = ! open"
-            :aria-expanded="open ? 'true' : 'false'"
-            aria-controls="site-mobile-nav"
-            class="liquid-glass col-start-3 grid size-10 shrink-0 place-items-center justify-self-end rounded-full text-cosmic-900 transition hover:bg-white/85 lg:hidden"
-        >
-            <span class="sr-only">Toggle navigation</span>
-            <x-icon name="bars-solid" class="size-5" x-show="! open" />
-            <x-icon name="times-solid" class="size-5" x-show="open" x-cloak />
-        </button>
+        {{-- Cart, and the mobile toggle beside it --}}
+        <div class="col-start-3 flex items-center gap-2 justify-self-end">
+            <livewire:shop.cart-count />
+
+            <button
+                type="button"
+                x-on:click="open = ! open"
+                :aria-expanded="open ? 'true' : 'false'"
+                aria-controls="site-mobile-nav"
+                class="liquid-glass grid size-10 shrink-0 place-items-center rounded-full text-cosmic-900 transition hover:bg-white/85 lg:hidden"
+            >
+                <span class="sr-only">Toggle navigation</span>
+                <x-icon name="bars-solid" class="size-5" x-show="! open" />
+                <x-icon name="times-solid" class="size-5" x-show="open" x-cloak />
+            </button>
+        </div>
 
         {{-- Mobile panel --}}
         <div

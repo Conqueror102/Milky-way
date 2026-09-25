@@ -1,16 +1,16 @@
 @php
     $categories = [
-        ['label' => 'Skincare & Facials', 'href' => '#categories'],
-        ['label' => 'Body Enhancement', 'href' => '#categories'],
-        ['label' => 'Spa & Wellness', 'href' => '#categories'],
-        ['label' => 'Bulk Wholesale', 'href' => '#categories'],
+        ['label' => 'Skincare & Facials', 'href' => route('home').'#categories'],
+        ['label' => 'Body Enhancement', 'href' => route('home').'#categories'],
+        ['label' => 'Spa & Wellness', 'href' => route('home').'#categories'],
+        ['label' => 'Bulk Wholesale', 'href' => route('home').'#categories'],
     ];
 
     $quickLinks = [
-        ['label' => 'Home', 'href' => '#top'],
-        ['label' => 'Categories', 'href' => '#categories'],
-        ['label' => 'Why Choose Us', 'href' => '#why'],
-        ['label' => 'Store Location', 'href' => '#location'],
+        ['label' => 'Home', 'href' => route('home').'#top'],
+        ['label' => 'Categories', 'href' => route('home').'#categories'],
+        ['label' => 'Why Choose Us', 'href' => route('home').'#why'],
+        ['label' => 'Store Location', 'href' => route('home').'#location'],
     ];
 
     $storeInfo = [
