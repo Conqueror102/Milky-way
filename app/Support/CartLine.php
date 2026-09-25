@@ -13,7 +13,7 @@ final readonly class CartLine
 
     public function unitPrice(): int
     {
-        return (int) $this->product->price;
+        return (int) $this->product->sellingPrice();
     }
 
     public function total(): int

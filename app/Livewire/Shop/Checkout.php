@@ -84,7 +84,7 @@ class Checkout extends Component
     protected function messages(): array
     {
         return [
-            'customer_phone.regex' => 'Enter a phone number we can call or WhatsApp, e.g. +234 816 182 3482.',
+            'customer_phone.regex' => 'Enter a phone number we can reach you on, e.g. +234 816 182 3482.',
         ];
     }
 

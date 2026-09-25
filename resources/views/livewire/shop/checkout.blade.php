@@ -15,7 +15,7 @@
     </x-shop.page-heading>
 
     <p class="font-sub mt-4 max-w-xl text-base leading-relaxed text-cosmic-900/70">
-        Place your order and we will call or WhatsApp you to confirm availability, delivery cost and payment. You pay nothing online.
+        Enter your delivery details, then pay for your order on the next step.
     </p>
 
     <form wire:submit="placeOrder" class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
@@ -27,7 +27,7 @@
             </div>
 
             <div>
-                <label for="customer_phone" class="{{ $label }}">Phone or WhatsApp number</label>
+                <label for="customer_phone" class="{{ $label }}">Phone number</label>
                 <input id="customer_phone" type="tel" wire:model="customer_phone" autocomplete="tel" required placeholder="+234 800 000 0000" class="{{ $field }}" />
                 @error('customer_phone') <p class="{{ $error }}">{{ $message }}</p> @enderror
             </div>
@@ -78,7 +78,7 @@
                 <span>Subtotal</span>
                 <span class="font-bold">{{ \App\Support\Money::format($this->subtotal) }}</span>
             </div>
-            <p class="font-sub mt-1 text-xs text-cream-50/60">Delivery is confirmed with you after ordering.</p>
+            <p class="font-sub mt-1 text-xs text-cream-50/60">Delivery is arranged with you after payment.</p>
 
             @error('cart') <p class="font-sub mt-4 rounded-xl bg-red-100 px-3 py-2 text-sm text-red-800">{{ $message }}</p> @enderror
 
@@ -88,8 +88,8 @@
                 wire:target="placeOrder"
                 class="font-sub mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-cream-50 px-6 py-3.5 text-sm font-bold text-cosmic-900 transition hover:bg-white disabled:opacity-60"
             >
-                <span wire:loading.remove wire:target="placeOrder">Place order</span>
-                <span wire:loading wire:target="placeOrder">Placing order…</span>
+                <span wire:loading.remove wire:target="placeOrder">Continue to payment</span>
+                <span wire:loading wire:target="placeOrder">Saving your order…</span>
             </button>
         </aside>
     </form>

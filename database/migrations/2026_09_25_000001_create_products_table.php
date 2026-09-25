@@ -29,7 +29,8 @@ return new class extends Migration
             // Path under public/ without extension; a .webp and a .jpg sit side by side.
             $table->string('image_path')->nullable();
 
-            $table->unsignedInteger('stock')->default(0);
+            // Units on hand. Null means stock isn't tracked, so the product never sells out.
+            $table->unsignedInteger('stock')->nullable();
             $table->boolean('is_active')->default(true);
             $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();

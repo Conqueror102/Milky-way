@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Cart;
 use App\Support\Money;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -23,7 +24,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $image_url
  * @property string|null $image_public_id
  * @property string|null $image_path
- * @property int $stock
+ * @property int|null $stock
  * @property bool $is_active
  * @property int $sort_order
  * @property Carbon|null $created_at
@@ -87,16 +88,49 @@ class Product extends Model
     }
 
     /**
-     * Whether this product can go in the cart. Products without a price are enquiry-only.
+     * The price the shop charges: the real price, or on preview deployments a stand-in
+     * for products that don't have one yet (see config milkyway.shop.demo_prices).
+     */
+    public function sellingPrice(): ?int
+    {
+        if ($this->price !== null) {
+            return $this->price;
+        }
+
+        return $this->usesDemoPrice() ? $this->demoPrice() : null;
+    }
+
+    public function usesDemoPrice(): bool
+    {
+        return $this->price === null && (bool) config('milkyway.shop.demo_prices');
+    }
+
+    /**
+     * Whether this product can go in the cart: listed, priced and in stock.
      */
     public function isPurchasable(): bool
     {
-        return $this->is_active && $this->price !== null && $this->price > 0;
+        return $this->is_active && ($this->sellingPrice() ?? 0) > 0 && ! $this->isSoldOut();
+    }
+
+    public function isSoldOut(): bool
+    {
+        return $this->stock !== null && $this->stock <= 0;
+    }
+
+    /**
+     * The most of this product one cart may hold.
+     */
+    public function maxOrderQuantity(): int
+    {
+        return $this->stock === null ? Cart::MAX_QUANTITY : min($this->stock, Cart::MAX_QUANTITY);
     }
 
     public function formattedPrice(): ?string
     {
-        return $this->price === null ? null : Money::format($this->price);
+        $price = $this->sellingPrice();
+
+        return $price === null ? null : Money::format($price);
     }
 
     /**
@@ -141,5 +175,13 @@ class Product extends Model
         }
 
         return $gallery;
+    }
+
+    /**
+     * A stable stand-in price between ₦2,500 and ₦22,000, the same on every page load.
+     */
+    private function demoPrice(): int
+    {
+        return (crc32($this->slug) % 40 + 5) * 500;
     }
 }

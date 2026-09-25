@@ -3,13 +3,16 @@
 namespace App\Livewire\Shop;
 
 use App\Models\Order;
-use App\Models\OrderItem;
+use App\Payments\PaymentGateway;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
+/**
+ * Where checkout lands: the placed order, and the step that takes payment for it.
+ */
 #[Layout('layouts::marketing', ['noindex' => true])]
 class OrderConfirmation extends Component
 {
@@ -30,19 +33,20 @@ class OrderConfirmation extends Component
     }
 
     /**
-     * The WhatsApp message that hands this order over to the store to confirm.
+     * Whether an online payment provider is switched on.
      */
-    public function whatsappMessage(): string
+    public function paymentsEnabled(): bool
     {
-        $lines = $this->order->items
-            ->map(fn (OrderItem $item) => "- {$item->quantity} x {$item->product_name} ({$item->formattedLineTotal()})")
-            ->implode("\n");
+        return filled(config('milkyway.shop.payment_gateway'));
+    }
 
-        return "Hello Milkyway Cosmetics Stores, I just placed order {$this->order->reference} on your website.\n\n"
-            .$lines."\n\n"
-            ."Subtotal: {$this->order->formattedSubtotal()}\n"
-            ."Deliver to: {$this->order->delivery_area}\n\n"
-            .'Please confirm availability and delivery.';
+    public function pay(): void
+    {
+        if (! $this->paymentsEnabled() || $this->order->isPaid()) {
+            return;
+        }
+
+        $this->redirect(app(PaymentGateway::class)->checkoutUrl($this->order));
     }
 
     public function render(): View

@@ -83,3 +83,29 @@ test('the header badge shows how many items are in the cart', function () {
 
     Livewire::test(CartCount::class)->assertSee('Cart, 3 items');
 });
+
+test('the cart never holds more than is in stock', function () {
+    $product = Product::factory()->create(['stock' => 4]);
+    $cart = app(Cart::class);
+
+    expect($cart->add($product, 3))->toBe(3)
+        ->and($cart->add($product, 3))->toBe(1)
+        ->and($cart->count())->toBe(4);
+
+    $cart->update($product->id, 10);
+    expect($cart->count())->toBe(4);
+});
+
+test('lines shrink when stock drops and sold out products drop out', function () {
+    $shrinks = Product::factory()->create(['stock' => 5]);
+    $soldOut = Product::factory()->create(['stock' => 2]);
+    $cart = app(Cart::class);
+    $cart->add($shrinks, 5);
+    $cart->add($soldOut, 2);
+
+    $shrinks->update(['stock' => 2]);
+    $soldOut->update(['stock' => 0]);
+
+    expect($cart->lines())->toHaveCount(1)
+        ->and($cart->count())->toBe(2);
+});

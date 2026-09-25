@@ -30,7 +30,7 @@ class ProductPage extends Component
 
     public function increment(): void
     {
-        $this->quantity = min($this->quantity + 1, Cart::MAX_QUANTITY);
+        $this->quantity = min($this->quantity + 1, $this->product->maxOrderQuantity());
     }
 
     public function decrement(): void
@@ -45,7 +45,20 @@ class ProductPage extends Component
         $this->product->refresh();
 
         if (! $this->product->isPurchasable()) {
-            $this->addError('quantity', 'This product can no longer be ordered online. Please enquire on WhatsApp.');
+            $this->addError('quantity', $this->product->isSoldOut()
+                ? 'Sorry, this product has just sold out.'
+                : 'This product can no longer be ordered online.');
+
+            return;
+        }
+
+        $inCart = $cart->quantityOf($this->product->id);
+        $room = $this->product->maxOrderQuantity() - $inCart;
+
+        if ($this->quantity > $room) {
+            $this->addError('quantity', $room > 0
+                ? "Only {$room} more can be added. You already have {$inCart} in your cart."
+                : "You already have all {$inCart} we have in stock in your cart.");
 
             return;
         }

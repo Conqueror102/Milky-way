@@ -116,3 +116,64 @@ test('gallery photos show even when the product has no main image', function () 
     $this->get(route('products.show', $product))
         ->assertSee('https://res.cloudinary.com/demo/image/upload/only.jpg');
 });
+
+test('preview deployments show stand-in prices so the cart can be tried', function () {
+    config(['milkyway.shop.demo_prices' => true]);
+    $product = Product::factory()->priceOnRequest()->create(['category' => 'Test Category']);
+
+    expect($product->sellingPrice())->toBeGreaterThan(0)
+        ->and($product->price)->toBeNull()
+        ->and($product->isPurchasable())->toBeTrue();
+
+    $this->get(route('products.show', $product))
+        ->assertSee('Preview price')
+        ->assertSee('Add to cart');
+
+    Livewire::test(ProductPage::class, ['product' => $product])->call('addToCart');
+    expect(app(Cart::class)->subtotal())->toBe($product->sellingPrice());
+});
+
+test('stand-in prices never show outside previews', function () {
+    config(['milkyway.shop.demo_prices' => false]);
+    $product = Product::factory()->priceOnRequest()->create();
+
+    expect($product->sellingPrice())->toBeNull()
+        ->and($product->isPurchasable())->toBeFalse();
+});
+
+test('a real price always wins over a stand-in', function () {
+    config(['milkyway.shop.demo_prices' => true]);
+    $product = Product::factory()->create(['price' => 4200]);
+
+    expect($product->sellingPrice())->toBe(4200)
+        ->and($product->usesDemoPrice())->toBeFalse();
+});
+
+test('a sold out product cannot be added', function () {
+    $product = Product::factory()->create(['stock' => 0]);
+
+    $this->get(route('products.show', $product))
+        ->assertSee('Sold out')
+        ->assertDontSee('Add to cart');
+});
+
+test('shoppers cannot add more than is in stock', function () {
+    $product = Product::factory()->create(['stock' => 2]);
+
+    Livewire::test(ProductPage::class, ['product' => $product])
+        ->call('increment')
+        ->call('increment')
+        ->assertSet('quantity', 2)
+        ->call('addToCart')
+        ->assertHasNoErrors()
+        ->call('addToCart')
+        ->assertHasErrors('quantity');
+
+    expect(app(Cart::class)->count())->toBe(2);
+});
+
+test('the product page has no whatsapp hand-off for products that can be bought', function () {
+    $product = Product::factory()->create(['category' => 'Test Category']);
+
+    $this->get(route('products.show', $product))->assertDontSee('Ask about this product');
+});
