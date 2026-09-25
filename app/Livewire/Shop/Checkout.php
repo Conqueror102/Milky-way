@@ -13,6 +13,10 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+/**
+ * @property-read Collection<int, CartLine> $lines
+ * @property-read int $subtotal
+ */
 #[Layout('layouts::marketing', ['noindex' => true])]
 #[Title('Checkout')]
 class Checkout extends Component
@@ -93,7 +97,7 @@ class Checkout extends Component
             ...$validated,
             'customer_email' => filled($validated['customer_email']) ? $validated['customer_email'] : null,
             'notes' => filled($validated['notes']) ? $validated['notes'] : null,
-        ], Auth::id());
+        ], Auth::user()?->id);
 
         // Lets this browser reopen its own confirmation page without an account.
         session()->push(self::PLACED_ORDERS_SESSION_KEY, $order->reference);

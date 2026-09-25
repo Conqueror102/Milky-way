@@ -18,7 +18,7 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $name = Str::title(fake()->unique()->words(3, true));
+        $name = Str::title(implode(' ', fake()->unique()->words(3)));
 
         return [
             'name' => $name,

@@ -10,6 +10,10 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+/**
+ * @property-read Collection<int, CartLine> $lines
+ * @property-read int $subtotal
+ */
 #[Layout('layouts::marketing', ['noindex' => true])]
 #[Title('Your cart')]
 class CartPage extends Component
