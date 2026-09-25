@@ -46,8 +46,12 @@ class Index extends Component
     {
         $product = Product::findOrFail($productId);
 
-        if ($product->image_public_id !== null && $cloudinary->isConfigured()) {
-            $cloudinary->destroy($product->image_public_id);
+        if ($cloudinary->isConfigured()) {
+            $publicIds = $product->images()->pluck('public_id')->push($product->image_public_id)->filter();
+
+            foreach ($publicIds as $publicId) {
+                $cloudinary->destroy((string) $publicId);
+            }
         }
 
         $product->delete();

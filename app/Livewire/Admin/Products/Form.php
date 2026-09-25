@@ -3,8 +3,10 @@
 namespace App\Livewire\Admin\Products;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\Cloudinary;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -13,6 +15,9 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use RuntimeException;
 
+/**
+ * @property-read Collection<int, ProductImage> $galleryImages
+ */
 class Form extends Component
 {
     use WithFileUploads;
@@ -37,6 +42,9 @@ class Form extends Component
 
     /** @var UploadedFile|null */
     public $photo = null;
+
+    /** @var array<int, UploadedFile> */
+    public $photos = [];
 
     public function mount(?Product $product = null): void
     {
@@ -78,6 +86,8 @@ class Form extends Component
             'stock' => ['required', 'integer', 'min:0'],
             'is_active' => ['boolean'],
             'photo' => ['nullable', 'image', 'max:5120'],
+            'photos' => ['array', 'max:10'],
+            'photos.*' => ['image', 'max:5120'],
         ];
     }
 
@@ -95,6 +105,63 @@ class Form extends Component
             ->all();
     }
 
+    /**
+     * The extra gallery photos already saved for this product.
+     *
+     * @return Collection<int, ProductImage>
+     */
+    #[Computed]
+    public function galleryImages(): Collection
+    {
+        return $this->product?->images()->get() ?? new Collection;
+    }
+
+    public function removeUpload(int $index): void
+    {
+        unset($this->photos[$index]);
+        $this->photos = array_values($this->photos);
+    }
+
+    /**
+     * Swap a gallery photo with its neighbour. Direction is -1 (earlier) or 1 (later).
+     */
+    public function moveImage(int $imageId, int $direction): void
+    {
+        $images = $this->galleryImages->values();
+        $from = $images->search(fn (ProductImage $image) => $image->id === $imageId);
+        $to = $from === false ? false : $from + ($direction < 0 ? -1 : 1);
+
+        if ($from === false || $to < 0 || $to >= $images->count()) {
+            return;
+        }
+
+        $order = $images->all();
+        [$order[$from], $order[$to]] = [$order[$to], $order[$from]];
+
+        foreach (array_values($order) as $position => $image) {
+            $image->update(['sort_order' => $position]);
+        }
+
+        unset($this->galleryImages);
+    }
+
+    public function deleteImage(int $imageId, Cloudinary $cloudinary): void
+    {
+        $image = $this->product?->images()->findOrFail($imageId);
+
+        if ($image === null) {
+            return;
+        }
+
+        if ($image->public_id !== null && $cloudinary->isConfigured()) {
+            $cloudinary->destroy($image->public_id);
+        }
+
+        $image->delete();
+
+        unset($this->galleryImages);
+    }
+
     public function save(Cloudinary $cloudinary): void
     {
         $validated = $this->validate();
@@ -102,18 +169,31 @@ class Form extends Component
         $product = $this->product ?? new Product;
         $oldPublicId = $product->image_public_id;
 
-        if ($this->photo !== null) {
-            try {
-                $image = $cloudinary->upload($this->photo);
-            } catch (RuntimeException $e) {
-                report($e);
-                $this->addError('photo', __('The image could not be uploaded. Check the Cloudinary settings and try again.'));
+        // Upload everything before touching the database, so a failed upload
+        // leaves the product as it was and nothing orphaned in Cloudinary.
+        $uploaded = [];
 
-                return;
+        try {
+            foreach ([$this->photo, ...$this->photos] as $file) {
+                $uploaded[] = $file === null ? null : $cloudinary->upload($file);
+            }
+        } catch (RuntimeException $e) {
+            report($e);
+
+            foreach (array_filter($uploaded) as $done) {
+                $cloudinary->destroy($done['public_id']);
             }
 
-            $product->image_url = $image['url'];
-            $product->image_public_id = $image['public_id'];
+            $this->addError($this->photo !== null && $uploaded === [] ? 'photo' : 'photos', __('A photo could not be uploaded. Check the Cloudinary settings and try again.'));
+
+            return;
+        }
+
+        $main = array_shift($uploaded);
+
+        if ($main !== null) {
+            $product->image_url = $main['url'];
+            $product->image_public_id = $main['public_id'];
         }
 
         $product->fill([
@@ -127,7 +207,17 @@ class Form extends Component
             'is_active' => $validated['is_active'],
         ])->save();
 
-        if ($this->photo !== null && $oldPublicId !== null) {
+        $nextPosition = ((int) $product->images()->max('sort_order')) + 1;
+
+        foreach ($uploaded as $offset => $image) {
+            $product->images()->create([
+                'url' => $image['url'],
+                'public_id' => $image['public_id'],
+                'sort_order' => $nextPosition + $offset,
+            ]);
+        }
+
+        if ($main !== null && $oldPublicId !== null) {
             $cloudinary->destroy($oldPublicId);
         }
 

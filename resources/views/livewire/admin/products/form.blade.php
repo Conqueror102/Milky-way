@@ -28,7 +28,7 @@
         </div>
 
         <flux:field>
-            <flux:label>{{ __('Photo') }}</flux:label>
+            <flux:label>{{ __('Main photo') }}</flux:label>
 
             <div class="flex items-center gap-4">
                 @if ($photo && $photo->isPreviewable())
@@ -46,10 +46,48 @@
             <flux:error name="photo" />
         </flux:field>
 
+        <flux:field>
+            <flux:label>{{ __('More photos') }}</flux:label>
+            <flux:description>{{ __('Shown after the main photo in the product page gallery. Up to 10 at a time.') }}</flux:description>
+
+            @if ($this->galleryImages->isNotEmpty())
+                <ul class="mt-2 flex flex-wrap gap-3">
+                    @foreach ($this->galleryImages as $image)
+                        <li wire:key="gallery-{{ $image->id }}" class="flex flex-col items-center gap-1">
+                            <img src="{{ $image->url }}" alt="" class="size-24 rounded-lg object-cover">
+                            <div class="flex">
+                                <flux:button size="xs" variant="ghost" icon="chevron-left" wire:click="moveImage({{ $image->id }}, -1)" :disabled="$loop->first" :aria-label="__('Move earlier')" />
+                                <flux:button size="xs" variant="ghost" icon="trash" wire:click="deleteImage({{ $image->id }})" wire:confirm="{{ __('Delete this photo?') }}" :aria-label="__('Delete photo')" />
+                                <flux:button size="xs" variant="ghost" icon="chevron-right" wire:click="moveImage({{ $image->id }}, 1)" :disabled="$loop->last" :aria-label="__('Move later')" />
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+
+            @if ($photos)
+                <ul class="mt-2 flex flex-wrap gap-3">
+                    @foreach ($photos as $index => $upload)
+                        <li wire:key="upload-{{ $index }}" class="flex flex-col items-center gap-1">
+                            @if ($upload->isPreviewable())
+                                <img src="{{ $upload->temporaryUrl() }}" alt="" class="size-24 rounded-lg object-cover opacity-80">
+                            @endif
+                            <flux:button size="xs" variant="ghost" icon="x-mark" wire:click="removeUpload({{ $index }})">{{ __('Remove') }}</flux:button>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+
+            <input type="file" wire:model="photos" accept="image/*" multiple class="mt-2 text-sm">
+            <div wire:loading wire:target="photos" class="text-sm text-zinc-500">{{ __('Uploading...') }}</div>
+            <flux:error name="photos" />
+            <flux:error name="photos.*" />
+        </flux:field>
+
         <flux:switch wire:model="is_active" :label="__('Show in shop')" />
 
         <div class="flex items-center gap-4">
-            <flux:button variant="primary" type="submit" wire:loading.attr="disabled" wire:target="save,photo">
+            <flux:button variant="primary" type="submit" wire:loading.attr="disabled" wire:target="save,photo,photos">
                 {{ __('Save product') }}
             </flux:button>
         </div>

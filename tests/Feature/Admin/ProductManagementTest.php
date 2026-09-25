@@ -3,8 +3,11 @@
 use App\Livewire\Admin\Products\Form;
 use App\Livewire\Admin\Products\Index;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Client\Request;
+use Illuminate\Http\Client\ResponseSequence;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
@@ -15,10 +18,19 @@ beforeEach(function () {
     Http::preventStrayRequests();
 
     Http::fake([
-        'api.cloudinary.com/*/image/upload' => fn () => $this->uploadResponse ?? Http::response([
-            'secure_url' => 'https://res.cloudinary.com/demo-cloud/image/upload/new.jpg',
-            'public_id' => 'milky-way/products/new',
-        ]),
+        // Tests can override the upload reply by setting $this->uploadResponse.
+        'api.cloudinary.com/*/image/upload' => function (Request $request) {
+            $response = $this->uploadResponse ?? null;
+
+            if ($response instanceof ResponseSequence) {
+                return $response($request);
+            }
+
+            return $response ?? Http::response([
+                'secure_url' => 'https://res.cloudinary.com/demo-cloud/image/upload/new.jpg',
+                'public_id' => 'milky-way/products/new',
+            ]);
+        },
         'api.cloudinary.com/*/image/destroy' => Http::response(['result' => 'ok']),
     ]);
 
@@ -148,4 +160,88 @@ test('a product can be left as price on request', function () {
     expect($product->refresh()->price)->toBeNull();
 
     Livewire::test(Index::class)->assertSee('On request');
+});
+
+test('admins can add several gallery photos at once', function () {
+    $product = Product::factory()->create();
+
+    Livewire::test(Form::class, ['product' => $product->fresh()])
+        ->set('photos', [UploadedFile::fake()->image('a.jpg'), UploadedFile::fake()->image('b.jpg')])
+        ->call('save')
+        ->assertHasNoErrors();
+
+    $images = $product->images()->get();
+
+    expect($images)->toHaveCount(2)
+        ->and($images->pluck('public_id')->all())->toBe(['milky-way/products/new', 'milky-way/products/new'])
+        ->and($images[0]->sort_order)->toBeLessThan($images[1]->sort_order)
+        ->and($product->fresh()->image_public_id)->toBeNull();
+});
+
+test('gallery photos can be reordered', function () {
+    $product = Product::factory()->create();
+    $first = ProductImage::factory()->for($product)->create(['sort_order' => 0]);
+    $second = ProductImage::factory()->for($product)->create(['sort_order' => 1]);
+    $third = ProductImage::factory()->for($product)->create(['sort_order' => 2]);
+
+    Livewire::test(Form::class, ['product' => $product->fresh()])
+        ->call('moveImage', $third->id, -1);
+
+    expect($product->images()->pluck('id')->all())->toBe([$first->id, $third->id, $second->id]);
+
+    Livewire::test(Form::class, ['product' => $product->fresh()])
+        ->call('moveImage', $first->id, -1);
+
+    expect($product->images()->pluck('id')->all())->toBe([$first->id, $third->id, $second->id]);
+});
+
+test('gallery photos can be deleted', function () {
+    $product = Product::factory()->create();
+    $image = ProductImage::factory()->for($product)->create(['public_id' => 'milky-way/products/extra']);
+
+    Livewire::test(Form::class, ['product' => $product->fresh()])
+        ->call('deleteImage', $image->id);
+
+    expect(ProductImage::find($image->id))->toBeNull();
+
+    Http::assertSent(fn (Request $request) => $request['public_id'] === 'milky-way/products/extra');
+});
+
+test('another product\'s photo cannot be deleted from this form', function () {
+    $product = Product::factory()->create();
+    $other = ProductImage::factory()->create();
+
+    expect(fn () => Livewire::test(Form::class, ['product' => $product->fresh()])->call('deleteImage', $other->id))
+        ->toThrow(ModelNotFoundException::class);
+
+    expect(ProductImage::find($other->id))->not->toBeNull();
+});
+
+test('a failed gallery upload saves nothing and cleans up', function () {
+    $product = Product::factory()->create(['name' => 'Original']);
+    $this->uploadResponse = Http::sequence()
+        ->push(['secure_url' => 'https://x/first.jpg', 'public_id' => 'milky-way/products/first'])
+        ->push(['error' => ['message' => 'Boom']], 500);
+
+    Livewire::test(Form::class, ['product' => $product->fresh()])
+        ->set('name', 'Changed')
+        ->set('photos', [UploadedFile::fake()->image('a.jpg'), UploadedFile::fake()->image('b.jpg')])
+        ->call('save')
+        ->assertHasErrors('photos');
+
+    expect($product->fresh()->name)->toBe('Original')
+        ->and($product->images()->count())->toBe(0);
+
+    Http::assertSent(fn (Request $request) => str_ends_with($request->url(), '/destroy')
+        && $request['public_id'] === 'milky-way/products/first');
+});
+
+test('deleting a product removes its gallery photos from Cloudinary', function () {
+    $product = Product::factory()->create(['image_public_id' => 'milky-way/products/main']);
+    ProductImage::factory()->for($product)->create(['public_id' => 'milky-way/products/extra']);
+
+    Livewire::test(Index::class)->call('delete', $product->id);
+
+    Http::assertSent(fn (Request $request) => $request['public_id'] === 'milky-way/products/main');
+    Http::assertSent(fn (Request $request) => $request['public_id'] === 'milky-way/products/extra');
 });
