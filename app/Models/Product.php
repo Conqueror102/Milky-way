@@ -19,13 +19,15 @@ use Illuminate\Support\Carbon;
  * @property string|null $description
  * @property int|null $price
  * @property string|null $image_url
+ * @property string|null $image_public_id
  * @property string|null $image_path
+ * @property int $stock
  * @property bool $is_active
  * @property int $sort_order
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['name', 'slug', 'category', 'type', 'description', 'price', 'image_url', 'image_path', 'is_active', 'sort_order'])]
+#[Fillable(['name', 'slug', 'category', 'type', 'description', 'price', 'image_url', 'image_public_id', 'image_path', 'stock', 'is_active', 'sort_order'])]
 class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
@@ -40,6 +42,7 @@ class Product extends Model
     {
         return [
             'price' => 'integer',
+            'stock' => 'integer',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];

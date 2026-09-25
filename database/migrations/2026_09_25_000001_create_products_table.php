@@ -24,9 +24,12 @@ return new class extends Migration
 
             // A hosted image (e.g. Cloudinary) wins over the bundled one when both are set.
             $table->string('image_url')->nullable();
+            // Cloudinary's public id for image_url, so the admin can delete the upload.
+            $table->string('image_public_id')->nullable();
             // Path under public/ without extension; a .webp and a .jpg sit side by side.
             $table->string('image_path')->nullable();
 
+            $table->unsignedInteger('stock')->default(0);
             $table->boolean('is_active')->default(true);
             $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
