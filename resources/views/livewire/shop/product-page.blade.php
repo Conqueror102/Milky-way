@@ -1,0 +1,101 @@
+<div class="mx-auto max-w-7xl px-6 pt-28 pb-16 sm:px-8 lg:pt-36 lg:pb-24">
+    <a href="{{ route('home') }}#shop" class="font-sub inline-flex items-center gap-2 text-sm font-medium text-cosmic-900/65 transition hover:text-cosmic-900">
+        <x-icon name="arrow-left-solid" class="size-4" />
+        Back to the shop
+    </a>
+
+    <div class="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-14">
+        <div class="rounded-[2rem] bg-white p-3 shadow-[0_12px_32px_-14px_rgba(20,52,82,0.3)] ring-1 ring-cosmic-900/8">
+            <x-shop.product-image :product="$product" loading="eager" class="aspect-square w-full rounded-[1.5rem]" />
+        </div>
+
+        <div class="flex flex-col">
+            <div class="flex flex-wrap gap-1.5">
+                <span class="font-sub rounded-full bg-cosmic-900/6 px-3 py-1.5 text-[0.7rem] font-medium text-cosmic-900/70">{{ $product->category }}</span>
+                @if ($product->type)
+                    <span class="font-sub rounded-full bg-cosmic-900/6 px-3 py-1.5 text-[0.7rem] font-medium text-cosmic-900/70">{{ $product->type }}</span>
+                @endif
+            </div>
+
+            <h1 class="mt-4 text-[clamp(2rem,3.6vw,3rem)] leading-[1.08] font-bold tracking-[-0.01em] text-cosmic-900">{{ $product->name }}</h1>
+
+            <p class="mt-4 text-2xl font-bold text-gold-600">
+                {{ $product->formattedPrice() ?? 'Price on request' }}
+            </p>
+
+            @if ($product->description)
+                <p class="font-sub mt-5 max-w-prose text-base leading-relaxed text-cosmic-900/75">{{ $product->description }}</p>
+            @endif
+
+            <div class="mt-8 rounded-[1.5rem] bg-white p-5 ring-1 ring-cosmic-900/8 sm:p-6">
+                @if ($product->isPurchasable())
+                    <div class="flex flex-wrap items-center gap-3">
+                        <x-shop.quantity-stepper :quantity="$quantity" decrement="decrement" increment="increment" />
+
+                        <button
+                            type="button"
+                            wire:click="addToCart"
+                            class="font-sub inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-cosmic-900 px-6 py-3.5 text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800 disabled:opacity-60"
+                            wire:loading.attr="disabled"
+                            wire:target="addToCart"
+                        >
+                            <x-icon name="shopping-bag-solid" class="size-4" />
+                            Add to cart
+                        </button>
+                    </div>
+
+                    @error('quantity')
+                        <p class="font-sub mt-3 text-sm text-red-700">{{ $message }}</p>
+                    @enderror
+
+                    @if ($added)
+                        <div class="font-sub mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-cosmic-900/5 px-4 py-3 text-sm text-cosmic-900" role="status">
+                            <span class="inline-flex items-center gap-2 font-semibold">
+                                <x-icon name="check-circle-solid" class="size-5 text-gold-600" />
+                                Added to your cart
+                            </span>
+                            <a href="{{ route('cart') }}" class="font-bold underline underline-offset-4 hover:text-cosmic-800">View cart</a>
+                        </div>
+                    @endif
+                @else
+                    <p class="font-sub text-sm leading-relaxed text-cosmic-900/70">
+                        We confirm the price of this product on request. Message us and we will get back to you with price and availability.
+                    </p>
+                @endif
+
+                <x-site.whatsapp-link
+                    :message="'Hello Milkyway Cosmetics Stores, I would like to ask about '.$product->name.'.'"
+                    :class="Arr::toCssClasses([
+                        'font-sub mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition duration-200',
+                        'bg-cosmic-900 text-white hover:bg-cosmic-800' => ! $product->isPurchasable(),
+                        'bg-cosmic-900/6 text-cosmic-900 hover:bg-cosmic-900/10' => $product->isPurchasable(),
+                    ])"
+                >
+                    <x-icon name="whatsapp" class="size-4" />
+                    Ask about this product
+                </x-site.whatsapp-link>
+            </div>
+
+            <ul class="font-sub mt-6 grid gap-2 text-sm text-cosmic-900/70">
+                <li class="flex items-center gap-2"><x-icon name="truck-solid" class="size-4 text-gold-600" /> Delivery to {{ implode(', ', config('milkyway.delivery_areas')) }}</li>
+                <li class="flex items-center gap-2"><x-icon name="boxes-solid" class="size-4 text-gold-600" /> Retail and bulk quantities</li>
+            </ul>
+        </div>
+    </div>
+
+    @if ($this->related->isNotEmpty())
+        <section class="mt-16 lg:mt-24">
+            <h2 class="text-2xl font-bold text-cosmic-900">More in {{ $product->category }}</h2>
+
+            <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+                @foreach ($this->related as $item)
+                    <a href="{{ route('products.show', $item) }}" wire:key="related-{{ $item->id }}" class="group flex flex-col rounded-[1.5rem] bg-white p-3 ring-1 ring-cosmic-900/8 transition hover:ring-cosmic-900/25">
+                        <x-shop.product-image :product="$item" class="aspect-square w-full rounded-[1rem]" />
+                        <h3 class="mt-3 px-0.5 text-base leading-tight font-bold text-cosmic-900 group-hover:underline">{{ $item->name }}</h3>
+                        <p class="font-sub mt-1 px-0.5 text-sm font-semibold text-gold-600">{{ $item->formattedPrice() ?? 'Price on request' }}</p>
+                    </a>
+                @endforeach
+            </div>
+        </section>
+    @endif
+</div>

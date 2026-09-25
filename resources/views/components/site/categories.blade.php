@@ -1,5 +1,7 @@
 @php
-    $categories = [
+    // Category panels: one photo card leading each category's products. Individual
+    // products come from the products table and open their own product page.
+    $panels = [
         [
             'key' => 'skincare',
             'panel' => '/images/categories/skincare-panel.jpg',
@@ -10,54 +12,6 @@
             'tags' => ['Skincare', 'Cleansers'],
         ],
         [
-            'key' => 'skincare-vaseline',
-            'image' => '/images/categories/skincare2/vaseline',
-            'name' => 'Vaseline Body Oils',
-            'icon' => 'tint-solid',
-            'description' => 'Vaseline Cocoa Radiant, Blue Seal Aloe Fresh and Healthy Bright Daily Brightening.',
-            'tags' => ['Skincare', 'Body Oil'],
-        ],
-        [
-            'key' => 'skincare-cosrx',
-            'image' => '/images/categories/skincare2/cosrx',
-            'name' => 'COSRX Alpha-Arbutin Serum',
-            'icon' => 'tint-solid',
-            'description' => 'The Alpha-Arbutin 2% Discoloration Care serum, Tranexamic Acid 3% + Niacinamide 5%, 50ml.',
-            'tags' => ['Skincare', 'Serum'],
-        ],
-        [
-            'key' => 'skincare-alpha',
-            'image' => '/images/categories/skincare2/alphaskincare',
-            'name' => 'Alpha Skin Care Renewal Lotion',
-            'icon' => 'tint-solid',
-            'description' => 'Alpha Skin Care Renewal Body Lotion, 12% Glycolic AHA, 12oz.',
-            'tags' => ['Skincare', 'Body Lotion'],
-        ],
-        [
-            'key' => 'skincare-olay',
-            'image' => '/images/categories/skincare2/olay',
-            'name' => 'Olay Dark Spot Body Lotion',
-            'icon' => 'tint-solid',
-            'description' => 'Olay Dark Spot Correcting Body Lotion, AHA & Vitamin C + Niacinamide, 17 fl oz.',
-            'tags' => ['Skincare', 'Body Lotion'],
-        ],
-        [
-            'key' => 'skincare-aveeno',
-            'image' => '/images/categories/skincare2/aveeno',
-            'name' => 'Aveeno Body Oil Mist',
-            'icon' => 'tint-solid',
-            'description' => 'Aveeno Daily Moisturizing Body Oil Mist with oat and jojoba oil, 200ml.',
-            'tags' => ['Skincare', 'Body Oil'],
-        ],
-        [
-            'key' => 'skincare-drteals',
-            'image' => '/images/categories/skincare2/drteals',
-            'name' => "Dr Teal's Citrus Body Care",
-            'icon' => 'tint-solid',
-            'description' => "Dr Teal's Body Wash, Body Lotion and Shea Sugar Scrub, citrus and vitamin C.",
-            'tags' => ['Skincare', 'Body Care'],
-        ],
-        [
             'key' => 'beauty',
             'panel' => '/images/categories/beauty-panel.jpg',
             'panelWebp' => '/images/categories/beauty-panel.webp',
@@ -65,122 +19,6 @@
             'icon' => 'paint-brush-solid',
             'description' => 'Makeup, beauty essentials, accessories and the tools to apply them.',
             'tags' => ['Beauty & Cosmetics', 'Makeup'],
-        ],
-        // The client's real Health & Beauty stock: one product, one card, same as every
-        // other card here — not six photos folded into a single tile.
-        [
-            'key' => 'health-anua',
-            'image' => '/images/categories/health/anua',
-            'name' => 'Anua Niacinamide Serum',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Anua Niacinamide 10% + TXA4 Serum, 30ml.',
-            'tags' => ['Health & Beauty', 'Serum'],
-        ],
-        [
-            'key' => 'health-niiracell',
-            'image' => '/images/categories/health/niiracell',
-            'name' => 'Niiracell Glutathione',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Niiracell Glutathione 90,000mg dietary supplement, 60 capsules.',
-            'tags' => ['Health & Beauty', 'Supplement'],
-        ],
-        [
-            'key' => 'health-beefar',
-            'image' => '/images/categories/health/beefar',
-            'name' => 'Beefar Probiotic Gummies',
-            'icon' => 'heartbeat-solid',
-            'description' => "Beefar Women's Probiotic + Slippery Elm gummies, 60 count.",
-            'tags' => ['Health & Beauty', 'Supplement'],
-        ],
-        [
-            'key' => 'health-neocell',
-            'image' => '/images/categories/health/neocell',
-            'name' => 'NeoCell Collagen Peptides',
-            'icon' => 'heartbeat-solid',
-            'description' => 'NeoCell Grassfed Collagen Peptides + Vitamin C, 360 caplets.',
-            'tags' => ['Health & Beauty', 'Supplement'],
-        ],
-        [
-            'key' => 'health-ginseng',
-            'image' => '/images/categories/health/ginseng',
-            'name' => 'Ginseng Six Treasures Tea',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Kanglai Ginseng Six Treasures Tea, 250g (10g x 25 packs).',
-            'tags' => ['Health & Beauty', 'Tea'],
-        ],
-        [
-            'key' => 'health-glutax',
-            'image' => '/images/categories/health/glutax',
-            'name' => 'Glutax Glutathione Injection',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Glutax 2000000GX glutathione injection kit. For professional administration.',
-            'tags' => ['Health & Beauty', 'Injectable'],
-        ],
-        [
-            'key' => 'health-menopause',
-            'image' => '/images/categories/teas/menopause',
-            'name' => 'Menopause Tea',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Herbal tea to support mood and relieve menopause symptoms, 10 tea bags.',
-            'tags' => ['Health & Beauty', 'Tea'],
-        ],
-        [
-            'key' => 'health-flattummy',
-            'image' => '/images/categories/teas/flattummy',
-            'name' => 'Flat Tummy Tea',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Wins Town 28 Days Detox Flat Tummy Tea, eases bloating and digestion, 28 teabags.',
-            'tags' => ['Health & Beauty', 'Tea'],
-        ],
-        [
-            'key' => 'health-grazerdetox',
-            'image' => '/images/categories/teas/grazerdetox',
-            'name' => 'Grazer Herbal Detox Tea',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Grazer Herbal Detox Tea, 30 teabags, 100g.',
-            'tags' => ['Health & Beauty', 'Tea'],
-        ],
-        [
-            'key' => 'health-doubleroot',
-            'image' => '/images/categories/teas/doubleroot',
-            'name' => 'Double Root Coffee',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Double Root Coffee, 100% Arabica.',
-            'tags' => ['Health & Beauty', 'Coffee'],
-        ],
-        [
-            'key' => 'health-ginsenggn',
-            'image' => '/images/categories/teas/ginsenggn',
-            'name' => 'Ginseng Six Treasures Tea (Green Nature)',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Green Nature Ginseng Six Premium Health Treasures Tea.',
-            'tags' => ['Health & Beauty', 'Tea'],
-        ],
-
-        // Sexual Enhancement: real stock, one product per card, same as Health & Beauty above.
-        [
-            'key' => 'sexual-tea',
-            'image' => '/images/categories/sexual/tea',
-            'name' => 'Erection Tea',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Tebillah Sam Erection Tea, boosts sex drive and libido. 30 tea bags.',
-            'tags' => ['Sexual Enhancement', 'Tea'],
-        ],
-        [
-            'key' => 'sexual-menpower',
-            'image' => '/images/categories/sexual/menpower',
-            'name' => 'Men Power Gummies',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Favret H&B Men Power, horny goat weed, coffee and mushroom, 8000mg, 60 gummies.',
-            'tags' => ['Sexual Enhancement', 'Supplement'],
-        ],
-        [
-            'key' => 'sexual-coffee',
-            'image' => '/images/categories/sexual/coffee',
-            'name' => 'X Power Coffee for Men',
-            'icon' => 'heartbeat-solid',
-            'description' => 'Wins Town X Power Coffee for men, NAFDAC registered. 16 sachets.',
-            'tags' => ['Sexual Enhancement', 'Coffee'],
         ],
         [
             'key' => 'body',
@@ -192,38 +30,6 @@
             'tags' => ['Body Enhancement', 'Body care'],
         ],
         [
-            'key' => 'body-bootybloom',
-            'image' => '/images/categories/body2/bootybloom',
-            'name' => 'Juliet Eve Booty Bloom',
-            'icon' => 'gem-solid',
-            'description' => 'Booty Bloom curve-enhancer shake, smooth butterscotch, with Pueraria Mirifica.',
-            'tags' => ['Body Enhancement', 'Shake'],
-        ],
-        [
-            'key' => 'body-beckon',
-            'image' => '/images/categories/body2/beckon',
-            'name' => 'Beckon Hip & Butt Oils',
-            'icon' => 'gem-solid',
-            'description' => "Beckon Hip Up Oil, Maca Oil and Hip Butt Oil range for women.",
-            'tags' => ['Body Enhancement', 'Oil'],
-        ],
-        [
-            'key' => 'body-macacapsules',
-            'image' => '/images/categories/body2/macacapsules',
-            'name' => 'Ultimate Maca Capsules',
-            'icon' => 'gem-solid',
-            'description' => 'Ultimate Maca Capsules, 7500mg, 120 veggy capsules, made for butt/hips.',
-            'tags' => ['Body Enhancement', 'Supplement'],
-        ],
-        [
-            'key' => 'body-duozi',
-            'image' => '/images/categories/body2/duozi',
-            'name' => 'Duozi Hip & Butt Drink',
-            'icon' => 'gem-solid',
-            'description' => 'Duozi Quick Effect Hip/Butt Enlargement Drink with Maca Plus, 10 x 30ml bottles.',
-            'tags' => ['Body Enhancement', 'Drink'],
-        ],
-        [
             'key' => 'spa',
             'panel' => '/images/categories/spa-panel.jpg',
             'panelWebp' => '/images/categories/spa-panel.webp',
@@ -231,30 +37,6 @@
             'icon' => 'spa-solid',
             'description' => 'Products and essentials for spas, massage businesses and professionals.',
             'tags' => ['Spa & Massage', 'Massage'],
-        ],
-        [
-            'key' => 'spa-massagegun',
-            'image' => '/images/categories/spa2/massagegun',
-            'name' => 'Percussion Massage Gun',
-            'icon' => 'spa-solid',
-            'description' => 'Deep-tissue massage gun with 4 head attachments, plus a free keyholder.',
-            'tags' => ['Spa & Massage', 'Massage'],
-        ],
-        [
-            'key' => 'spa-mooyam',
-            'image' => '/images/categories/spa2/mooyam',
-            'name' => 'Mooyam Massage Oil Set',
-            'icon' => 'spa-solid',
-            'description' => 'Lavender, Frankincense and Sore Muscle massage oils, 8 fl oz each.',
-            'tags' => ['Spa & Massage', 'Massage Oil'],
-        ],
-        [
-            'key' => 'spa-woodenroller',
-            'image' => '/images/categories/spa2/woodenroller',
-            'name' => 'Wooden Spine Roller',
-            'icon' => 'spa-solid',
-            'description' => 'Handheld wooden roller for back and muscle massage.',
-            'tags' => ['Spa & Massage', 'Massage Tool'],
         ],
         [
             'key' => 'wholesale',
@@ -267,14 +49,14 @@
         ],
     ];
 
+    $products = \App\Models\Product::query()->active()->ordered()->get();
+
     $slides = [
         ['key' => 'applying-product', 'alt' => 'A woman applying a skincare product at her dressing table'],
         ['key' => 'face-roller', 'alt' => 'A woman using a rose quartz face roller'],
         ['key' => 'podium', 'alt' => 'Cosmetic bottles and tubes arranged on a display podium'],
         ['key' => 'spa-massage', 'alt' => 'A woman receiving an oil massage in a spa'],
     ];
-
-    $first = $categories[0];
 
     // The dropdown/panel show categories, not every individual product card. One entry
     // per unique first tag, in first-appearance order, with its own blurb for the panel.
@@ -287,6 +69,28 @@
         'Spa & Massage' => 'Products and essentials for spas, massage businesses and professionals.',
         'Wholesale' => 'Bulk purchasing for retailers, resellers, salons, spas and beauty businesses.',
     ];
+
+    // Each category's panel first, then its products; categories added later (e.g. from
+    // the admin) that have no blurb yet follow at the end.
+    $categoryOrder = collect(array_keys($categoryBlurbs))
+        ->concat($products->pluck('category'))
+        ->unique()
+        ->values();
+
+    $categories = $categoryOrder
+        ->flatMap(fn ($name) => collect($panels)
+            ->filter(fn ($panel) => $panel['tags'][0] === $name)
+            ->concat($products
+                ->where('category', $name)
+                ->map(fn ($product) => [
+                    'key' => 'product-'.$product->id,
+                    'name' => $product->name,
+                    'description' => $product->description,
+                    'tags' => array_values(array_filter([$product->category, $product->type])),
+                    'product' => $product,
+                ])))
+        ->values()
+        ->all();
 
     $filters = collect([['key' => 'All', 'name' => 'All', 'description' => 'Everything we stock, in one place.']])
         ->concat(
@@ -391,7 +195,7 @@
                 <div class="max-h-[30rem] overflow-y-auto py-1 pr-2 pl-1 sm:max-h-[36rem] lg:max-h-[42rem] lg:pr-2.5 [scrollbar-width:thin] [scrollbar-color:#E5671780_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gold-500/40 hover:[&::-webkit-scrollbar-thumb]:bg-gold-500/80">
                 <div class="grid gap-3.5 sm:grid-cols-2">
                     @foreach ($categories as $category)
-                        @php $imagePath = $category['image'] ?? '/images/categories/'.$category['key']; @endphp
+                        @php $product = $category['product'] ?? null; @endphp
                         {{-- PORTRAIT CARD WITH IMAGE BEHIND & GLOSSY FADE GLASS EFFECT --}}
                         <article
                             x-show="active === 'All' || active === '{{ $category['tags'][0] }}'"
@@ -401,15 +205,19 @@
                         >
                             {{-- Image radius sits a step tighter than the card's, as in the reference --}}
                             <div class="relative">
-                                <picture>
-                                    <source type="image/webp" srcset="{{ $imagePath }}.webp" />
-                                    <img
-                                        src="{{ $imagePath }}.jpg"
-                                        alt="{{ $category['name'] }}"
-                                        loading="lazy"
-                                        class="aspect-square w-full rounded-[1rem] object-cover"
-                                    />
-                                </picture>
+                                @if ($product)
+                                    <x-shop.product-image :product="$product" class="aspect-square w-full rounded-[1rem]" />
+                                @else
+                                    <picture>
+                                        <source type="image/webp" srcset="/images/categories/{{ $category['key'] }}.webp" />
+                                        <img
+                                            src="/images/categories/{{ $category['key'] }}.jpg"
+                                            alt="{{ $category['name'] }}"
+                                            loading="lazy"
+                                            class="aspect-square w-full rounded-[1rem] object-cover"
+                                        />
+                                    </picture>
+                                @endif
                                 <span class="font-sub absolute top-2.5 left-2.5 rounded-full bg-cosmic-950/55 px-2.5 py-1 text-[0.6rem] font-semibold text-white backdrop-blur-sm">
                                     Retail &middot; Bulk
                                 </span>
@@ -417,20 +225,32 @@
 
                             <h3 class="mt-4 px-0.5 text-base leading-tight font-bold text-cosmic-900">{{ $category['name'] }}</h3>
 
+                            @if ($product)
+                                <p class="font-sub mt-1 px-0.5 text-sm font-semibold text-gold-600">{{ $product->formattedPrice() ?? 'Price on request' }}</p>
+                            @endif
+
                             <p class="font-sub mt-2 line-clamp-2 px-0.5 text-xs leading-relaxed text-cosmic-900/55">
                                 {{ $category['description'] }}
                             </p>
 
-                            <div class="mt-3 flex flex-wrap gap-1.5 px-0.5">
+                            <div class="mt-3 mb-4 flex flex-wrap gap-1.5 px-0.5">
                                 @foreach ($category['tags'] as $tag)
                                     <span class="font-sub rounded-full bg-cosmic-900/6 px-3 py-1.5 text-[0.65rem] font-medium text-cosmic-900/70">{{ $tag }}</span>
                                 @endforeach
                             </div>
 
-                            <x-site.whatsapp-link
-                                :message="'Hello Milkyway Cosmetics Stores, I would like to see what you have available under '.$category['name'].'.'"
-                                class="font-sub mt-4 block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
-                            >View products</x-site.whatsapp-link>
+                            @if ($product)
+                                <a
+                                    href="{{ route('products.show', $product) }}"
+                                    x-on:click.stop
+                                    class="font-sub mt-auto block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
+                                >View product</a>
+                            @else
+                                <x-site.whatsapp-link
+                                    :message="'Hello Milkyway Cosmetics Stores, I would like to see what you have available under '.$category['name'].'.'"
+                                    class="font-sub mt-auto block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
+                                >View products</x-site.whatsapp-link>
+                            @endif
                         </article>
                     @endforeach
                     </div>

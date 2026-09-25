@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Response;
 
 class SeoController extends Controller
@@ -21,6 +22,9 @@ class SeoController extends Controller
             'Disallow: /register',
             'Disallow: /forgot-password',
             'Disallow: /reset-password',
+            'Disallow: /cart',
+            'Disallow: /checkout',
+            'Disallow: /orders',
             '',
             'Sitemap: '.$this->siteUrl().'/sitemap.xml',
         ];
@@ -29,12 +33,18 @@ class SeoController extends Controller
     }
 
     /**
-     * A single-page site, so a single entry.
+     * The homepage, then one entry per product page.
      */
     public function sitemap(): Response
     {
+        $productUrls = Product::query()
+            ->active()
+            ->ordered()
+            ->pluck('slug')
+            ->map(fn (string $slug) => $this->siteUrl().'/products/'.$slug);
+
         return response()
-            ->view('sitemap', ['urls' => [$this->siteUrl().'/']])
+            ->view('sitemap', ['urls' => [$this->siteUrl().'/', ...$productUrls->all()]])
             ->header('Content-Type', 'application/xml; charset=UTF-8');
     }
 

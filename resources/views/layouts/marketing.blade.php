@@ -1,6 +1,7 @@
 @props([
     'title' => null,
     'description' => null,
+    'noindex' => false,
 ])
 
 @php
@@ -11,7 +12,7 @@
     $metaDescription = $description ?? $seo['description'];
     $canonical = $siteUrl.request()->getPathInfo();
     $ogImage = $siteUrl.$seo['image'];
-    $robots = 'index, follow, max-image-preview:large';
+    $robots = $noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 @endphp
 
 <!DOCTYPE html>
@@ -21,7 +22,9 @@
         @include('partials.seo')
 
         {{-- The hero photograph is the largest thing above the fold, so start fetching it at once --}}
+        @if (request()->routeIs('home'))
         <link rel="preload" as="image" type="image/webp" href="/images/hero/slide-1.webp" imagesrcset="/images/hero/slide-1-640.webp 640w, /images/hero/slide-1.webp 1000w" imagesizes="(min-width: 1024px) 40rem, 100vw" fetchpriority="high" />
+        @endif
 
         {{-- Sets .motion-ready before first paint so revealed elements never flash. If the
              script that reveals them has not arrived within 4s (slow connection), it steps
