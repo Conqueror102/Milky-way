@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use RuntimeException;
@@ -21,6 +22,10 @@ class Form extends Component
     public string $name = '';
 
     public string $slug = '';
+
+    public string $category = '';
+
+    public string $type = '';
 
     public string $description = '';
 
@@ -39,6 +44,8 @@ class Form extends Component
             $this->product = $product;
             $this->name = $product->name;
             $this->slug = $product->slug;
+            $this->category = $product->category;
+            $this->type = (string) $product->type;
             $this->description = (string) $product->description;
             $this->price = (string) $product->price;
             $this->stock = (string) $product->stock;
@@ -64,12 +71,25 @@ class Form extends Component
         return [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('products', 'slug')->ignore($this->product)],
+            'category' => ['required', 'string', 'max:255'],
+            'type' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:5000'],
             'price' => ['nullable', 'integer', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
             'is_active' => ['boolean'],
             'photo' => ['nullable', 'image', 'max:5120'],
         ];
+    }
+
+    /**
+     * Categories already in use, offered as suggestions.
+     *
+     * @return list<string>
+     */
+    #[Computed]
+    public function categories(): array
+    {
+        return Product::query()->distinct()->orderBy('category')->pluck('category')->all();
     }
 
     public function save(Cloudinary $cloudinary): void
@@ -96,6 +116,8 @@ class Form extends Component
         $product->fill([
             'name' => $validated['name'],
             'slug' => $validated['slug'],
+            'category' => $validated['category'],
+            'type' => $validated['type'] ?: null,
             'description' => $validated['description'] ?: null,
             'price' => filled($validated['price']) ? (int) $validated['price'] : null,
             'stock' => (int) $validated['stock'],

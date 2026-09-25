@@ -9,6 +9,17 @@
 
         <flux:input wire:model="slug" :label="__('Link name')" :description="__('Used in the product page address. Letters, numbers and dashes only.')" required />
 
+        <div class="grid gap-6 sm:grid-cols-2">
+            <flux:input wire:model="category" :label="__('Category')" list="product-categories" required />
+            <flux:input wire:model="type" :label="__('Type')" :description="__('Optional, for example Serum or Soap.')" />
+        </div>
+
+        <datalist id="product-categories">
+            @foreach ($this->categories as $existing)
+                <option value="{{ $existing }}"></option>
+            @endforeach
+        </datalist>
+
         <flux:textarea wire:model="description" :label="__('Description')" rows="5" />
 
         <div class="grid gap-6 sm:grid-cols-2">

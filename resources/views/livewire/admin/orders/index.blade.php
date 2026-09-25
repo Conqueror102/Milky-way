@@ -7,8 +7,8 @@
 
         <flux:select wire:model.live="status" class="max-w-48">
             <flux:select.option value="">{{ __('All statuses') }}</flux:select.option>
-            @foreach (\App\Models\Order::STATUSES as $option)
-                <flux:select.option :value="$option">{{ __(ucfirst($option)) }}</flux:select.option>
+            @foreach (\App\Enums\OrderStatus::cases() as $option)
+                <flux:select.option :value="$option->value">{{ __(ucfirst($option->value)) }}</flux:select.option>
             @endforeach
         </flux:select>
     </div>
@@ -27,12 +27,12 @@
             @forelse ($this->orders as $order)
                 <flux:table.row :key="$order->id">
                     <flux:table.cell>
-                        <flux:link :href="route('admin.orders.show', $order)" wire:navigate>#{{ $order->id }}</flux:link>
+                        <flux:link :href="route('admin.orders.show', $order)" wire:navigate>{{ $order->reference }}</flux:link>
                     </flux:table.cell>
                     <flux:table.cell>{{ $order->customer_name }}</flux:table.cell>
                     <flux:table.cell>{{ $order->items_count }}</flux:table.cell>
-                    <flux:table.cell>₦{{ number_format($order->total) }}</flux:table.cell>
-                    <flux:table.cell><flux:badge size="sm">{{ __(ucfirst($order->status)) }}</flux:badge></flux:table.cell>
+                    <flux:table.cell>₦{{ number_format($order->subtotal) }}</flux:table.cell>
+                    <flux:table.cell><flux:badge size="sm">{{ __(ucfirst($order->status->value)) }}</flux:badge></flux:table.cell>
                     <flux:table.cell>{{ $order->created_at?->diffForHumans() }}</flux:table.cell>
                 </flux:table.row>
             @empty
