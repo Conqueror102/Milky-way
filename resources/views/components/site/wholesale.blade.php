@@ -1,23 +1,12 @@
 @php
-    $askAbout = [
-        'Available products',
-        'Wholesale prices',
-        'Minimum quantities',
-        'Current stock',
-        'Bulk orders',
-        'Delivery options',
-    ];
+    $askAbout = $site->lines('wholesale.ask_items');
 
     /** Telling buyers what to send speeds up the first reply and saves a round of questions. */
-    $tellUs = [
-        'The kind of business you run',
-        'Where you are based',
-        'Which categories you stock',
-        'Roughly how much you buy at a time',
-    ];
+    $tellUs = $site->lines('wholesale.tell_items');
 
-    $enquiry = 'Hello Milkyway Cosmetics Stores. I run a [salon / shop / resale business] in [area] '
-        .'and I would like wholesale prices for [category]. I buy roughly [quantity] at a time.';
+    $enquiry = $site->text('wholesale.enquiry');
+
+    $photo = $site->image('wholesale.photo');
 @endphp
 
 <section id="wholesale" class="bg-gold-300 py-10 lg:py-14">
@@ -30,19 +19,17 @@
                 <div data-reveal class="flex items-center gap-3">
                     <span class="h-px w-10 bg-cosmic-900/40"></span>
                     <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-cosmic-900/70 uppercase">
-                        Wholesale
+                        {{ $site->text('wholesale.eyebrow') }}
                     </span>
                 </div>
 
                 <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-900">
-                    Stock your beauty
-                    <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-cosmic-900">business</span>
+                    {{ $site->text('wholesale.heading') }}
+                    <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-cosmic-900">{{ $site->text('wholesale.heading_accent') }}</span>
                 </h2>
 
                 <p data-reveal style="--d:300" class="font-sub mt-5 text-base leading-relaxed text-cosmic-900/75 lg:text-lg">
-                    Retailer, reseller, salon owner, spa operator or beauty entrepreneur &mdash;
-                    you can buy here in bulk. Starting out or restocking, message us and we will
-                    tell you what we have and what it costs.
+                    {{ $site->text('wholesale.intro') }}
                 </p>
 
                 <x-site.whatsapp-link
@@ -51,11 +38,11 @@
                     class="font-sub mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-cosmic-900 px-8 py-4 text-sm font-semibold text-cream-50 transition duration-200 hover:bg-cosmic-950"
                 >
                     <x-icon name="whatsapp" class="size-5 text-gold-400" />
-                    Get wholesale prices
+                    {{ $site->text('wholesale.button') }}
                 </x-site.whatsapp-link>
 
                 <p data-reveal class="font-sub mt-4 max-w-sm text-sm leading-relaxed text-cosmic-900/60">
-                    Opens WhatsApp with a message you can fill in. {{ config('milkyway.hours') }}.
+                    {{ $site->text('wholesale.button_note') }} {{ config('milkyway.hours') }}.
                 </p>
 
                 {{-- What we have instead of stockist logos: facts --}}
@@ -82,7 +69,7 @@
                 <div data-reveal="right" class="rounded-[1.5rem] bg-cream-50 p-6 ring-1 ring-cosmic-900/10 shadow-[0_10px_28px_-16px_rgba(20,52,82,0.35)] lg:p-7">
                     <div class="flex items-center gap-2.5">
                         <x-icon name="check-solid" class="size-4 text-gold-700" />
-                        <h3 class="font-sub text-sm font-bold tracking-[0.14em] text-cosmic-900 uppercase">Ask us about</h3>
+                        <h3 class="font-sub text-sm font-bold tracking-[0.14em] text-cosmic-900 uppercase">{{ $site->text('wholesale.ask_title') }}</h3>
                     </div>
                     <ul class="mt-5 grid gap-3">
                         @foreach ($askAbout as $item)
@@ -97,7 +84,7 @@
                 <div data-reveal="right" class="rounded-[1.5rem] bg-cosmic-900 p-6 lg:p-7">
                     <div class="flex items-center gap-2.5">
                         <x-icon name="pen-solid" class="size-4 text-gold-400" />
-                        <h3 class="font-sub text-sm font-bold tracking-[0.14em] text-cream-50 uppercase">Tell us</h3>
+                        <h3 class="font-sub text-sm font-bold tracking-[0.14em] text-cream-50 uppercase">{{ $site->text('wholesale.tell_title') }}</h3>
                     </div>
                     <ul class="mt-5 grid gap-3">
                         @foreach ($tellUs as $item)
@@ -107,13 +94,25 @@
                             </li>
                         @endforeach
                     </ul>
-                    <p class="font-sub mt-6 text-sm leading-relaxed text-cream-50/55">
-                        Four lines in your first message saves a day of back and forth.
-                    </p>
+                    @if (filled($site->text('wholesale.tell_note')))
+                        <p class="font-sub mt-6 text-sm leading-relaxed text-cream-50/55">
+                            {{ $site->text('wholesale.tell_note') }}
+                        </p>
+                    @endif
                 </div>
 
                 {{-- Fills the foot of the two cards and shows the kind of stock on offer --}}
                 <div data-reveal="clip" class="overflow-hidden rounded-[1.5rem] sm:col-span-2">
+                    @if ($photo)
+                        <x-site.photo
+                            :src="$photo"
+                            :alt="$site->alt('wholesale.photo')"
+                            sizes="(min-width: 1024px) 45vw, 100vw"
+                            :widths="[800, 1200]"
+                            loading="lazy"
+                            class="aspect-[4/1] w-full object-cover"
+                        />
+                    @else
                     <picture>
                         <source type="image/webp" srcset="/images/wholesale-strip-800.webp 800w, /images/wholesale-strip-1200.webp 1200w" sizes="(min-width: 1024px) 45vw, 100vw" />
                         <img
@@ -125,6 +124,7 @@
                             class="aspect-[4/1] w-full object-cover"
                         />
                     </picture>
+                    @endif
                 </div>
             </div>
         </div>

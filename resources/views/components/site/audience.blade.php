@@ -7,14 +7,14 @@
      * @var array<int, array{label: string, x: float, y: float}>
      */
     $branches = [
-        ['label' => 'Individual Beauty Consumers', 'x' => 13, 'y' => 31],
-        ['label' => 'Retail Customers', 'x' => 50, 'y' => 13],
-        ['label' => 'Wholesale Buyers', 'x' => 86, 'y' => 20],
-        ['label' => 'Beauty Entrepreneurs', 'x' => 10, 'y' => 64],
-        ['label' => 'Beauty Product Resellers', 'x' => 90, 'y' => 64],
-        ['label' => 'Makeup Artists & Beauty Professionals', 'x' => 21, 'y' => 89],
-        ['label' => 'Spa & Massage Businesses', 'x' => 50, 'y' => 94],
-        ['label' => 'Salon Owners', 'x' => 78, 'y' => 89],
+        ['label' => $site->text('audience.label_1'), 'x' => 13, 'y' => 31],
+        ['label' => $site->text('audience.label_2'), 'x' => 50, 'y' => 13],
+        ['label' => $site->text('audience.label_3'), 'x' => 86, 'y' => 20],
+        ['label' => $site->text('audience.label_4'), 'x' => 10, 'y' => 64],
+        ['label' => $site->text('audience.label_5'), 'x' => 90, 'y' => 64],
+        ['label' => $site->text('audience.label_6'), 'x' => 21, 'y' => 89],
+        ['label' => $site->text('audience.label_7'), 'x' => 50, 'y' => 94],
+        ['label' => $site->text('audience.label_8'), 'x' => 78, 'y' => 89],
     ];
 @endphp
 
@@ -27,12 +27,12 @@
             <div data-reveal class="flex items-center gap-3">
                 <span class="h-px w-10 bg-gold-400/50"></span>
                 <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-400 uppercase">
-                    Who we serve
+                    {{ $site->text('audience.eyebrow') }}
                 </span>
             </div>
             <h2 data-reveal="lines" style="--d:120" class="mt-3 text-[clamp(1.6rem,2.6vw,2.5rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
-                Who can shop with
-                <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-400">us?</span>
+                {{ $site->text('audience.heading') }}
+                <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-400">{{ $site->text('audience.heading_accent') }}</span>
             </h2>
         </div>
     </div>

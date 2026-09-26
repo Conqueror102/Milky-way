@@ -6,10 +6,12 @@ use App\Models\User;
 use App\Payments\PaymentGateway;
 use App\Payments\PaystackGateway;
 use App\Services\Cloudinary;
+use App\Support\SiteContent;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use RuntimeException;
@@ -22,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(Cloudinary::class, fn (): Cloudinary => Cloudinary::fromConfig());
+
+        $this->app->singleton(SiteContent::class);
 
         $this->app->singleton(PaystackGateway::class, fn () => new PaystackGateway(
             (string) config('services.paystack.secret_key'),
@@ -42,6 +46,10 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
 
         Gate::define('admin', fn (User $user): bool => $user->is_admin);
+
+        // The home page's editable copy and photos, as $site in every view. It only
+        // reads the database the first time a view asks for something.
+        View::share('site', $this->app->make(SiteContent::class));
     }
 
     /**

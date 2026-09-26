@@ -26,18 +26,17 @@
             <div data-reveal class="flex items-center gap-3">
                 <span class="h-px w-10 bg-gold-400/50"></span>
                 <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-400 uppercase">
-                    Delivery
+                    {{ $site->text('delivery.eyebrow') }}
                 </span>
             </div>
 
             <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
-                We deliver well past
-                <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-400">Lagos</span>
+                {{ $site->text('delivery.heading') }}
+                <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-400">{{ $site->text('delivery.heading_accent') }}</span>
             </h2>
 
             <p data-reveal style="--d:300" class="font-sub mt-5 max-w-md text-base leading-relaxed text-cream-50/65 lg:text-lg">
-                We cater to customers within and outside Lagos, subject to arrangement and
-                destination. Tell us where you are and we will work it out.
+                {{ $site->text('delivery.intro') }}
             </p>
 
             <x-site.whatsapp-link
@@ -47,7 +46,7 @@
                 class="font-sub mt-8 inline-flex items-center justify-center gap-3 rounded-full bg-cream-50 px-8 py-4 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white"
             >
                 <x-icon name="whatsapp" class="size-5 text-cosmic-900" />
-                Ask about delivery
+                {{ $site->text('delivery.button') }}
             </x-site.whatsapp-link>
         </div>
 
@@ -64,7 +63,7 @@
             </svg>
 
             <p class="font-sub absolute top-[90%] left-[13%] -translate-y-1/2 text-[0.62rem] leading-snug tracking-[0.16em] whitespace-nowrap text-cream-50/50 uppercase">
-                The shop &middot; Amuwo-Odofin
+                {{ $site->text('delivery.shop_label') }}
             </p>
 
             @foreach ($destinations as $destination)
@@ -75,7 +74,7 @@
             @endforeach
 
             <span class="font-sub absolute top-[6%] right-0 rounded-full border border-gold-400/40 px-3.5 py-1.5 text-xs font-medium text-gold-400">
-                Other locations &mdash; ask us
+                {{ $site->text('delivery.other_label') }}
             </span>
         </div>
     </div>

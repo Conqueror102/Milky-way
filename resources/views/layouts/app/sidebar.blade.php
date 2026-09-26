@@ -25,6 +25,9 @@
                         <flux:sidebar.item icon="clipboard-document-list" :href="route('admin.orders.index')" :current="request()->routeIs('admin.orders.*')" wire:navigate>
                             {{ __('Orders') }}
                         </flux:sidebar.item>
+                        <flux:sidebar.item icon="photo" :href="route('admin.site.index')" :current="request()->routeIs('admin.site.*')" wire:navigate>
+                            {{ __('Site content') }}
+                        </flux:sidebar.item>
                     </flux:sidebar.group>
                 @endcan
             </flux:sidebar.nav>

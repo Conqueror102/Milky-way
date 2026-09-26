@@ -23,7 +23,11 @@
 
         {{-- The hero photograph is the largest thing above the fold, so start fetching it at once --}}
         @if (request()->routeIs('home'))
+            @if ($heroPhoto = $site->image('hero.slide_1'))
+        <link rel="preload" as="image" href="{{ \App\Support\SiteContent::resized($heroPhoto, 1600) }}" imagesrcset="{{ \App\Support\SiteContent::resized($heroPhoto, 640) }} 640w, {{ \App\Support\SiteContent::resized($heroPhoto, 1000) }} 1000w, {{ \App\Support\SiteContent::resized($heroPhoto, 1600) }} 1600w" imagesizes="(min-width: 1024px) 40rem, 100vw" fetchpriority="high" />
+            @else
         <link rel="preload" as="image" type="image/webp" href="/images/hero/slide-1.webp" imagesrcset="/images/hero/slide-1-640.webp 640w, /images/hero/slide-1.webp 1000w" imagesizes="(min-width: 1024px) 40rem, 100vw" fetchpriority="high" />
+            @endif
         @endif
 
         {{-- Sets .motion-ready before first paint so revealed elements never flash. If the

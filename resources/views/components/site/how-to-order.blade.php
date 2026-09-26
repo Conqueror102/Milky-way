@@ -1,10 +1,10 @@
 @php
     $steps = [
-        ['icon' => 'search-solid', 'title' => 'Browse products', 'description' => "Find the beauty or personal-care products you're looking for."],
-        ['icon' => 'clipboard-check-solid', 'title' => 'Check availability', 'description' => 'Product availability and prices may vary, so we confirm before anything is agreed.'],
-        ['icon' => 'whatsapp', 'title' => 'Contact us', 'description' => 'Send us a message on WhatsApp for enquiries or orders.'],
-        ['icon' => 'check-solid', 'title' => 'Confirm your order', 'description' => 'We give you the details you need, including what delivery will involve.'],
-        ['icon' => 'truck-solid', 'title' => 'Receive your order', 'description' => 'Delivery is arranged based on where you are.'],
+        ['icon' => 'search-solid', 'title' => $site->text('how.step_1_title'), 'description' => $site->text('how.step_1_text')],
+        ['icon' => 'clipboard-check-solid', 'title' => $site->text('how.step_2_title'), 'description' => $site->text('how.step_2_text')],
+        ['icon' => 'whatsapp', 'title' => $site->text('how.step_3_title'), 'description' => $site->text('how.step_3_text')],
+        ['icon' => 'check-solid', 'title' => $site->text('how.step_4_title'), 'description' => $site->text('how.step_4_text')],
+        ['icon' => 'truck-solid', 'title' => $site->text('how.step_5_title'), 'description' => $site->text('how.step_5_text')],
     ];
 @endphp
 
@@ -15,6 +15,18 @@
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 hidden lg:block">
         <div data-stagger="160" data-stagger-from="200" class="mx-auto flex max-w-7xl items-start justify-end gap-3 px-6 sm:px-8">
             @foreach (['a' => 'h-60', 'b' => 'h-80', 'c' => 'h-60'] as $plate => $height)
+                @if ($custom = $site->image('how.photo_'.$loop->iteration))
+                    <x-site.photo
+                        :src="$custom"
+                        alt=""
+                        sizes="9rem"
+                        :widths="[300]"
+                        loading="lazy"
+                        data-reveal="down"
+                        :class="$height.' w-[7.5rem] rounded-b-[1.5rem] object-cover xl:w-[8.5rem]'"
+                    />
+                    @continue
+                @endif
                 <picture>
                     <source type="image/webp" srcset="/images/how/{{ $plate }}.webp" />
                     <img
@@ -32,17 +44,16 @@
 
         {{-- Heading --}}
         <span data-reveal class="font-sub inline-block rounded-full bg-gold-300 px-4 py-2 text-sm font-semibold text-cosmic-900">
-            How it works
+            {{ $site->text('how.eyebrow') }}
         </span>
 
         <h2 data-reveal="lines" style="--d:120" class="mt-5 max-w-lg text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.15] font-bold tracking-[-0.01em] text-cosmic-900">
-            From browsing to your
-            <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-700">doorstep</span>
+            {{ $site->text('how.heading') }}
+            <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-700">{{ $site->text('how.heading_accent') }}</span>
         </h2>
 
         <p data-reveal style="--d:300" class="font-sub mt-5 max-w-lg text-base leading-relaxed text-cosmic-900/60 lg:text-lg">
-            There is no checkout to fight with. You message us, we confirm what is in stock
-            and what it costs, then we arrange delivery.
+            {{ $site->text('how.intro') }}
         </p>
 
         {{-- The steps, stepping down the page --}}
@@ -109,7 +120,7 @@
                 class="font-sub inline-flex items-center justify-center gap-3 rounded-full bg-cosmic-900 px-8 py-4 text-sm font-semibold text-cream-50 transition duration-200 hover:bg-cosmic-950"
             >
                 <x-icon name="whatsapp" class="size-5 text-gold-400" />
-                Start an order on WhatsApp
+                {{ $site->text('how.button') }}
             </x-site.whatsapp-link>
         </div>
     </div>

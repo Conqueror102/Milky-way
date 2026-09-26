@@ -1,4 +1,16 @@
 @php
+    // The dropdown/panel show categories, not every individual product card. One entry
+    // per unique first tag, in first-appearance order, with its own blurb for the panel.
+    $categoryBlurbs = [
+        'Skincare' => $site->text('categories.blurb_skincare'),
+        'Beauty & Cosmetics' => $site->text('categories.blurb_beauty'),
+        'Health & Beauty' => $site->text('categories.blurb_health'),
+        'Sexual Enhancement' => $site->text('categories.blurb_sexual'),
+        'Body Enhancement' => $site->text('categories.blurb_body'),
+        'Spa & Massage' => $site->text('categories.blurb_spa'),
+        'Wholesale' => $site->text('categories.blurb_wholesale'),
+    ];
+
     // Category panels: one photo card leading each category's products. Individual
     // products come from the products table and open their own product page.
     $panels = [
@@ -6,69 +18,67 @@
             'key' => 'skincare',
             'panel' => '/images/categories/skincare-panel.jpg',
             'panelWebp' => '/images/categories/skincare-panel.webp',
-            'name' => 'Skincare',
+            'name' => $site->text('categories.card_skincare_name'),
             'icon' => 'tint-solid',
-            'description' => 'Cleansers, moisturisers, creams, serums, soaps and scrubs for every routine.',
+            'description' => $categoryBlurbs['Skincare'],
             'tags' => ['Skincare', 'Cleansers'],
         ],
         [
             'key' => 'beauty',
             'panel' => '/images/categories/beauty-panel.jpg',
             'panelWebp' => '/images/categories/beauty-panel.webp',
-            'name' => 'Beauty & Cosmetics',
+            'name' => $site->text('categories.card_beauty_name'),
             'icon' => 'paint-brush-solid',
-            'description' => 'Makeup, beauty essentials, accessories and the tools to apply them.',
+            'description' => $categoryBlurbs['Beauty & Cosmetics'],
             'tags' => ['Beauty & Cosmetics', 'Makeup'],
         ],
         [
             'key' => 'body',
             'panel' => '/images/categories/body-panel.jpg',
             'panelWebp' => '/images/categories/body-panel.webp',
-            'name' => 'Body Enhancement',
+            'name' => $site->text('categories.card_body_name'),
             'icon' => 'gem-solid',
-            'description' => 'Body-enhancement and personal-care products for a complete regimen.',
+            'description' => $categoryBlurbs['Body Enhancement'],
             'tags' => ['Body Enhancement', 'Body care'],
         ],
         [
             'key' => 'spa',
             'panel' => '/images/categories/spa-panel.jpg',
             'panelWebp' => '/images/categories/spa-panel.webp',
-            'name' => 'Spa & Massage',
+            'name' => $site->text('categories.card_spa_name'),
             'icon' => 'spa-solid',
-            'description' => 'Products and essentials for spas, massage businesses and professionals.',
+            'description' => $categoryBlurbs['Spa & Massage'],
             'tags' => ['Spa & Massage', 'Massage'],
         ],
         [
             'key' => 'wholesale',
             'panel' => '/images/categories/wholesale-panel.jpg',
             'panelWebp' => '/images/categories/wholesale-panel.webp',
-            'name' => 'Wholesale',
+            'name' => $site->text('categories.card_wholesale_name'),
             'icon' => 'boxes-solid',
-            'description' => 'Bulk purchasing for retailers, resellers, salons, spas and beauty businesses.',
+            'description' => $categoryBlurbs['Wholesale'],
             'tags' => ['Wholesale', 'Bulk orders'],
         ],
     ];
 
     $products = \App\Models\Product::query()->active()->ordered()->get();
 
-    $slides = [
-        ['key' => 'applying-product', 'alt' => 'A woman applying a skincare product at her dressing table'],
-        ['key' => 'face-roller', 'alt' => 'A woman using a rose quartz face roller'],
-        ['key' => 'podium', 'alt' => 'Cosmetic bottles and tubes arranged on a display podium'],
-        ['key' => 'spa-massage', 'alt' => 'A woman receiving an oil massage in a spa'],
-    ];
+    // The feature panel's photos. An uploaded one is served from Cloudinary instead.
+    $slides = collect([
+        'feature_1' => 'applying-product',
+        'feature_2' => 'face-roller',
+        'feature_3' => 'podium',
+        'feature_4' => 'spa-massage',
+    ])->map(function ($file, $field) use ($site) {
+        $custom = $site->image("categories.{$field}");
 
-    // The dropdown/panel show categories, not every individual product card. One entry
-    // per unique first tag, in first-appearance order, with its own blurb for the panel.
-    $categoryBlurbs = [
-        'Skincare' => 'Cleansers, moisturisers, creams, serums, soaps and scrubs for every routine.',
-        'Beauty & Cosmetics' => 'Makeup, beauty essentials, accessories and the tools to apply them.',
-        'Health & Beauty' => 'Selected health and personal-care products to sit alongside your beauty shelf.',
-        'Sexual Enhancement' => 'Products to support intimacy and libido, for individuals and couples.',
-        'Body Enhancement' => 'Body-enhancement and personal-care products for a complete regimen.',
-        'Spa & Massage' => 'Products and essentials for spas, massage businesses and professionals.',
-        'Wholesale' => 'Bulk purchasing for retailers, resellers, salons, spas and beauty businesses.',
-    ];
+        return [
+            'key' => $field,
+            'jpg' => $custom ? \App\Support\SiteContent::resized($custom, 1200) : "/images/showcase/{$file}.jpg",
+            'webp' => $custom ? null : "/images/showcase/{$file}.webp",
+            'alt' => $site->alt("categories.{$field}"),
+        ];
+    })->values()->all();
 
     // Each category's panel first, then its products; categories added later (e.g. from
     // the admin) that have no blurb yet follow at the end.
@@ -92,7 +102,7 @@
         ->values()
         ->all();
 
-    $filters = collect([['key' => 'All', 'name' => 'All', 'description' => 'Everything we stock, in one place.']])
+    $filters = collect([['key' => 'All', 'name' => 'All', 'description' => $site->text('categories.blurb_all')]])
         ->concat(
             collect($categories)
                 ->pluck('tags.0')
@@ -134,12 +144,12 @@
                 <div data-reveal class="flex items-center gap-3">
                     <span class="h-px w-10 bg-gold-400/50"></span>
                     <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-400 uppercase">
-                        Shop by category
+                        {{ $site->text('categories.eyebrow') }}
                     </span>
                 </div>
                 <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
-                    One store, every
-                    <span class="font-script tracking-[-0.03em] text-gold-400">beauty</span> need
+                    {{ $site->text('categories.heading') }}
+                    <span class="font-script tracking-[-0.03em] text-gold-400">{{ $site->text('categories.heading_accent') }}</span> {{ $site->text('categories.heading_end') }}
                 </h2>
             </div>
 
@@ -207,6 +217,15 @@
                             <div class="relative">
                                 @if ($product)
                                     <x-shop.product-image :product="$product" class="aspect-square w-full rounded-[1rem]" />
+                                @elseif ($custom = $site->image('categories.card_'.$category['key']))
+                                    <x-site.photo
+                                        :src="$custom"
+                                        :alt="$site->alt('categories.card_'.$category['key']) ?: $category['name']"
+                                        sizes="(min-width: 1024px) 20rem, (min-width: 640px) 50vw, 100vw"
+                                        :widths="[400, 800]"
+                                        loading="lazy"
+                                        class="aspect-square w-full rounded-[1rem] object-cover"
+                                    />
                                 @else
                                     <picture>
                                         <source type="image/webp" srcset="/images/categories/{{ $category['key'] }}.webp" />
@@ -219,7 +238,7 @@
                                     </picture>
                                 @endif
                                 <span class="font-sub absolute top-2.5 left-2.5 rounded-full bg-cosmic-950/55 px-2.5 py-1 text-[0.6rem] font-semibold text-white backdrop-blur-sm">
-                                    Retail &middot; Bulk
+                                    {{ $site->text('categories.card_badge') }}
                                 </span>
                             </div>
 
@@ -244,12 +263,12 @@
                                     href="{{ route('products.show', $product) }}"
                                     x-on:click.stop
                                     class="font-sub mt-auto block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
-                                >View product</a>
+                                >{{ $site->text('categories.product_button') }}</a>
                             @else
                                 <x-site.whatsapp-link
                                     :message="'Hello Milkyway Cosmetics Stores, I would like to see what you have available under '.$category['name'].'.'"
                                     class="font-sub mt-auto block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
-                                >View products</x-site.whatsapp-link>
+                                >{{ $site->text('categories.card_button') }}</x-site.whatsapp-link>
                             @endif
                         </article>
                     @endforeach
@@ -266,15 +285,15 @@
             >
                 {{-- Server-rendered base: the first slide, and the no-JS fallback --}}
                 <img
-                    src="/images/showcase/{{ $slides[0]['key'] }}.jpg"
+                    src="{{ $slides[0]['jpg'] }}"
                     alt="{{ $slides[0]['alt'] }}"
                     class="absolute inset-0 -z-30 size-full object-cover"
                 />
                 <template x-for="(s, i) in slides" :key="s.key">
                     <picture>
-                        <source type="image/webp" :srcset="'/images/showcase/' + s.key + '.webp'" />
+                        <source :type="s.webp ? 'image/webp' : 'image/jpeg'" :srcset="s.webp || s.jpg" />
                         <img
-                            :src="'/images/showcase/' + s.key + '.jpg'"
+                            :src="s.jpg"
                             :alt="s.alt"
                             :class="slide === i ? 'opacity-100' : 'opacity-0'"
                             class="absolute inset-0 -z-20 size-full object-cover transition-opacity duration-700 ease-out"
@@ -307,7 +326,7 @@
                         class="font-sub mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-cream-50 px-6 py-3.5 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white"
                     >
                         <x-icon name="whatsapp" class="size-4" />
-                        Enquire about stock
+                        {{ $site->text('categories.feature_button') }}
                     </x-site.whatsapp-link>
                 </div>
             </div>

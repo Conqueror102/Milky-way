@@ -48,15 +48,16 @@ class Cloudinary
     }
 
     /**
-     * Upload an image and return its secure URL and public id.
+     * Upload an image and return its secure URL and public id. It goes in the
+     * configured folder unless another is given.
      *
      * @return array{url: string, public_id: string}
      */
-    public function upload(UploadedFile $file): array
+    public function upload(UploadedFile $file, ?string $folder = null): array
     {
         $response = Http::asMultipart()
             ->attach('file', (string) file_get_contents($file->getRealPath()), $file->getClientOriginalName())
-            ->post($this->endpoint('upload'), $this->signed(['folder' => $this->folder]));
+            ->post($this->endpoint('upload'), $this->signed(['folder' => $folder ?? $this->folder]));
 
         if ($response->failed()) {
             throw new RuntimeException('Cloudinary upload failed: '.$response->json('error.message', $response->body()));
