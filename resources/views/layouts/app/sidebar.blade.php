@@ -37,6 +37,9 @@
                         <flux:sidebar.item icon="photo" :href="route('admin.site.index')" :current="request()->routeIs('admin.site.*')" wire:navigate>
                             {{ __('Site content') }}
                         </flux:sidebar.item>
+                        <flux:sidebar.item icon="swatch" :href="route('admin.colors')" :current="request()->routeIs('admin.colors')" wire:navigate>
+                            {{ __('Colours') }}
+                        </flux:sidebar.item>
                     </flux:sidebar.group>
                 @endcan
             </flux:sidebar.nav>

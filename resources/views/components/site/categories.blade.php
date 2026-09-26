@@ -159,7 +159,7 @@
 
             {{-- Card grid --}}
             <div class="relative order-2 rounded-[1.5rem] lg:order-1">
-                <div class="max-h-[30rem] overflow-y-auto py-1 pr-2 pl-1 sm:max-h-[36rem] lg:max-h-[42rem] lg:pr-2.5 [scrollbar-width:thin] [scrollbar-color:#E5671780_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gold-500/40 hover:[&::-webkit-scrollbar-thumb]:bg-gold-500/80">
+                <div class="max-h-[30rem] overflow-y-auto py-1 pr-2 pl-1 sm:max-h-[36rem] lg:max-h-[42rem] lg:pr-2.5 [scrollbar-width:thin] [scrollbar-color:color-mix(in_srgb,var(--color-gold-500)_50%,transparent)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gold-500/40 hover:[&::-webkit-scrollbar-thumb]:bg-gold-500/80">
                 <div class="grid gap-3.5 sm:grid-cols-2">
                     @foreach ($categories as $category)
                         @php $product = $category['product'] ?? null; @endphp
@@ -168,7 +168,7 @@
                             x-show="active === 'All' || active === '{{ $category['tags'][0] }}'"
                             x-on:click="active = '{{ $category['tags'][0] }}'"
                             :class="active === '{{ $category['tags'][0] }}' ? 'ring-2 ring-cosmic-900' : 'ring-1 ring-cosmic-900/8'"
-                            class="flex cursor-pointer flex-col rounded-[1.5rem] rounded-b-[2.25rem] bg-white p-3 shadow-[0_12px_32px_-14px_rgba(20,52,82,0.3)] transition duration-200"
+                            class="flex cursor-pointer flex-col rounded-[1.5rem] rounded-b-[2.25rem] bg-white p-3 shadow-[0_12px_32px_-14px_color-mix(in_srgb,var(--color-cosmic-900)_30%,transparent)] transition duration-200"
                         >
                             {{-- Image radius sits a step tighter than the card's, as in the reference --}}
                             <div class="relative">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Admin\Categories;
+use App\Livewire\Admin\Colors;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Orders;
 use App\Livewire\Admin\Products;
@@ -29,4 +30,6 @@ Route::middleware(['auth', 'verified', 'can:admin'])
 
         Route::livewire('site', Site\Index::class)->name('site.index');
         Route::livewire('site/{section}', Site\Edit::class)->name('site.edit');
+
+        Route::livewire('colors', Colors::class)->name('colors');
     });

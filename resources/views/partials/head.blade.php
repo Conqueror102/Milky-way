@@ -13,4 +13,7 @@
 @fonts
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+{{-- The colours an admin picked at /admin/colors; nothing while the originals are in use --}}
+{{ app(\App\Support\Palette::class)->styleTag() }}
 @fluxAppearance
