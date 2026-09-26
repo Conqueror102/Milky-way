@@ -114,4 +114,20 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Store Admins
+    |--------------------------------------------------------------------------
+    |
+    | Accounts registered with one of these emails can manage the store, on
+    | top of anyone promoted with `php artisan app:make-admin`. Set it as a
+    | comma-separated list so admin access survives a fresh database.
+    |
+    */
+
+    'admin_emails' => array_values(array_filter(array_map(
+        fn (string $email): string => strtolower(trim($email)),
+        explode(',', (string) env('ADMIN_EMAILS', '')),
+    ))),
+
 ];

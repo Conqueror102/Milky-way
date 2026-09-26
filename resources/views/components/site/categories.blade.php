@@ -1,65 +1,20 @@
 @php
-    // The dropdown/panel show categories, not every individual product card. One entry
-    // per unique first tag, in first-appearance order, with its own blurb for the panel.
-    $categoryBlurbs = [
-        'Skincare' => $site->text('categories.blurb_skincare'),
-        'Beauty & Cosmetics' => $site->text('categories.blurb_beauty'),
-        'Health & Beauty' => $site->text('categories.blurb_health'),
-        'Sexual Enhancement' => $site->text('categories.blurb_sexual'),
-        'Body Enhancement' => $site->text('categories.blurb_body'),
-        'Spa & Massage' => $site->text('categories.blurb_spa'),
-        'Wholesale' => $site->text('categories.blurb_wholesale'),
-    ];
+    // Categories are managed in the admin; one with a photo leads its products with
+    // a photo card of its own. Products open their own product page.
+    $categoryRecords = \App\Models\Category::query()->ordered()->get();
 
-    // Category panels: one photo card leading each category's products. Individual
-    // products come from the products table and open their own product page.
-    $panels = [
-        [
-            'key' => 'skincare',
-            'panel' => '/images/categories/skincare-panel.jpg',
-            'panelWebp' => '/images/categories/skincare-panel.webp',
-            'name' => $site->text('categories.card_skincare_name'),
-            'icon' => 'tint-solid',
-            'description' => $categoryBlurbs['Skincare'],
-            'tags' => ['Skincare', 'Cleansers'],
-        ],
-        [
-            'key' => 'beauty',
-            'panel' => '/images/categories/beauty-panel.jpg',
-            'panelWebp' => '/images/categories/beauty-panel.webp',
-            'name' => $site->text('categories.card_beauty_name'),
-            'icon' => 'paint-brush-solid',
-            'description' => $categoryBlurbs['Beauty & Cosmetics'],
-            'tags' => ['Beauty & Cosmetics', 'Makeup'],
-        ],
-        [
-            'key' => 'body',
-            'panel' => '/images/categories/body-panel.jpg',
-            'panelWebp' => '/images/categories/body-panel.webp',
-            'name' => $site->text('categories.card_body_name'),
-            'icon' => 'gem-solid',
-            'description' => $categoryBlurbs['Body Enhancement'],
-            'tags' => ['Body Enhancement', 'Body care'],
-        ],
-        [
-            'key' => 'spa',
-            'panel' => '/images/categories/spa-panel.jpg',
-            'panelWebp' => '/images/categories/spa-panel.webp',
-            'name' => $site->text('categories.card_spa_name'),
-            'icon' => 'spa-solid',
-            'description' => $categoryBlurbs['Spa & Massage'],
-            'tags' => ['Spa & Massage', 'Massage'],
-        ],
-        [
-            'key' => 'wholesale',
-            'panel' => '/images/categories/wholesale-panel.jpg',
-            'panelWebp' => '/images/categories/wholesale-panel.webp',
-            'name' => $site->text('categories.card_wholesale_name'),
-            'icon' => 'boxes-solid',
-            'description' => $categoryBlurbs['Wholesale'],
-            'tags' => ['Wholesale', 'Bulk orders'],
-        ],
-    ];
+    $panels = $categoryRecords
+        ->filter(fn ($category) => $category->imageSrc() !== null)
+        ->map(fn ($category) => [
+            'key' => 'category-'.$category->id,
+            'image' => $category->imageSrc(),
+            'imageWebp' => $category->imageWebp(),
+            'name' => $category->name,
+            'description' => (string) $category->description,
+            'tags' => [$category->name],
+        ])
+        ->values()
+        ->all();
 
     $products = \App\Models\Product::query()->active()->ordered()->get();
 
@@ -80,9 +35,11 @@
         ];
     })->values()->all();
 
-    // Each category's panel first, then its products; categories added later (e.g. from
-    // the admin) that have no blurb yet follow at the end.
-    $categoryOrder = collect(array_keys($categoryBlurbs))
+    $categoryBlurbs = $categoryRecords->pluck('description', 'name')->map(fn ($text) => (string) $text)->all();
+
+    // Each category's photo card first, then its products, in the admin's order;
+    // a product whose category was since removed follows at the end.
+    $categoryOrder = $categoryRecords->pluck('name')
         ->concat($products->pluck('category'))
         ->unique()
         ->values();
@@ -217,20 +174,13 @@
                             <div class="relative">
                                 @if ($product)
                                     <x-shop.product-image :product="$product" class="aspect-square w-full rounded-[1rem]" />
-                                @elseif ($custom = $site->image('categories.card_'.$category['key']))
-                                    <x-site.photo
-                                        :src="$custom"
-                                        :alt="$site->alt('categories.card_'.$category['key']) ?: $category['name']"
-                                        sizes="(min-width: 1024px) 20rem, (min-width: 640px) 50vw, 100vw"
-                                        :widths="[400, 800]"
-                                        loading="lazy"
-                                        class="aspect-square w-full rounded-[1rem] object-cover"
-                                    />
                                 @else
                                     <picture>
-                                        <source type="image/webp" srcset="/images/categories/{{ $category['key'] }}.webp" />
+                                        @if ($category['imageWebp'])
+                                            <source type="image/webp" srcset="{{ $category['imageWebp'] }}" />
+                                        @endif
                                         <img
-                                            src="/images/categories/{{ $category['key'] }}.jpg"
+                                            src="{{ $category['image'] }}"
                                             alt="{{ $category['name'] }}"
                                             loading="lazy"
                                             class="aspect-square w-full rounded-[1rem] object-cover"

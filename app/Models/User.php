@@ -79,4 +79,16 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->hasMany(Order::class);
     }
+
+    /**
+     * Whether this account can manage the store, either promoted in the
+     * database or listed in ADMIN_EMAILS.
+     */
+    public function isAdmin(): bool
+    {
+        /** @var array<int, string> $emails */
+        $emails = config('auth.admin_emails', []);
+
+        return $this->is_admin || in_array(strtolower($this->email), $emails, true);
+    }
 }

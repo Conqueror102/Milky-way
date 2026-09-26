@@ -45,7 +45,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->configureDefaults();
 
-        Gate::define('admin', fn (User $user): bool => $user->is_admin);
+        Gate::define('admin', fn (User $user): bool => $user->isAdmin());
 
         // The home page's editable copy and photos, as $site in every view. It only
         // reads the database the first time a view asks for something.

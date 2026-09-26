@@ -65,7 +65,7 @@ return [
 
         'categories' => [
             'label' => 'Shop by category',
-            'description' => 'The category cards, the rotating feature photos and the category blurbs.',
+            'description' => 'The heading, the rotating feature photos and the card buttons.',
             'anchor' => 'shop',
             'groups' => [
                 [
@@ -89,36 +89,13 @@ return [
                     ],
                 ],
                 [
-                    'label' => 'Category cards',
-                    'description' => 'One card leads each category, ahead of its products.',
+                    'label' => 'Cards',
+                    'description' => 'Category names, blurbs and photos are on the Categories page.',
                     'fields' => [
-                        'card_skincare' => ['type' => 'image', 'label' => 'Skincare card photo', 'default' => '/images/categories/skincare.jpg', 'alt' => 'Skincare'],
-                        'card_skincare_name' => ['type' => 'text', 'label' => 'Skincare card title', 'default' => 'Skincare'],
-                        'card_beauty' => ['type' => 'image', 'label' => 'Beauty & Cosmetics card photo', 'default' => '/images/categories/beauty.jpg', 'alt' => 'Beauty & Cosmetics'],
-                        'card_beauty_name' => ['type' => 'text', 'label' => 'Beauty & Cosmetics card title', 'default' => 'Beauty & Cosmetics'],
-                        'card_body' => ['type' => 'image', 'label' => 'Body Enhancement card photo', 'default' => '/images/categories/body.jpg', 'alt' => 'Body Enhancement'],
-                        'card_body_name' => ['type' => 'text', 'label' => 'Body Enhancement card title', 'default' => 'Body Enhancement'],
-                        'card_spa' => ['type' => 'image', 'label' => 'Spa & Massage card photo', 'default' => '/images/categories/spa.jpg', 'alt' => 'Spa & Massage'],
-                        'card_spa_name' => ['type' => 'text', 'label' => 'Spa & Massage card title', 'default' => 'Spa & Massage'],
-                        'card_wholesale' => ['type' => 'image', 'label' => 'Wholesale card photo', 'default' => '/images/categories/wholesale.jpg', 'alt' => 'Wholesale'],
-                        'card_wholesale_name' => ['type' => 'text', 'label' => 'Wholesale card title', 'default' => 'Wholesale'],
                         'card_badge' => ['type' => 'text', 'label' => 'Badge on each card photo', 'default' => 'Retail · Bulk'],
                         'card_button' => ['type' => 'text', 'label' => 'Category card button', 'default' => 'View products'],
                         'product_button' => ['type' => 'text', 'label' => 'Product card button', 'default' => 'View product'],
-                    ],
-                ],
-                [
-                    'label' => 'Category blurbs',
-                    'description' => 'Shown on the category card and in the feature panel when a category is picked.',
-                    'fields' => [
-                        'blurb_all' => ['type' => 'textarea', 'label' => 'All', 'default' => 'Everything we stock, in one place.'],
-                        'blurb_skincare' => ['type' => 'textarea', 'label' => 'Skincare', 'default' => 'Cleansers, moisturisers, creams, serums, soaps and scrubs for every routine.'],
-                        'blurb_beauty' => ['type' => 'textarea', 'label' => 'Beauty & Cosmetics', 'default' => 'Makeup, beauty essentials, accessories and the tools to apply them.'],
-                        'blurb_health' => ['type' => 'textarea', 'label' => 'Health & Beauty', 'default' => 'Selected health and personal-care products to sit alongside your beauty shelf.'],
-                        'blurb_sexual' => ['type' => 'textarea', 'label' => 'Sexual Enhancement', 'default' => 'Products to support intimacy and libido, for individuals and couples.'],
-                        'blurb_body' => ['type' => 'textarea', 'label' => 'Body Enhancement', 'default' => 'Body-enhancement and personal-care products for a complete regimen.'],
-                        'blurb_spa' => ['type' => 'textarea', 'label' => 'Spa & Massage', 'default' => 'Products and essentials for spas, massage businesses and professionals.'],
-                        'blurb_wholesale' => ['type' => 'textarea', 'label' => 'Wholesale', 'default' => 'Bulk purchasing for retailers, resellers, salons, spas and beauty businesses.'],
+                        'blurb_all' => ['type' => 'textarea', 'label' => 'Blurb for All', 'default' => 'Everything we stock, in one place.', 'help' => 'Shown in the feature panel before a category is picked.'],
                     ],
                 ],
             ],

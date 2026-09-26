@@ -37,3 +37,15 @@ test('the make-admin command promotes a user', function () {
 test('the make-admin command fails for an unknown email', function () {
     $this->artisan('app:make-admin', ['email' => 'nobody@example.com'])->assertFailed();
 });
+
+test('accounts listed in ADMIN_EMAILS can open the admin', function () {
+    config(['auth.admin_emails' => ['owner@example.com', 'second@example.com']]);
+
+    $this->actingAs(User::factory()->create(['email' => 'Owner@Example.com']))
+        ->get(route('admin.products.index'))
+        ->assertOk();
+
+    $this->actingAs(User::factory()->create(['email' => 'someone@example.com']))
+        ->get(route('admin.products.index'))
+        ->assertForbidden();
+});
