@@ -1,0 +1,30 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Category;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+
+/**
+ * @extends Factory<Category>
+ */
+class CategoryFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => Str::title(rtrim(fake()->unique()->sentence(2, false), '.')),
+            'description' => fake()->sentence(),
+            'image_url' => null,
+            'image_public_id' => null,
+            'image_path' => null,
+            'sort_order' => 100,
+        ];
+    }
+}

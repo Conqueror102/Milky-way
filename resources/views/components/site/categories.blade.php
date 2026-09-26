@@ -1,53 +1,20 @@
 @php
-    // Category panels: one photo card leading each category's products. Individual
-    // products come from the products table and open their own product page.
-    $panels = [
-        [
-            'key' => 'skincare',
-            'panel' => '/images/categories/skincare-panel.jpg',
-            'panelWebp' => '/images/categories/skincare-panel.webp',
-            'name' => 'Skincare',
-            'icon' => 'tint-solid',
-            'description' => 'Cleansers, moisturisers, creams, serums, soaps and scrubs for every routine.',
-            'tags' => ['Skincare', 'Cleansers'],
-        ],
-        [
-            'key' => 'beauty',
-            'panel' => '/images/categories/beauty-panel.jpg',
-            'panelWebp' => '/images/categories/beauty-panel.webp',
-            'name' => 'Beauty & Cosmetics',
-            'icon' => 'paint-brush-solid',
-            'description' => 'Makeup, beauty essentials, accessories and the tools to apply them.',
-            'tags' => ['Beauty & Cosmetics', 'Makeup'],
-        ],
-        [
-            'key' => 'body',
-            'panel' => '/images/categories/body-panel.jpg',
-            'panelWebp' => '/images/categories/body-panel.webp',
-            'name' => 'Body Enhancement',
-            'icon' => 'gem-solid',
-            'description' => 'Body-enhancement and personal-care products for a complete regimen.',
-            'tags' => ['Body Enhancement', 'Body care'],
-        ],
-        [
-            'key' => 'spa',
-            'panel' => '/images/categories/spa-panel.jpg',
-            'panelWebp' => '/images/categories/spa-panel.webp',
-            'name' => 'Spa & Massage',
-            'icon' => 'spa-solid',
-            'description' => 'Products and essentials for spas, massage businesses and professionals.',
-            'tags' => ['Spa & Massage', 'Massage'],
-        ],
-        [
-            'key' => 'wholesale',
-            'panel' => '/images/categories/wholesale-panel.jpg',
-            'panelWebp' => '/images/categories/wholesale-panel.webp',
-            'name' => 'Wholesale',
-            'icon' => 'boxes-solid',
-            'description' => 'Bulk purchasing for retailers, resellers, salons, spas and beauty businesses.',
-            'tags' => ['Wholesale', 'Bulk orders'],
-        ],
-    ];
+    // Categories are managed in the admin; one with a photo leads its products with
+    // a photo card of its own. Products open their own product page.
+    $categoryRecords = \App\Models\Category::query()->ordered()->get();
+
+    $panels = $categoryRecords
+        ->filter(fn ($category) => $category->imageSrc() !== null)
+        ->map(fn ($category) => [
+            'key' => 'category-'.$category->id,
+            'image' => $category->imageSrc(),
+            'imageWebp' => $category->imageWebp(),
+            'name' => $category->name,
+            'description' => (string) $category->description,
+            'tags' => [$category->name],
+        ])
+        ->values()
+        ->all();
 
     $products = \App\Models\Product::query()->active()->ordered()->get();
 
@@ -58,21 +25,11 @@
         ['key' => 'spa-massage', 'alt' => 'A woman receiving an oil massage in a spa'],
     ];
 
-    // The dropdown/panel show categories, not every individual product card. One entry
-    // per unique first tag, in first-appearance order, with its own blurb for the panel.
-    $categoryBlurbs = [
-        'Skincare' => 'Cleansers, moisturisers, creams, serums, soaps and scrubs for every routine.',
-        'Beauty & Cosmetics' => 'Makeup, beauty essentials, accessories and the tools to apply them.',
-        'Health & Beauty' => 'Selected health and personal-care products to sit alongside your beauty shelf.',
-        'Sexual Enhancement' => 'Products to support intimacy and libido, for individuals and couples.',
-        'Body Enhancement' => 'Body-enhancement and personal-care products for a complete regimen.',
-        'Spa & Massage' => 'Products and essentials for spas, massage businesses and professionals.',
-        'Wholesale' => 'Bulk purchasing for retailers, resellers, salons, spas and beauty businesses.',
-    ];
+    $categoryBlurbs = $categoryRecords->pluck('description', 'name')->map(fn ($text) => (string) $text)->all();
 
-    // Each category's panel first, then its products; categories added later (e.g. from
-    // the admin) that have no blurb yet follow at the end.
-    $categoryOrder = collect(array_keys($categoryBlurbs))
+    // Each category's photo card first, then its products, in the admin's order;
+    // a product whose category was since removed follows at the end.
+    $categoryOrder = $categoryRecords->pluck('name')
         ->concat($products->pluck('category'))
         ->unique()
         ->values();
@@ -209,9 +166,11 @@
                                     <x-shop.product-image :product="$product" class="aspect-square w-full rounded-[1rem]" />
                                 @else
                                     <picture>
-                                        <source type="image/webp" srcset="/images/categories/{{ $category['key'] }}.webp" />
+                                        @if ($category['imageWebp'])
+                                            <source type="image/webp" srcset="{{ $category['imageWebp'] }}" />
+                                        @endif
                                         <img
-                                            src="/images/categories/{{ $category['key'] }}.jpg"
+                                            src="{{ $category['image'] }}"
                                             alt="{{ $category['name'] }}"
                                             loading="lazy"
                                             class="aspect-square w-full rounded-[1rem] object-cover"
