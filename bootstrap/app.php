@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApplySiteContent;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Paystack signs its webhook instead; it can't send a CSRF token.
         $middleware->validateCsrfTokens(except: ['payments/paystack/webhook']);
+
+        // Business details an admin changed override config/milkyway.php.
+        $middleware->web(append: [ApplySiteContent::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

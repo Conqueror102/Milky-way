@@ -1,8 +1,8 @@
 @php
     $assurances = [
-        ['icon' => 'store-alt-solid', 'label' => 'Wholesale & Retail'],
-        ['icon' => 'truck-solid', 'label' => 'Delivery Available'],
-        ['icon' => 'clock-solid', 'label' => 'Open 24 Hours'],
+        ['icon' => 'store-alt-solid', 'label' => $site->text('hero.badge_1')],
+        ['icon' => 'truck-solid', 'label' => $site->text('hero.badge_2')],
+        ['icon' => 'clock-solid', 'label' => $site->text('hero.badge_3')],
     ];
 
     // Lifestyle photos, cross-fading full-bleed behind the copy, the same way the
@@ -28,13 +28,21 @@
     $sizes = '(min-width: 1024px) 40rem, 100vw';
 
     $slides = [
-        ['key' => 'slide-1', 'alt' => 'A woman smiling while applying raw shea butter to her face', 'pos' => 'object-[center_25%]', 'fit' => 'cover'],
-        ['key' => 'slide-2', 'alt' => 'A woman checking a hand mirror while applying skincare cream', 'pos' => 'object-[35%_30%]', 'fit' => 'natural'],
+        ['field' => 'hero.slide_1', 'key' => 'slide-1', 'pos' => 'object-[center_25%]', 'fit' => 'cover'],
+        ['field' => 'hero.slide_2', 'key' => 'slide-2', 'pos' => 'object-[35%_30%]', 'fit' => 'natural'],
         // slide-3 (towel + flowers) is dropped: it's almost entirely pale robe and white
         // towel, so against the orange wash it renders as a near-blank rectangle no
         // matter the crop -- not a framing problem, the photo itself doesn't work here.
-        ['key' => 'slide-4', 'alt' => 'Close-up of a woman applying a dollop of cream to her cheek', 'pos' => 'object-[center_32%]', 'fit' => 'cover'],
+        ['field' => 'hero.slide_3', 'key' => 'slide-4', 'pos' => 'object-[center_32%]', 'fit' => 'cover'],
     ];
+
+    // A photo uploaded from the admin replaces the bundled one in its slot. Its crop
+    // is unknown, so it fills the frame from the centre.
+    $slides = array_map(fn ($item) => $item + [
+        'custom' => $site->image($item['field']),
+        'alt' => $site->alt($item['field']),
+    ], $slides);
+    $slides = array_map(fn ($item) => $item['custom'] ? ['pos' => 'object-center', 'fit' => 'cover'] + $item : $item, $slides);
 @endphp
 
 {{-- Locked to the viewport: the section is exactly one screen tall and nothing spills
@@ -61,6 +69,20 @@
          stays hidden until it has fully arrived, then fades in, rather than painting in
          line by line on a slow connection. The rest start hidden and load quietly behind it. --}}
     @foreach ($slides as $i => $item)
+        @php
+            $photoClass = $frame.' -z-20 '.$item['pos'].' '.$fits[$item['fit']].' '.($i === 0 ? '' : 'opacity-0').' [&:not([data-ready])]:opacity-0! transition-opacity duration-1000 ease-out';
+        @endphp
+        @if ($item['custom'])
+            <x-site.photo
+                :src="$item['custom']"
+                :alt="$item['alt']"
+                :sizes="$sizes"
+                onload="this.setAttribute('data-ready', '')"
+                :fetchpriority="$i === 0 ? 'high' : 'low'"
+                x-bind:class="slide === {{ $i }} ? 'opacity-100!' : 'opacity-0'"
+                :class="$photoClass"
+            />
+        @else
         <picture>
             <source type="image/webp" srcset="/images/hero/{{ $item['key'] }}-640.webp 640w, /images/hero/{{ $item['key'] }}.webp 1000w" sizes="{{ $sizes }}" />
             <img
@@ -75,9 +97,10 @@
                     fetchpriority="low"
                 @endif
                 :class="slide === {{ $i }} ? 'opacity-100!' : 'opacity-0'"
-                class="{{ $frame }} -z-20 {{ $item['pos'] }} {{ $fits[$item['fit']] }} {{ $i === 0 ? '' : 'opacity-0' }} [&:not([data-ready])]:opacity-0! transition-opacity duration-1000 ease-out"
+                class="{{ $photoClass }}"
             />
         </picture>
+        @endif
     @endforeach
 
     {{-- A soft brand-orange wash ties the four different photo backgrounds together --}}
@@ -105,17 +128,17 @@
             <div data-enter style="--d:120" class="flex items-center gap-3">
                 <span class="h-px w-6 bg-cosmic-900/35 sm:w-10"></span>
                 <span class="font-sub text-[0.55rem] font-medium tracking-[0.1em] text-cosmic-900/70 uppercase sm:text-[0.68rem] sm:tracking-[0.32em]">
-                    Health/Beauty Supplements &middot; Skincare Products &middot; Body Enhancer
+                    {{ $site->text('hero.eyebrow') }}
                 </span>
             </div>
 
             {{-- Headline --}}
             <h1 class="mt-5 max-lg:[@media(max-height:700px)]:mt-3 text-[clamp(2.6rem,min(7.4vw,13vh),6.25rem)] leading-[1] font-bold tracking-[-0.01em] text-cosmic-900">
-                <span data-enter style="--d:260" class="block">Your Beauty.</span>
+                <span data-enter style="--d:260" class="block">{{ $site->text('hero.heading') }}</span>
                 <span data-enter style="--d:420" class="mt-2 block ps-1 lg:ps-16">
-                    <span class="align-baseline">Our</span>
+                    <span class="align-baseline">{{ $site->text('hero.heading_second') }}</span>
                     <span class="relative ms-2 inline-block">
-                        <span class="font-script text-[1.18em] leading-[0.8] font-normal tracking-[-0.03em] text-gold-800">Passion</span>
+                        <span class="font-script text-[1.18em] leading-[0.8] font-normal tracking-[-0.03em] text-gold-800">{{ $site->text('hero.heading_accent') }}</span>
                         <svg viewBox="0 0 200 10" preserveAspectRatio="none" fill="none" aria-hidden="true"
                              class="absolute -bottom-[0.06em] left-0 h-[0.13em] w-full text-gold-600">
                             <path d="M3 7.4C38 2.6 77 1.4 107 2.8c24 1.1 52 3.4 90 1.1" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
@@ -127,21 +150,19 @@
             <div>
                 {{-- Supporting copy --}}
                 <p data-enter style="--d:600" class="font-sub mt-6 max-lg:[@media(max-height:700px)]:mt-4 max-w-lg text-[0.95rem] leading-relaxed text-cosmic-900/90 sm:text-base lg:text-lg">
-                    Skincare, beauty, body enhancement and spa products at
-                    <span class="font-semibold text-cosmic-900">wholesale and retail prices</span>.
-                    Shopping for yourself, or stocking your beauty business — we've got you covered.
+                    {{ $site->rich('hero.intro', 'font-semibold text-cosmic-900') }}
                 </p>
 
                 {{-- Calls to action --}}
                 <div data-enter style="--d:740" class="mt-7 max-lg:[@media(max-height:700px)]:mt-5 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-3">
                     <a href="#shop" class="group inline-flex items-center justify-center font-sub gap-2.5 rounded-full bg-cosmic-900 px-7 py-4 text-sm font-semibold text-cream-50 ring-1 ring-gold-400/40 transition duration-200 hover:bg-cosmic-950 hover:ring-gold-400">
-                        Shop our products
+                        {{ $site->text('hero.primary_button') }}
                         <x-icon name="arrow-right-solid" class="size-4 text-gold-400 transition-transform duration-200 group-hover:translate-x-0.5" />
                     </a>
 
                     <x-site.whatsapp-link class="liquid-glass font-sub inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-4 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white/85">
                         <x-icon name="whatsapp" class="size-4 text-cosmic-900" />
-                        Chat with us on WhatsApp
+                        {{ $site->text('hero.secondary_button') }}
                     </x-site.whatsapp-link>
                 </div>
 

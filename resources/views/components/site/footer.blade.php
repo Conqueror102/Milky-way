@@ -13,12 +13,9 @@
         ['label' => 'Store Location', 'href' => route('home').'#location'],
     ];
 
-    $storeInfo = [
-        ['label' => 'C003 Bornu Plaza', 'href' => 'https://wa.me/'.config('milkyway.whatsapp.number')],
-        ['label' => 'Tradefair, Lagos', 'href' => 'https://wa.me/'.config('milkyway.whatsapp.number')],
-        ['label' => 'Open 24/7 Mon–Sun', 'href' => 'https://wa.me/'.config('milkyway.whatsapp.number')],
-        ['label' => 'Lagos · Abuja · Accra', 'href' => 'https://wa.me/'.config('milkyway.whatsapp.number')],
-    ];
+    $storeInfo = collect($site->lines('footer.store_info'))
+        ->map(fn ($label) => ['label' => $label, 'href' => 'https://wa.me/'.config('milkyway.whatsapp.number')])
+        ->all();
 
     $socials = [
         ['label' => 'Instagram', 'href' => config('milkyway.socials.instagram.url')],
@@ -28,7 +25,7 @@
     ];
 @endphp
 
-<footer class="relative w-full bg-cosmic-950 overflow-hidden pt-16 sm:pt-20 lg:pt-24 border-t border-gold-400/20">
+<footer id="site-footer" class="relative w-full bg-cosmic-950 overflow-hidden pt-16 sm:pt-20 lg:pt-24 border-t border-gold-400/20">
     {{-- Soft Gold Ambient Top Glow --}}
     <div class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[42rem] h-60 bg-gold-400/10 blur-3xl rounded-full"></div>
 
@@ -52,17 +49,16 @@
                     </a>
 
                     <p class="font-sub text-sm text-cream-100/70 leading-relaxed max-w-sm mt-4">
-                        Milkyway Cosmetics Stores supplies quality skincare, beauty, body enhancement and spa products at wholesale and retail prices, from Amuwo-Odofin, Lagos.
+                        {{ $site->text('footer.blurb') }}
                     </p>
                 </div>
 
                 <div>
                     <x-site.whatsapp-link
-                        message="Hello Milkyway Cosmetics Stores, I would like to make an enquiry about your products."
                         class="inline-flex items-center gap-2.5 rounded-full bg-gold-400/10 hover:bg-gold-400/20 border border-gold-400/25 px-4 py-2 text-xs font-medium text-gold-300 hover:text-gold-200 transition duration-200"
                     >
                         <span class="size-2 rounded-full bg-gold-400 animate-pulse"></span>
-                        <span class="font-sub">Chat on WhatsApp · 24/7 Available</span>
+                        <span class="font-sub">{{ $site->text('footer.whatsapp_label') }}</span>
                     </x-site.whatsapp-link>
                 </div>
             </div>
@@ -135,7 +131,7 @@
                 © {{ date('Y') }} Milkyway Cosmetics. All rights reserved.
             </div>
             <div>
-                Tradefair Complex, Lagos · Wholesale & Retail
+                {{ $site->text('footer.bottom_line') }}
             </div>
         </div>
 

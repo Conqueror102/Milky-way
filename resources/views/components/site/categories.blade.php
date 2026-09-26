@@ -18,12 +18,22 @@
 
     $products = \App\Models\Product::query()->active()->ordered()->get();
 
-    $slides = [
-        ['key' => 'applying-product', 'alt' => 'A woman applying a skincare product at her dressing table'],
-        ['key' => 'face-roller', 'alt' => 'A woman using a rose quartz face roller'],
-        ['key' => 'podium', 'alt' => 'Cosmetic bottles and tubes arranged on a display podium'],
-        ['key' => 'spa-massage', 'alt' => 'A woman receiving an oil massage in a spa'],
-    ];
+    // The feature panel's photos. An uploaded one is served from Cloudinary instead.
+    $slides = collect([
+        'feature_1' => 'applying-product',
+        'feature_2' => 'face-roller',
+        'feature_3' => 'podium',
+        'feature_4' => 'spa-massage',
+    ])->map(function ($file, $field) use ($site) {
+        $custom = $site->image("categories.{$field}");
+
+        return [
+            'key' => $field,
+            'jpg' => $custom ? \App\Support\SiteContent::resized($custom, 1200) : "/images/showcase/{$file}.jpg",
+            'webp' => $custom ? null : "/images/showcase/{$file}.webp",
+            'alt' => $site->alt("categories.{$field}"),
+        ];
+    })->values()->all();
 
     $categoryBlurbs = $categoryRecords->pluck('description', 'name')->map(fn ($text) => (string) $text)->all();
 
@@ -49,7 +59,7 @@
         ->values()
         ->all();
 
-    $filters = collect([['key' => 'All', 'name' => 'All', 'description' => 'Everything we stock, in one place.']])
+    $filters = collect([['key' => 'All', 'name' => 'All', 'description' => $site->text('categories.blurb_all')]])
         ->concat(
             collect($categories)
                 ->pluck('tags.0')
@@ -91,12 +101,12 @@
                 <div data-reveal class="flex items-center gap-3">
                     <span class="h-px w-10 bg-gold-400/50"></span>
                     <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-400 uppercase">
-                        Shop by category
+                        {{ $site->text('categories.eyebrow') }}
                     </span>
                 </div>
                 <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cream-50">
-                    One store, every
-                    <span class="font-script tracking-[-0.03em] text-gold-400">beauty</span> need
+                    {{ $site->text('categories.heading') }}
+                    <span class="font-script tracking-[-0.03em] text-gold-400">{{ $site->text('categories.heading_accent') }}</span> {{ $site->text('categories.heading_end') }}
                 </h2>
             </div>
 
@@ -178,7 +188,7 @@
                                     </picture>
                                 @endif
                                 <span class="font-sub absolute top-2.5 left-2.5 rounded-full bg-cosmic-950/55 px-2.5 py-1 text-[0.6rem] font-semibold text-white backdrop-blur-sm">
-                                    Retail &middot; Bulk
+                                    {{ $site->text('categories.card_badge') }}
                                 </span>
                             </div>
 
@@ -203,12 +213,12 @@
                                     href="{{ route('products.show', $product) }}"
                                     x-on:click.stop
                                     class="font-sub mt-auto block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
-                                >View product</a>
+                                >{{ $site->text('categories.product_button') }}</a>
                             @else
                                 <x-site.whatsapp-link
                                     :message="'Hello Milkyway Cosmetics Stores, I would like to see what you have available under '.$category['name'].'.'"
                                     class="font-sub mt-auto block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
-                                >View products</x-site.whatsapp-link>
+                                >{{ $site->text('categories.card_button') }}</x-site.whatsapp-link>
                             @endif
                         </article>
                     @endforeach
@@ -225,15 +235,15 @@
             >
                 {{-- Server-rendered base: the first slide, and the no-JS fallback --}}
                 <img
-                    src="/images/showcase/{{ $slides[0]['key'] }}.jpg"
+                    src="{{ $slides[0]['jpg'] }}"
                     alt="{{ $slides[0]['alt'] }}"
                     class="absolute inset-0 -z-30 size-full object-cover"
                 />
                 <template x-for="(s, i) in slides" :key="s.key">
                     <picture>
-                        <source type="image/webp" :srcset="'/images/showcase/' + s.key + '.webp'" />
+                        <source :type="s.webp ? 'image/webp' : 'image/jpeg'" :srcset="s.webp || s.jpg" />
                         <img
-                            :src="'/images/showcase/' + s.key + '.jpg'"
+                            :src="s.jpg"
                             :alt="s.alt"
                             :class="slide === i ? 'opacity-100' : 'opacity-0'"
                             class="absolute inset-0 -z-20 size-full object-cover transition-opacity duration-700 ease-out"
@@ -266,7 +276,7 @@
                         class="font-sub mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-cream-50 px-6 py-3.5 text-sm font-semibold text-cosmic-900 transition duration-200 hover:bg-white"
                     >
                         <x-icon name="whatsapp" class="size-4" />
-                        Enquire about stock
+                        {{ $site->text('categories.feature_button') }}
                     </x-site.whatsapp-link>
                 </div>
             </div>

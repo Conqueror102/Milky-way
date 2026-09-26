@@ -12,17 +12,17 @@
             <div data-reveal class="flex items-center gap-3">
                 <span class="h-px w-10 bg-cosmic-900/40"></span>
                 <span class="font-sub text-[0.68rem] font-bold tracking-[0.32em] text-cosmic-900 uppercase">
-                    Contact Us
+                    {{ $site->text('contact.eyebrow') }}
                 </span>
             </div>
 
             <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(2.1rem,3.6vw,3.2rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-950">
-                Come and see
-                <span class="font-script text-[1.25em] leading-[0.8] tracking-[-0.03em] text-cream-50">us</span>
+                {{ $site->text('contact.heading') }}
+                <span class="font-script text-[1.25em] leading-[0.8] tracking-[-0.03em] text-cream-50">{{ $site->text('contact.heading_accent') }}</span>
             </h2>
 
             <p data-reveal style="--d:180" class="font-sub mt-3 max-w-md text-sm sm:text-base text-cosmic-900/90 leading-relaxed">
-                Visit our physical store in Tradefair Complex, Lagos or get in touch directly for wholesale & retail orders.
+                {{ $site->text('contact.intro') }}
             </p>
 
             <dl data-stagger="120" data-stagger-from="250" class="mt-8 grid gap-4">
@@ -32,7 +32,7 @@
                         <x-icon name="map-marker-alt-solid" class="size-5 text-white" />
                     </span>
                     <div>
-                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">The Shop</dt>
+                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">{{ $site->text('contact.shop_label') }}</dt>
                         <dd class="font-sub mt-1 text-sm font-semibold leading-relaxed text-cosmic-950 sm:text-base">
                             {{ config('milkyway.address.line') }},<br>{{ config('milkyway.address.area') }}
                         </dd>
@@ -45,7 +45,7 @@
                         <x-icon name="clock-solid" class="size-5 text-white" />
                     </span>
                     <div>
-                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">Opening Hours</dt>
+                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">{{ $site->text('contact.hours_label') }}</dt>
                         <dd class="font-sub mt-1 text-sm font-semibold text-cosmic-950 sm:text-base">{{ config('milkyway.hours') }}</dd>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                         <x-icon name="phone-solid" class="size-5 text-white" />
                     </span>
                     <div>
-                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">Phone & Enquiries</dt>
+                        <dt class="font-sub text-[0.62rem] font-bold tracking-[0.2em] text-[#E56717] uppercase">{{ $site->text('contact.phone_label') }}</dt>
                         <dd class="font-sub mt-1 text-sm font-semibold text-cosmic-950 sm:text-base">
                             <a href="tel:{{ config('milkyway.phone_dial') }}" class="underline-offset-4 hover:underline hover:text-[#E56717] transition-colors">
                                 {{ config('milkyway.phone') }}
@@ -73,14 +73,14 @@
                     class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-[#E56717] shadow-lg shadow-cosmic-950/10 transition duration-200 hover:bg-cream-50 hover:scale-[1.02]"
                 >
                     <x-icon name="phone-solid" class="size-4 text-[#E56717]" />
-                    Call us
+                    {{ $site->text('contact.call_button') }}
                 </a>
 
                 <x-site.whatsapp-link
                     class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full bg-cosmic-900 px-7 py-3.5 text-sm font-semibold text-cream-50 shadow-md shadow-cosmic-950/15 transition duration-200 hover:bg-cosmic-950 hover:scale-[1.02]"
                 >
                     <x-icon name="whatsapp" class="size-4 text-[#25D366]" />
-                    WhatsApp us
+                    {{ $site->text('contact.whatsapp_button') }}
                 </x-site.whatsapp-link>
 
                 <a
@@ -90,7 +90,7 @@
                     class="font-sub inline-flex items-center justify-center gap-2.5 rounded-full border border-[#E56717]/30 bg-white/90 px-7 py-3.5 text-sm font-semibold text-cosmic-950 shadow-sm backdrop-blur-md transition duration-200 hover:bg-white hover:border-[#E56717] hover:scale-[1.02]"
                 >
                     <x-icon name="map-marker-alt-solid" class="size-4 text-[#E56717]" />
-                    Get directions
+                    {{ $site->text('contact.directions_button') }}
                 </a>
             </div>
         </div>

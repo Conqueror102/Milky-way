@@ -2,43 +2,49 @@
     $reasons = [
         [
             'icon' => 'certificate-solid',
-            'title' => 'Guaranteed Quality',
-            'description' => '100% authentic skincare, beauty, and spa formulations.',
+            'title' => $site->text('why.reason_1_title'),
+            'description' => $site->text('why.reason_1_text'),
         ],
         [
             'icon' => 'boxes-solid',
-            'title' => 'Wholesale & Retail',
-            'description' => 'Buy single units for yourself or bulk cartons for your business.',
+            'title' => $site->text('why.reason_2_title'),
+            'description' => $site->text('why.reason_2_text'),
         ],
         [
             'icon' => 'layer-group-solid',
-            'title' => 'Wide Variety',
-            'description' => 'Everything from daily cleansers and makeup to professional spa oils and wellness.',
+            'title' => $site->text('why.reason_3_title'),
+            'description' => $site->text('why.reason_3_text'),
         ],
         [
             'icon' => 'map-marker-alt-solid',
-            'title' => 'Prime Location',
-            'description' => 'Easily accessible at Bornu Plaza, Tradefair Complex, Lagos.',
+            'title' => $site->text('why.reason_4_title'),
+            'description' => $site->text('why.reason_4_text'),
         ],
         [
             'icon' => 'clock-solid',
-            'title' => '24/7 Availability',
-            'description' => 'Order, enquire, and check stock anytime via WhatsApp.',
+            'title' => $site->text('why.reason_5_title'),
+            'description' => $site->text('why.reason_5_text'),
         ],
         [
             'icon' => 'headset-solid',
-            'title' => 'Dedicated Customer Support',
-            'description' => 'Fast responses, product guidance, and reliable service.',
+            'title' => $site->text('why.reason_6_title'),
+            'description' => $site->text('why.reason_6_text'),
         ],
     ];
 
     // Plates 2 and 3 are the same real photos the hero carousel uses. The crop is
     // per-photo, since a 4:3 window over a tall portrait otherwise lands on the chin.
     $plates = [
-        ['src' => '/images/showcase/face-roller', 'alt' => 'A woman using a rose quartz face roller', 'pos' => 'object-center'],
-        ['src' => '/images/hero/slide-1', 'alt' => 'A woman smiling while applying raw shea butter to her face', 'pos' => 'object-[center_15%]'],
-        ['src' => '/images/hero/slide-2', 'alt' => 'A woman checking a hand mirror while applying skincare cream', 'pos' => 'object-[65%_center]'],
+        ['field' => 'why.photo_1', 'src' => '/images/showcase/face-roller', 'pos' => 'object-center'],
+        ['field' => 'why.photo_2', 'src' => '/images/hero/slide-1', 'pos' => 'object-[center_15%]'],
+        ['field' => 'why.photo_3', 'src' => '/images/hero/slide-2', 'pos' => 'object-[65%_center]'],
     ];
+
+    // An uploaded photo takes its plate's place, cropped from the centre.
+    $plates = array_map(fn ($plate) => [
+        'custom' => $site->image($plate['field']),
+        'alt' => $site->alt($plate['field']),
+    ] + $plate, $plates);
 @endphp
 
 <section id="why" class="bg-canvas py-10 lg:py-14">
@@ -49,17 +55,17 @@
             <div data-reveal class="flex items-center gap-3">
                 <span class="h-px w-10 bg-gold-500/60"></span>
                 <span class="font-sub text-[0.68rem] font-medium tracking-[0.32em] text-gold-700 uppercase">
-                    Why choose us
+                    {{ $site->text('why.eyebrow') }}
                 </span>
             </div>
 
             <h2 data-reveal="lines" style="--d:120" class="mt-4 text-[clamp(1.85rem,3.2vw,2.85rem)] leading-[1.1] font-bold tracking-[-0.01em] text-cosmic-900">
-                Quality beauty, made
-                <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-700">accessible</span>
+                {{ $site->text('why.heading') }}
+                <span class="font-script text-[1.15em] leading-[0.8] tracking-[-0.03em] text-gold-700">{{ $site->text('why.heading_accent') }}</span>
             </h2>
 
             <p data-reveal style="--d:300" class="font-sub mt-4 text-base leading-relaxed text-cosmic-900/60 lg:text-lg">
-                For everyday shoppers and beauty businesses alike &mdash; here is what you can count on.
+                {{ $site->text('why.intro') }}
             </p>
         </div>
 
@@ -78,6 +84,18 @@
             {{-- Plates, first on small screens so the section opens on an image --}}
             <div data-stagger="150" data-stagger-from="200" class="order-first grid grid-cols-3 gap-3 lg:order-none lg:col-start-3 lg:row-start-1 lg:flex lg:flex-col lg:gap-4">
                 @foreach ($plates as $plate)
+                    @if ($plate['custom'])
+                        <x-site.photo
+                            :src="$plate['custom']"
+                            :alt="$plate['alt']"
+                            sizes="(min-width: 1024px) 17rem, 33vw"
+                            :widths="[400, 800]"
+                            loading="lazy"
+                            data-reveal="clip"
+                            class="aspect-square w-full rounded-xl object-cover object-center lg:aspect-[4/3]"
+                        />
+                        @continue
+                    @endif
                     <picture>
                         <source type="image/webp" srcset="{{ $plate['src'] }}.webp" />
                         <img
@@ -117,7 +135,7 @@
                     data-reveal
                     class="font-sub mt-1 inline-flex items-center justify-center gap-2.5 self-start rounded-full border border-cosmic-900/35 px-9 py-4 text-xs font-semibold tracking-[0.2em] text-cosmic-900 uppercase transition duration-200 hover:border-cosmic-900 hover:bg-cosmic-900 hover:text-cream-50 lg:self-end"
                 >
-                    Chat with us
+                    {{ $site->text('why.button') }}
                 </x-site.whatsapp-link>
             </div>
         </div>
