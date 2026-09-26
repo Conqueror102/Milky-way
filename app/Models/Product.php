@@ -102,7 +102,22 @@ class Product extends Model
 
     public function usesDemoPrice(): bool
     {
-        return $this->price === null && (bool) config('milkyway.shop.demo_prices');
+        return $this->price === null && self::demoPricesEnabled();
+    }
+
+    /**
+     * Whether products without a price get a stand-in one. Unless configured, it
+     * follows the address: Vercel branch previews look like *-git-*.vercel.app.
+     */
+    public static function demoPricesEnabled(): bool
+    {
+        $setting = config('milkyway.shop.demo_prices');
+
+        if ($setting !== null) {
+            return (bool) $setting;
+        }
+
+        return preg_match('/-git-[a-z0-9-]+\.vercel\.app$/', request()->getHost()) === 1;
     }
 
     /**

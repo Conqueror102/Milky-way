@@ -71,9 +71,11 @@ return [
     |--------------------------------------------------------------------------
     |
     | demo_prices gives every product without a price a stand-in price, so the
-    | cart and checkout can be tried end to end. It is on for Vercel preview
-    | deployments and off everywhere else unless SHOP_DEMO_PRICES says so; it
-    | never writes prices to the database.
+    | cart and checkout can be tried end to end. SHOP_DEMO_PRICES decides when
+    | set. Otherwise it is on for Vercel preview deployments, which are known by
+    | VERCEL_ENV or, when the container doesn't receive that, by their branch
+    | address (*-git-*.vercel.app), and off everywhere else. It never writes
+    | prices to the database.
     |
     | payment_gateway names the online payment provider. Paystack switches on by
     | itself once PAYSTACK_SECRET_KEY is set; until then the payment step shows
@@ -82,7 +84,7 @@ return [
     */
 
     'shop' => [
-        'demo_prices' => (bool) env('SHOP_DEMO_PRICES', env('VERCEL_ENV') === 'preview'),
+        'demo_prices' => env('SHOP_DEMO_PRICES', env('VERCEL_ENV') ? env('VERCEL_ENV') === 'preview' : null),
 
         'payment_gateway' => env('SHOP_PAYMENT_GATEWAY', env('PAYSTACK_SECRET_KEY') ? 'paystack' : null),
     ],
