@@ -209,11 +209,17 @@
                             </div>
 
                             @if ($product)
-                                <a
-                                    href="{{ route('products.show', $product) }}"
-                                    x-on:click.stop
-                                    class="font-sub mt-auto block rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
-                                >{{ $site->text('categories.product_button') }}</a>
+                                <div class="mt-auto flex items-center gap-2">
+                                    <a
+                                        href="{{ route('products.show', $product) }}"
+                                        x-on:click.stop
+                                        class="font-sub block min-w-0 flex-1 rounded-full bg-cosmic-900 py-3.5 text-center text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
+                                    >{{ $site->text('categories.product_button') }}</a>
+
+                                    @if ($product->isPurchasable())
+                                        <livewire:shop.card-add-to-cart :product="$product" :key="'card-cart-'.$product->id" />
+                                    @endif
+                                </div>
                             @else
                                 <x-site.whatsapp-link
                                     :message="'Hello Milkyway Cosmetics Stores, I would like to see what you have available under '.$category['name'].'.'"
