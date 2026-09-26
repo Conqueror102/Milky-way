@@ -141,6 +141,19 @@ test('stand-in prices never show outside previews', function () {
         ->and($product->isPurchasable())->toBeFalse();
 });
 
+test('vercel branch previews show stand-in prices without extra settings', function () {
+    config(['milkyway.shop.demo_prices' => null]);
+    $product = Product::factory()->priceOnRequest()->create(['category' => 'Test Category']);
+
+    $this->get('https://milky-way-git-dev-team.vercel.app/products/'.$product->slug)
+        ->assertSee('Preview price')
+        ->assertSee('Add to cart');
+
+    $this->get('https://milkywaycosmetics.com.ng/products/'.$product->slug)
+        ->assertDontSee('Preview price')
+        ->assertDontSee('Add to cart');
+});
+
 test('a real price always wins over a stand-in', function () {
     config(['milkyway.shop.demo_prices' => true]);
     $product = Product::factory()->create(['price' => 4200]);
