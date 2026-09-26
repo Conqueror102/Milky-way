@@ -66,7 +66,7 @@
 
             {{-- Both sides of the conversation --}}
             <div data-stagger="150" data-stagger-from="250" class="grid gap-4 sm:grid-cols-2">
-                <div data-reveal="right" class="rounded-[1.5rem] bg-cream-50 p-6 ring-1 ring-cosmic-900/10 shadow-[0_10px_28px_-16px_rgba(20,52,82,0.35)] lg:p-7">
+                <div data-reveal="right" class="rounded-[1.5rem] bg-cream-50 p-6 ring-1 ring-cosmic-900/10 shadow-[0_10px_28px_-16px_color-mix(in_srgb,var(--color-cosmic-900)_35%,transparent)] lg:p-7">
                     <div class="flex items-center gap-2.5">
                         <x-icon name="check-solid" class="size-4 text-gold-700" />
                         <h3 class="font-sub text-sm font-bold tracking-[0.14em] text-cosmic-900 uppercase">{{ $site->text('wholesale.ask_title') }}</h3>

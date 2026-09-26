@@ -63,7 +63,6 @@ return [
         'image' => '/images/og-image.jpg',
         'image_alt' => 'Milkyway Cosmetics Stores: Your Beauty. Our Passion.',
         'locale' => 'en_NG',
-        'theme_color' => '#143452',
     ],
 
     /*

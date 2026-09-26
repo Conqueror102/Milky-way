@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Payments\PaymentGateway;
 use App\Payments\PaystackGateway;
 use App\Services\Cloudinary;
+use App\Support\Palette;
 use App\Support\SiteContent;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
@@ -26,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(Cloudinary::class, fn (): Cloudinary => Cloudinary::fromConfig());
 
         $this->app->singleton(SiteContent::class);
+        $this->app->singleton(Palette::class);
 
         $this->app->singleton(PaystackGateway::class, fn () => new PaystackGateway(
             (string) config('services.paystack.secret_key'),

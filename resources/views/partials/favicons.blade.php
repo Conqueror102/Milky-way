@@ -3,4 +3,4 @@
 <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="{{ config('milkyway.seo.theme_color') }}">
+<meta name="theme-color" content="{{ app(\App\Support\Palette::class)->color('brand') }}">

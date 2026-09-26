@@ -140,10 +140,10 @@
     {{-- Giant Luminous Brand Watermark Typography (Full Width Edge-to-Edge) --}}
     <div class="relative w-full overflow-hidden pointer-events-none select-none -mb-3 sm:-mb-5 lg:-mb-8">
         {{-- Ambient golden backlight --}}
-        <div class="absolute inset-x-0 bottom-0 h-44 bg-[radial-gradient(ellipse_at_bottom,rgba(229,103,23,0.28),transparent_70%)] blur-2xl"></div>
+        <div class="absolute inset-x-0 bottom-0 h-44 bg-[radial-gradient(ellipse_at_bottom,color-mix(in_srgb,var(--color-gold-500)_28%,transparent),transparent_70%)] blur-2xl"></div>
 
         {{-- Watermark Text: Center letters shine in Soft Gold, fading to Cosmic Blue edges --}}
-        <div class="w-full text-center whitespace-nowrap font-sub font-black uppercase tracking-tight text-[18vw] leading-[0.75] bg-[radial-gradient(ellipse_80%_100%_at_50%_30%,#f6d2b6_0%,#E56717_35%,#a73d10_65%,rgba(18,42,66,0.15)_95%)] bg-clip-text text-transparent">
+        <div class="w-full text-center whitespace-nowrap font-sub font-black uppercase tracking-tight text-[18vw] leading-[0.75] bg-[radial-gradient(ellipse_80%_100%_at_50%_30%,var(--color-gold-200)_0%,var(--color-gold-500)_35%,var(--color-gold-700)_65%,color-mix(in_srgb,var(--color-cosmic-950)_15%,transparent)_95%)] bg-clip-text text-transparent">
             MILKYWAY
         </div>
     </div>

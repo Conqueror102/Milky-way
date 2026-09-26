@@ -20,7 +20,7 @@
 
 {{-- The artwork is the section. Its canvas was extended in its own navy so the floating
      header has room to sit over it without covering the composition. --}}
-<section id="who" class="relative isolate bg-[#052a58]">
+<section id="who" class="relative isolate bg-deep">
     {{-- Heading, in the headroom above the composition --}}
     <div class="relative px-6 pt-24 pb-4 sm:px-8 lg:absolute lg:inset-x-0 lg:top-0 lg:pb-0 lg:pt-28">
         <div class="mx-auto max-w-7xl">

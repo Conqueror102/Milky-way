@@ -7,7 +7,7 @@
     <div class="mt-6 grid gap-8 lg:grid-cols-2 lg:gap-14">
         @php $gallery = $product->gallery(); @endphp
 
-        <div class="rounded-[2rem] bg-white p-3 shadow-[0_12px_32px_-14px_rgba(20,52,82,0.3)] ring-1 ring-cosmic-900/8">
+        <div class="rounded-[2rem] bg-white p-3 shadow-[0_12px_32px_-14px_color-mix(in_srgb,var(--color-cosmic-900)_30%,transparent)] ring-1 ring-cosmic-900/8">
             @if ($gallery !== [])
                 {{-- Main photo, plus thumbnails when there are several; the first photo is server-rendered so it shows without JS. --}}
                 <div x-data="{ active: 0 }" wire:ignore>

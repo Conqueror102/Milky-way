@@ -17,6 +17,10 @@
     --font-sub: var(--font-dm-sans), var(--font-sans);
     --font-script: var(--font-shadows-into-light), ui-rounded, cursive;
 
+    /* The cosmic, gold and cream families below are the defaults. Admins can change
+       them from /admin/colors: App\Support\Palette then sets every one of these
+       variables from a <style> tag in the page head. Keep config/palette.php in step. */
+
     /* Deep Cosmic Blue — brand navy, anchored at 900 = #143452 */
     --color-cosmic-50: #f3f8fd;
     --color-cosmic-100: #e6eff9;
@@ -58,10 +62,12 @@
 
     /* Brand semantics — use these so a rebrand is a three-line change */
     --color-brand: var(--color-cosmic-900);
-    --color-brand-accent: #E56717;
+    --color-brand-accent: var(--color-gold-500);
     --color-canvas: var(--color-cream-50);
     /* The hero photograph's own beige — scrims tinted with it blend into the image */
-    --color-sand: #E56717;
+    --color-sand: var(--color-gold-500);
+    /* The deep blue behind the "Who we serve" band */
+    --color-deep: #052a58;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -126,26 +132,26 @@ select:focus[data-flux-control] {
     backdrop-filter: blur(22px) saturate(180%);
     -webkit-backdrop-filter: blur(22px) saturate(180%);
     border-width: 1px;
-    border-color: rgba(20, 52, 82, 0.06);
-    box-shadow: 0 10px 30px -8px rgba(20, 52, 82, 0.12);
+    border-color: color-mix(in srgb, var(--color-cosmic-900) 6%, transparent);
+    box-shadow: 0 10px 30px -8px color-mix(in srgb, var(--color-cosmic-900) 12%, transparent);
 }
 
 @utility liquid-glass-cosmic {
-    background-color: rgba(20, 52, 82, 0.78);
+    background-color: color-mix(in srgb, var(--color-cosmic-900) 78%, transparent);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-width: 1px;
-    border-color: rgba(229, 103, 23, 0.22);
-    box-shadow: 0 14px 32px -8px rgba(10, 24, 39, 0.3);
+    border-color: color-mix(in srgb, var(--color-gold-500) 22%, transparent);
+    box-shadow: 0 14px 32px -8px color-mix(in srgb, var(--color-cosmic-950) 30%, transparent);
 }
 
 @utility liquid-glass-gold {
-    background-color: rgba(229, 103, 23, 0.15);
+    background-color: color-mix(in srgb, var(--color-gold-500) 15%, transparent);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border-width: 1px;
-    border-color: rgba(229, 103, 23, 0.28);
-    box-shadow: 0 8px 22px -6px rgba(229, 103, 23, 0.22);
+    border-color: color-mix(in srgb, var(--color-gold-500) 28%, transparent);
+    box-shadow: 0 8px 22px -6px color-mix(in srgb, var(--color-gold-500) 22%, transparent);
 }
 
 /* ---------------------------------------------------------------------------
