@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Shop\RecordPayment;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Payments\PaystackGateway;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class PaystackController extends Controller
     {
         $reference = $request->string('reference', $request->string('trxref')->toString())->toString();
 
-        $order = Order::where('payment_reference', $reference)->first();
+        $order = $this->orderFor($reference);
 
         abort_if($reference === '' || $order === null, 404);
 
@@ -33,7 +34,9 @@ class PaystackController extends Controller
         if ($result !== null && $result['status'] === 'success') {
             $this->recordPayment->succeeded($order, $reference, $result['amount']);
         } elseif ($result !== null && $result['status'] === 'failed') {
-            $this->recordPayment->failed($order, $reference);
+            $this->recordPayment->failed($order, $reference, $result['message']);
+        } elseif ($result !== null && $result['status'] === 'abandoned') {
+            $this->recordPayment->abandoned($order, $reference);
         }
 
         $order->refresh();
@@ -59,7 +62,7 @@ class PaystackController extends Controller
             $reference = $request->string('data.reference')->toString();
             $orderReference = $request->input('data.metadata.order_reference');
 
-            $order = Order::where('payment_reference', $reference)->first()
+            $order = $this->orderFor($reference)
                 ?? (is_string($orderReference) ? Order::where('reference', $orderReference)->first() : null);
 
             if ($order !== null) {
@@ -68,5 +71,19 @@ class PaystackController extends Controller
         }
 
         return response()->noContent(200);
+    }
+
+    /**
+     * The order a payment reference belongs to. Older attempts are found through their
+     * payment row, since the order only remembers its latest reference.
+     */
+    private function orderFor(string $reference): ?Order
+    {
+        if ($reference === '') {
+            return null;
+        }
+
+        return Order::where('payment_reference', $reference)->first()
+            ?? Payment::where('reference', $reference)->first()?->order;
     }
 }

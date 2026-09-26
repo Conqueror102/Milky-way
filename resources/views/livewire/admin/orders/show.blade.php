@@ -62,6 +62,29 @@
         </flux:table.rows>
     </flux:table>
 
+    @if ($order->payments->isNotEmpty())
+        <div class="space-y-2">
+            <div class="flex items-center justify-between">
+                <flux:heading>{{ __('Payment attempts') }}</flux:heading>
+                <flux:link :href="route('admin.transactions.index', ['q' => $order->reference])" wire:navigate class="text-sm">{{ __('In transactions') }}</flux:link>
+            </div>
+
+            <flux:table>
+                <flux:table.rows>
+                    @foreach ($order->payments as $payment)
+                        <flux:table.row :key="$payment->id">
+                            <flux:table.cell class="whitespace-nowrap">{{ $payment->created_at?->format('j M Y, g:i a') }}</flux:table.cell>
+                            <flux:table.cell class="font-mono text-xs">{{ $payment->reference }}</flux:table.cell>
+                            <flux:table.cell class="tabular-nums">₦{{ number_format($payment->amount_paid ?? $payment->amount) }}</flux:table.cell>
+                            <flux:table.cell><x-admin.transaction-badge :status="$payment->status" /></flux:table.cell>
+                            <flux:table.cell class="text-sm">{{ $payment->message }}</flux:table.cell>
+                        </flux:table.row>
+                    @endforeach
+                </flux:table.rows>
+            </flux:table>
+        </div>
+    @endif
+
     <form wire:submit="updateStatus" class="flex items-end gap-4">
         <flux:select wire:model="status" :label="__('Status')" class="max-w-48">
             @foreach (\App\Enums\OrderStatus::cases() as $option)

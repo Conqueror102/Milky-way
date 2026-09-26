@@ -2,9 +2,11 @@
 
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
+use App\Enums\TransactionStatus;
 use App\Livewire\Shop\Checkout;
 use App\Livewire\Shop\OrderConfirmation;
 use App\Models\Order;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Http;
 use Livewire\Livewire;
 
@@ -137,4 +139,53 @@ test('a payment reported twice is recorded once', function () {
     ], $payload)->assertOk();
 
     expect($order->fresh()->paid_at->equalTo($paidAt))->toBeTrue();
+});
+
+test('each payment attempt is kept for the admin', function () {
+    Http::fake([
+        'api.paystack.test/transaction/initialize' => Http::response(['status' => true, 'data' => ['authorization_url' => 'https://checkout.paystack.com/abc']]),
+    ]);
+    $order = paystackOrder();
+
+    Livewire::test(OrderConfirmation::class, ['order' => $order])->call('pay');
+    Livewire::test(OrderConfirmation::class, ['order' => $order])->call('pay');
+
+    $payments = $order->payments()->get();
+    expect($payments)->toHaveCount(2)
+        ->and($payments->pluck('status')->unique()->all())->toBe([TransactionStatus::Pending])
+        ->and($payments->first()->amount)->toBe(12500)
+        ->and($payments->first()->reference)->toBe($order->fresh()->payment_reference);
+});
+
+test('the callback records the outcome on the payment attempt', function () {
+    $order = paystackOrder(['payment_reference' => 'MW-ABC123-XYZ']);
+    $order->payments()->create(['provider' => 'paystack', 'reference' => 'MW-ABC123-XYZ', 'amount' => 12500]);
+    Http::fake(['api.paystack.test/transaction/verify/*' => Http::response(['status' => true, 'data' => ['status' => 'failed', 'amount' => 1250000, 'gateway_response' => 'Declined']])]);
+
+    $this->get(route('payments.paystack.callback', ['reference' => 'MW-ABC123-XYZ']));
+
+    $payment = Payment::where('reference', 'MW-ABC123-XYZ')->first();
+    expect($payment->status)->toBe(TransactionStatus::Failed)->and($payment->message)->toBe('Declined');
+});
+
+test('an older attempt that succeeds late still pays the order', function () {
+    $order = paystackOrder(['payment_reference' => 'MW-NEWER']);
+    $order->payments()->create(['provider' => 'paystack', 'reference' => 'MW-OLDER', 'amount' => 12500]);
+    Http::fake(['api.paystack.test/transaction/verify/MW-OLDER' => Http::response(verifyResponse('success', 1250000))]);
+
+    $this->get(route('payments.paystack.callback', ['reference' => 'MW-OLDER']))->assertRedirect(route('orders.show', $order));
+
+    expect($order->fresh()->payment_status)->toBe(PaymentStatus::Paid)
+        ->and($order->fresh()->payment_reference)->toBe('MW-OLDER')
+        ->and(Payment::where('reference', 'MW-OLDER')->first()->status)->toBe(TransactionStatus::Successful);
+});
+
+test('an abandoned payment leaves the order open', function () {
+    $order = paystackOrder(['payment_reference' => 'MW-ABC123-XYZ']);
+    Http::fake(['api.paystack.test/transaction/verify/*' => Http::response(verifyResponse('abandoned', 1250000))]);
+
+    $this->get(route('payments.paystack.callback', ['reference' => 'MW-ABC123-XYZ']));
+
+    expect($order->fresh()->payment_status)->toBe(PaymentStatus::Unpaid)
+        ->and(Payment::where('reference', 'MW-ABC123-XYZ')->first()->status)->toBe(TransactionStatus::Abandoned);
 });
