@@ -41,7 +41,7 @@ test('admins can create a product with a photo', function () {
     Livewire::test(Form::class)
         ->set('name', 'Shea Body Butter')
         ->assertSet('slug', 'shea-body-butter')
-        ->set('category', 'Body Care')
+        ->set('category', 'Skincare')
         ->set('description', 'Rich and creamy.')
         ->set('price', '4500')
         ->set('stock', '12')
@@ -54,7 +54,7 @@ test('admins can create a product with a photo', function () {
 
     expect($product->name)->toBe('Shea Body Butter')
         ->and($product->slug)->toBe('shea-body-butter')
-        ->and($product->category)->toBe('Body Care')
+        ->and($product->category)->toBe('Skincare')
         ->and($product->price)->toBe(4500)
         ->and($product->stock)->toBe(12)
         ->and($product->image_url)->toBe('https://res.cloudinary.com/demo-cloud/image/upload/new.jpg')
@@ -80,7 +80,7 @@ test('a failed upload keeps the form open with an error', function () {
 
     Livewire::test(Form::class)
         ->set('name', 'Shea Body Butter')
-        ->set('category', 'Body Care')
+        ->set('category', 'Skincare')
         ->set('price', '4500')
         ->set('photo', UploadedFile::fake()->image('butter.jpg'))
         ->call('save')

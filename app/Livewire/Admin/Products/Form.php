@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Products;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Services\Cloudinary;
@@ -79,7 +80,7 @@ class Form extends Component
         return [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'alpha_dash', Rule::unique('products', 'slug')->ignore($this->product)],
-            'category' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', 'exists:categories,name'],
             'type' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:5000'],
             'price' => ['nullable', 'integer', 'min:0'],
@@ -92,15 +93,15 @@ class Form extends Component
     }
 
     /**
-     * Categories already in use, offered as suggestions.
+     * The categories a product can be filed under, in shop order.
      *
      * @return array<int, string>
      */
     #[Computed]
     public function categories(): array
     {
-        return Product::query()->distinct()->orderBy('category')->pluck('category')
-            ->map(fn (mixed $category): string => (string) $category)
+        return Category::query()->ordered()->pluck('name')
+            ->map(fn (mixed $name): string => (string) $name)
             ->values()
             ->all();
     }
