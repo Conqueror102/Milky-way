@@ -1,16 +1,18 @@
 <?php
 
 use App\Livewire\Admin\Categories;
+use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Orders;
 use App\Livewire\Admin\Products;
 use App\Livewire\Admin\Site;
+use App\Livewire\Admin\Transactions;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'can:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::redirect('/', '/admin/products');
+        Route::livewire('/', Dashboard::class)->name('dashboard');
 
         Route::livewire('products', Products\Index::class)->name('products.index');
         Route::livewire('products/create', Products\Form::class)->name('products.create');
@@ -22,6 +24,8 @@ Route::middleware(['auth', 'verified', 'can:admin'])
 
         Route::livewire('orders', Orders\Index::class)->name('orders.index');
         Route::livewire('orders/{order}', Orders\Show::class)->name('orders.show');
+
+        Route::livewire('transactions', Transactions\Index::class)->name('transactions.index');
 
         Route::livewire('site', Site\Index::class)->name('site.index');
         Route::livewire('site/{section}', Site\Edit::class)->name('site.edit');

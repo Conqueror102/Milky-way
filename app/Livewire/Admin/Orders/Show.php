@@ -17,7 +17,7 @@ class Show extends Component
 
     public function mount(Order $order): void
     {
-        $this->order = $order->load('items');
+        $this->order = $order->load('items', 'payments');
         $this->status = $order->status->value;
     }
 

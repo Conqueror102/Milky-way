@@ -2,6 +2,7 @@
 
 namespace App\Payments;
 
+use App\Enums\TransactionStatus;
 use App\Models\Order;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -21,7 +22,7 @@ class PaystackGateway implements PaymentGateway
     /**
      * Start a transaction for the order and return Paystack's payment page. Each attempt
      * gets its own reference (Paystack refuses a reused one), saved on the order so the
-     * callback and webhook can find it.
+     * callback and webhook can find it, and kept as a payment row for the admin.
      */
     public function checkoutUrl(Order $order): string
     {
@@ -44,13 +45,20 @@ class PaystackGateway implements PaymentGateway
 
         $order->update(['payment_provider' => 'paystack', 'payment_reference' => $reference]);
 
+        $order->payments()->create([
+            'provider' => 'paystack',
+            'reference' => $reference,
+            'status' => TransactionStatus::Pending,
+            'amount' => $order->subtotal,
+        ]);
+
         return $url;
     }
 
     /**
      * Ask Paystack what happened to a transaction.
      *
-     * @return array{status: string, amount: int, reference: string}|null
+     * @return array{status: string, amount: int, reference: string, message: string|null}|null
      */
     public function verify(string $reference): ?array
     {
@@ -63,7 +71,9 @@ class PaystackGateway implements PaymentGateway
             return null;
         }
 
-        return ['status' => $status, 'amount' => (int) $amount, 'reference' => $reference];
+        $message = $response->json('data.gateway_response');
+
+        return ['status' => $status, 'amount' => (int) $amount, 'reference' => $reference, 'message' => is_string($message) ? $message : null];
     }
 
     /**
