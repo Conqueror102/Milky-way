@@ -1,5 +1,5 @@
 <div class="mx-auto max-w-7xl px-6 pt-28 pb-16 sm:px-8 lg:pt-36 lg:pb-24">
-    <a href="{{ route('home') }}#shop" class="font-sub inline-flex items-center gap-2 text-sm font-medium text-cosmic-900/65 transition hover:text-cosmic-900">
+    <a href="{{ route('shop') }}" class="font-sub inline-flex items-center gap-2 text-sm font-medium text-cosmic-900/65 transition hover:text-cosmic-900">
         <x-icon name="arrow-left-solid" class="size-4" />
         Back to the shop
     </a>

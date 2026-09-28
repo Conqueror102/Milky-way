@@ -6,6 +6,7 @@ use App\Livewire\Shop\CartPage;
 use App\Livewire\Shop\Checkout;
 use App\Livewire\Shop\OrderConfirmation;
 use App\Livewire\Shop\ProductPage;
+use App\Livewire\Shop\ShopPage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,7 @@ Route::get('/health', static fn (): JsonResponse => response()->json(['status' =
 
 Route::view('/', 'home')->name('home');
 
+Route::livewire('shop', ShopPage::class)->name('shop');
 Route::livewire('products/{product}', ProductPage::class)->name('products.show');
 Route::livewire('cart', CartPage::class)->name('cart');
 Route::livewire('checkout', Checkout::class)->name('checkout');

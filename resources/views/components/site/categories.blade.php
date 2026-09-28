@@ -59,6 +59,23 @@
         ->values()
         ->all();
 
+    // The home page shows a taste of the catalogue: the first few cards overall and the
+    // first few of each category. "See all" opens the shop page for the rest.
+    $homeLimit = 8;
+    $seenPerCategory = [];
+    $categories = collect($categories)
+        ->values()
+        ->map(function ($card, $index) use (&$seenPerCategory, $homeLimit) {
+            $tag = $card['tags'][0];
+            $seenPerCategory[$tag] = ($seenPerCategory[$tag] ?? 0) + 1;
+
+            return $card + [
+                'inAll' => $index < $homeLimit,
+                'inCategory' => $seenPerCategory[$tag] <= $homeLimit,
+            ];
+        })
+        ->all();
+
     $filters = collect([['key' => 'All', 'name' => 'All', 'description' => $site->text('categories.blurb_all')]])
         ->concat(
             collect($categories)
@@ -162,10 +179,11 @@
                 <div class="max-h-[30rem] overflow-y-auto py-1 pr-2 pl-1 sm:max-h-[36rem] lg:max-h-[42rem] lg:pr-2.5 [scrollbar-width:thin] [scrollbar-color:color-mix(in_srgb,var(--color-gold-500)_50%,transparent)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gold-500/40 hover:[&::-webkit-scrollbar-thumb]:bg-gold-500/80">
                 <div class="grid gap-3.5 sm:grid-cols-2">
                     @foreach ($categories as $category)
+                        @continue(! $category['inAll'] && ! $category['inCategory'])
                         @php $product = $category['product'] ?? null; @endphp
                         {{-- PORTRAIT CARD WITH IMAGE BEHIND & GLOSSY FADE GLASS EFFECT --}}
                         <article
-                            x-show="active === 'All' || active === '{{ $category['tags'][0] }}'"
+                            x-show="active === 'All' ? @js($category['inAll']) : (active === @js($category['tags'][0]) && @js($category['inCategory']))"
                             x-on:click="active = '{{ $category['tags'][0] }}'"
                             :class="active === '{{ $category['tags'][0] }}' ? 'ring-2 ring-cosmic-900' : 'ring-1 ring-cosmic-900/8'"
                             class="flex cursor-pointer flex-col rounded-[1.5rem] rounded-b-[2.25rem] bg-white p-3 shadow-[0_12px_32px_-14px_color-mix(in_srgb,var(--color-cosmic-900)_30%,transparent)] transition duration-200"
@@ -230,6 +248,15 @@
                     @endforeach
                     </div>
                 </div>
+
+                <a
+                    href="{{ route('shop') }}"
+                    :href="active === 'All' ? @js(route('shop')) : @js(route('shop')) + '?category=' + encodeURIComponent(active)"
+                    class="font-sub mt-3 flex items-center justify-center gap-2 rounded-full bg-gold-500 py-3.5 text-sm font-bold text-white transition duration-200 hover:bg-cosmic-800"
+                >
+                    <span x-text="active === 'All' ? 'See all products' : 'See all ' + current.name">See all products</span>
+                    <x-icon name="arrow-right-solid" class="size-4" />
+                </a>
             </div>
 
             {{-- Feature panel, driven by the pills --}}
