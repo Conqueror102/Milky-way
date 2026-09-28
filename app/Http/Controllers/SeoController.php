@@ -33,7 +33,7 @@ class SeoController extends Controller
     }
 
     /**
-     * The homepage, then one entry per product page.
+     * The homepage and the shop, then one entry per product page.
      */
     public function sitemap(): Response
     {
@@ -44,7 +44,7 @@ class SeoController extends Controller
             ->map(fn (string $slug) => $this->siteUrl().'/products/'.$slug);
 
         return response()
-            ->view('sitemap', ['urls' => [$this->siteUrl().'/', ...$productUrls->all()]])
+            ->view('sitemap', ['urls' => [$this->siteUrl().'/', $this->siteUrl().'/shop', ...$productUrls->all()]])
             ->header('Content-Type', 'application/xml; charset=UTF-8');
     }
 

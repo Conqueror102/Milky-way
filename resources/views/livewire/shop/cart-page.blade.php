@@ -12,7 +12,7 @@
             Browse the shop and add a few favourites. They will wait for you here.
         </p>
 
-        <a href="{{ route('home') }}#shop" class="font-sub mt-8 inline-flex items-center gap-2 rounded-full bg-cosmic-900 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-cosmic-800">
+        <a href="{{ route('shop') }}" class="font-sub mt-8 inline-flex items-center gap-2 rounded-full bg-cosmic-900 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-cosmic-800">
             Browse products
             <x-icon name="arrow-right-solid" class="size-4" />
         </a>
@@ -70,7 +70,7 @@
                     <x-icon name="arrow-right-solid" class="size-4" />
                 </a>
 
-                <a href="{{ route('home') }}#shop" class="font-sub mt-3 block text-center text-sm text-cream-50/70 underline-offset-4 hover:text-cream-50 hover:underline">Continue shopping</a>
+                <a href="{{ route('shop') }}" class="font-sub mt-3 block text-center text-sm text-cream-50/70 underline-offset-4 hover:text-cream-50 hover:underline">Continue shopping</a>
             </aside>
         </div>
     @endif

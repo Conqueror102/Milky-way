@@ -1,14 +1,18 @@
 @php
     $links = [
         ['label' => 'Home', 'href' => route('home')],
-        ['label' => 'Shop', 'href' => route('home').'#shop'],
+        ['label' => 'Shop', 'href' => route('shop')],
         ['label' => 'Wholesale', 'href' => route('home').'#wholesale'],
         ['label' => 'About', 'href' => route('home').'#about'],
         ['label' => 'Contact', 'href' => route('home').'#contact'],
     ];
 
-    // The shop pages share this header; only the homepage marks Home as current.
-    $onHome = request()->routeIs('home');
+    // The shop pages share this header; the homepage marks Home as current, the shop page Shop.
+    $current = match (true) {
+        request()->routeIs('home') => 'Home',
+        request()->routeIs('shop') => 'Shop',
+        default => null,
+    };
 @endphp
 
 {{-- No containing bar: a single glass pill holds the nav, and the wordmark floats bare
@@ -24,8 +28,8 @@
                     href="{{ $link['href'] }}"
                     @class([
                         'font-sub rounded-full px-4 py-2 text-sm font-medium transition duration-200',
-                        'bg-cosmic-900 text-cream-50' => $onHome && $loop->first,
-                        'text-cosmic-900/75 hover:bg-white/60 hover:text-cosmic-900' => ! ($onHome && $loop->first),
+                        'bg-cosmic-900 text-cream-50' => $link['label'] === $current,
+                        'text-cosmic-900/75 hover:bg-white/60 hover:text-cosmic-900' => $link['label'] !== $current,
                     ])
                 >{{ $link['label'] }}</a>
             @endforeach
