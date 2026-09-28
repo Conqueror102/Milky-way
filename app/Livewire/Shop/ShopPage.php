@@ -52,13 +52,12 @@ class ShopPage extends Component
             ->map(fn ($name): string => (string) $name)
             ->all();
 
-        return Category::query()->ordered()->pluck('name')
+        return array_values(Category::query()->ordered()->pluck('name')
             ->map(fn ($name): string => (string) $name)
             ->concat($inUse)
             ->unique()
             ->filter(fn (string $name): bool => in_array($name, $inUse, true))
-            ->values()
-            ->all();
+            ->all());
     }
 
     /**
