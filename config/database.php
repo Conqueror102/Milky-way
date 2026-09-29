@@ -97,6 +97,13 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+            // Connection poolers (like Prisma's pooled.db.prisma.io) hand one server
+            // connection to many clients, so a server-side prepared statement name can
+            // already be taken; pdo_pgsql ignores that clash but it aborts the transaction.
+            // Preparing statements in PHP instead avoids named statements altogether.
+            'options' => extension_loaded('pdo_pgsql') ? [
+                PDO::ATTR_EMULATE_PREPARES => true,
+            ] : [],
         ],
 
         'sqlsrv' => [
