@@ -9,6 +9,14 @@ test('login screen can be rendered', function () {
     $response->assertOk();
 });
 
+test('there is no sign-up page', function () {
+    $this->get('/register')->assertNotFound();
+    $this->post('/register', ['name' => 'Ada', 'email' => 'ada@example.com', 'password' => 'password', 'password_confirmation' => 'password'])->assertNotFound();
+
+    $this->get(route('login'))->assertOk()->assertDontSee('Sign up');
+    expect(User::count())->toBe(0);
+});
+
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 

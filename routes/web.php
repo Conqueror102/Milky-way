@@ -8,6 +8,7 @@ use App\Livewire\Shop\OrderConfirmation;
 use App\Livewire\Shop\ProductPage;
 use App\Livewire\Shop\ShopPage;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/health', static fn (): JsonResponse => response()->json(['status' => 'ok']));
@@ -26,9 +27,10 @@ Route::post('payments/paystack/webhook', [PaystackController::class, 'webhook'])
 Route::get('robots.txt', [SeoController::class, 'robots'])->name('seo.robots');
 Route::get('sitemap.xml', [SeoController::class, 'sitemap'])->name('seo.sitemap');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
-});
+// Where Fortify sends people after logging in: admins to the store admin, anyone else to the shop.
+Route::middleware(['auth', 'verified'])->get('dashboard', fn () => redirect()->route(
+    Gate::allows('admin') ? 'admin.dashboard' : 'home'
+))->name('dashboard');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/admin.php';
