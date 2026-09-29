@@ -40,12 +40,16 @@
 
             <div class="sm:col-span-2">
                 <label for="delivery_area" class="{{ $label }}">Delivery area</label>
-                <select id="delivery_area" wire:model="delivery_area" required class="{{ $field }}">
-                    <option value="">Choose an area</option>
-                    @foreach (\App\Livewire\Shop\Checkout::deliveryAreas() as $area)
-                        <option value="{{ $area }}">{{ $area }}</option>
+                <select id="delivery_area" wire:model.live="delivery_area" required class="{{ $field }}">
+                    <option value="">Choose where you are</option>
+                    @foreach ($this->areas as $area)
+                        <option wire:key="area-{{ $area->id }}" value="{{ $area->name }}">{{ $area->fee === null ? $area->name : $area->name.' · '.$area->feeLabel() }}</option>
                     @endforeach
+                    <option value="{{ \App\Livewire\Shop\Checkout::OTHER_AREA }}">Somewhere else · we'll contact you</option>
                 </select>
+                @if ($delivery_area === \App\Livewire\Shop\Checkout::OTHER_AREA)
+                    <p class="font-sub mt-1.5 text-sm text-cosmic-900/60">Put your town, state and country in the address below. We'll message you with the delivery cost before we send your order.</p>
+                @endif
                 @error('delivery_area') <p class="{{ $error }}">{{ $message }}</p> @enderror
             </div>
 
@@ -74,11 +78,23 @@
                 @endforeach
             </ul>
 
-            <div class="font-sub mt-5 flex justify-between border-t border-cream-50/15 pt-4 text-base">
-                <span>Subtotal</span>
-                <span class="font-bold">{{ \App\Support\Money::format($this->subtotal) }}</span>
-            </div>
-            <p class="font-sub mt-1 text-xs text-cream-50/60">Delivery is arranged with you after payment.</p>
+            <dl class="font-sub mt-5 grid gap-2 border-t border-cream-50/15 pt-4 text-sm">
+                <div class="flex justify-between gap-4">
+                    <dt class="text-cream-50/80">Subtotal</dt>
+                    <dd class="font-semibold">{{ \App\Support\Money::format($this->subtotal) }}</dd>
+                </div>
+                <div class="flex justify-between gap-4">
+                    <dt class="text-cream-50/80">Delivery</dt>
+                    <dd class="text-right font-semibold">{{ $this->selectedArea?->feeLabel() ?? ($delivery_area === '' ? 'Choose where you are' : 'Arranged after payment') }}</dd>
+                </div>
+                <div class="mt-1 flex justify-between gap-4 border-t border-cream-50/15 pt-3 text-base">
+                    <dt>Total</dt>
+                    <dd class="font-bold">{{ \App\Support\Money::format($this->subtotal + ($this->selectedArea?->fee ?? 0)) }}</dd>
+                </div>
+            </dl>
+            @if ($delivery_area !== '' && $this->selectedArea?->fee === null)
+                <p class="font-sub mt-1 text-xs text-cream-50/60">We'll agree the delivery cost with you after payment.</p>
+            @endif
 
             @error('cart') <p class="font-sub mt-4 rounded-xl bg-red-100 px-3 py-2 text-sm text-red-800">{{ $message }}</p> @enderror
 

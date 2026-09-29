@@ -4,6 +4,7 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Livewire\Shop\Checkout;
 use App\Livewire\Shop\OrderConfirmation;
+use App\Models\DeliveryArea;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -189,4 +190,58 @@ test('the pay button hands the order to the payment gateway when one is set up',
         ->assertSee('Pay ₦5,000')
         ->call('pay')
         ->assertRedirect('https://pay.example/'.$order->reference);
+});
+
+test('an order carries the delivery fee set for its area', function () {
+    DeliveryArea::where('name', 'Lagos')->update(['fee' => 3000]);
+    app(Cart::class)->add(Product::factory()->create(['price' => 5000]));
+
+    fillCheckout(Livewire::test(Checkout::class))
+        ->assertSee('₦3,000')
+        ->assertSee('₦8,000')
+        ->call('placeOrder');
+
+    $order = Order::sole();
+    expect($order->subtotal)->toBe(5000)
+        ->and($order->delivery_fee)->toBe(3000)
+        ->and($order->total())->toBe(8000);
+});
+
+test('an order to a place without a fee leaves delivery to be arranged', function () {
+    app(Cart::class)->add(Product::factory()->create(['price' => 5000]));
+
+    fillCheckout(Livewire::test(Checkout::class))
+        ->assertSee('Arranged after payment')
+        ->call('placeOrder');
+
+    $order = Order::sole();
+    expect($order->delivery_fee)->toBeNull()
+        ->and($order->total())->toBe(5000);
+});
+
+test('shoppers outside every listed place can still order', function () {
+    app(Cart::class)->add(Product::factory()->create(['price' => 5000]));
+
+    fillCheckout(Livewire::test(Checkout::class))
+        ->set('delivery_area', Checkout::OTHER_AREA)
+        ->set('delivery_address', '4 Kings Road, London, UK')
+        ->call('placeOrder')
+        ->assertHasNoErrors();
+
+    expect(Order::sole())
+        ->delivery_area->toBe('Somewhere else')
+        ->delivery_fee->toBeNull();
+});
+
+test('checkout offers the places the admin added', function () {
+    DeliveryArea::factory()->create(['name' => 'Kano', 'fee' => 6000]);
+    app(Cart::class)->add(Product::factory()->create(['price' => 5000]));
+
+    fillCheckout(Livewire::test(Checkout::class))
+        ->assertSee('Kano · ₦6,000')
+        ->set('delivery_area', 'Kano')
+        ->call('placeOrder')
+        ->assertHasNoErrors();
+
+    expect(Order::sole()->delivery_fee)->toBe(6000);
 });

@@ -30,7 +30,7 @@ class PaystackGateway implements PaymentGateway
 
         $response = $this->client()->post('/transaction/initialize', [
             'email' => $order->customer_email,
-            'amount' => $order->subtotal * 100,
+            'amount' => $order->total() * 100,
             'currency' => 'NGN',
             'reference' => $reference,
             'callback_url' => route('payments.paystack.callback'),
@@ -49,7 +49,7 @@ class PaystackGateway implements PaymentGateway
             'provider' => 'paystack',
             'reference' => $reference,
             'status' => TransactionStatus::Pending,
-            'amount' => $order->subtotal,
+            'amount' => $order->total(),
         ]);
 
         return $url;

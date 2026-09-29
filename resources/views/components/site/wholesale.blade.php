@@ -49,7 +49,7 @@
                 <dl data-reveal class="mt-9 grid gap-5 border-t border-cosmic-900/15 pt-7 sm:grid-cols-3">
                     <div>
                         <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cosmic-900/55 uppercase">Delivers to</dt>
-                        <dd class="font-sub mt-1.5 text-sm font-medium text-cosmic-900">{{ implode(' · ', config('milkyway.delivery_areas')) }}</dd>
+                        <dd class="font-sub mt-1.5 text-sm font-medium text-cosmic-900">Across Nigeria and beyond</dd>
                     </div>
                     <div>
                         <dt class="font-sub text-[0.62rem] font-semibold tracking-[0.2em] text-cosmic-900/55 uppercase">Walk in</dt>

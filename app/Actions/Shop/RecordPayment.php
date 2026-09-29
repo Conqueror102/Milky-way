@@ -30,12 +30,12 @@ class RecordPayment
                 return;
             }
 
-            if ($amountPaid < $order->subtotal * 100) {
+            if ($amountPaid < $order->total() * 100) {
                 Log::warning('Payment for less than the order total', [
                     'order' => $order->reference,
                     'reference' => $reference,
                     'paid_kobo' => $amountPaid,
-                    'due_kobo' => $order->subtotal * 100,
+                    'due_kobo' => $order->total() * 100,
                 ]);
 
                 $payment->update([
@@ -111,7 +111,7 @@ class RecordPayment
             'order_id' => $order->id,
             'provider' => $order->payment_provider ?? 'paystack',
             'status' => TransactionStatus::Pending,
-            'amount' => $order->subtotal,
+            'amount' => $order->total(),
         ]);
     }
 }

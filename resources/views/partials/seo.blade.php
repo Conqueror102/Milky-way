@@ -23,7 +23,7 @@
             'opens' => '00:00',
             'closes' => '23:59',
         ]],
-        'areaServed' => config('milkyway.delivery_areas'),
+        'areaServed' => \App\Models\DeliveryArea::query()->ordered()->pluck('name')->all(),
         'hasMap' => 'https://www.google.com/maps/search/?api=1&query='.rawurlencode(config('milkyway.map_query')),
         // The Facebook link in config has not been confirmed, so it is left out of sameAs.
         'sameAs' => array_values(array_filter([

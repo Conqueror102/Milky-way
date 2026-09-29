@@ -3,6 +3,7 @@
 namespace App\Livewire\Shop;
 
 use App\Actions\Shop\PlaceOrder;
+use App\Models\DeliveryArea;
 use App\Support\Cart;
 use App\Support\CartLine;
 use Illuminate\Support\Collection;
@@ -16,12 +17,19 @@ use Livewire\Component;
 /**
  * @property-read Collection<int, CartLine> $lines
  * @property-read int $subtotal
+ * @property-read Collection<int, DeliveryArea> $areas
+ * @property-read DeliveryArea|null $selectedArea
  */
 #[Layout('layouts::marketing', ['noindex' => true])]
 #[Title('Checkout')]
 class Checkout extends Component
 {
     public const PLACED_ORDERS_SESSION_KEY = 'orders.placed';
+
+    /**
+     * The choice for shoppers outside every listed place: delivery is arranged with them.
+     */
+    public const OTHER_AREA = 'Somewhere else';
 
     public string $customer_name = '';
 
@@ -58,7 +66,7 @@ class Checkout extends Component
             'customer_name' => ['required', 'string', 'max:120'],
             'customer_phone' => ['required', 'string', 'max:30', 'regex:/^\+?[0-9\s()-]{7,}$/'],
             'customer_email' => ['required', 'email', 'max:255'],
-            'delivery_area' => ['required', 'string', Rule::in(self::deliveryAreas())],
+            'delivery_area' => ['required', 'string', Rule::in([...$this->areas->pluck('name'), self::OTHER_AREA])],
             'delivery_address' => ['required', 'string', 'max:1000'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ];
@@ -122,13 +130,20 @@ class Checkout extends Component
     }
 
     /**
-     * @return list<string>
+     * @return Collection<int, DeliveryArea>
      */
-    public static function deliveryAreas(): array
+    #[Computed]
+    public function areas(): Collection
     {
-        /** @var list<string> $areas */
-        $areas = config('milkyway.delivery_areas', []);
+        return DeliveryArea::query()->ordered()->get();
+    }
 
-        return $areas;
+    /**
+     * The listed place the shopper chose, if any.
+     */
+    #[Computed]
+    public function selectedArea(): ?DeliveryArea
+    {
+        return $this->areas->firstWhere('name', $this->delivery_area);
     }
 }

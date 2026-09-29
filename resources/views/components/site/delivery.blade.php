@@ -12,10 +12,16 @@
         ['left' => 63.0, 'top' => 27.9],
     ];
 
-    $destinations = collect(config('milkyway.delivery_areas'))
+    // The places an admin ticked for the home page, or the first few when none are.
+    $areas = \App\Models\DeliveryArea::query()->ordered()->get();
+    $featured = $areas->where('is_featured', true)->whenEmpty(fn () => $areas);
+
+    $destinations = $featured
         ->take(count($orbits))
         ->values()
-        ->map(fn ($label, $i) => $orbits[$i] + ['label' => $label]);
+        ->map(fn ($area, $i) => $orbits[$i] + ['label' => $area->name]);
+
+    $morePlaces = $areas->count() - $destinations->count();
 @endphp
 
 <section id="delivery" class="bg-cosmic-950 py-10 lg:py-14">
@@ -68,12 +74,15 @@
 
             @foreach ($destinations as $destination)
                 <span
-                    class="orbit-pill font-sub absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-cream-50 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-cosmic-900 shadow-lg shadow-cosmic-950/40"
+                    class="orbit-pill font-sub absolute max-w-[45%] -translate-x-1/2 -translate-y-1/2 truncate rounded-full bg-cream-50 px-3.5 py-1.5 text-xs font-semibold whitespace-nowrap text-cosmic-900 shadow-lg shadow-cosmic-950/40"
                     style="left: {{ $destination['left'] }}%; top: {{ $destination['top'] }}%; --i: {{ $loop->index }}"
                 >{{ $destination['label'] }}</span>
             @endforeach
 
             <span class="font-sub absolute top-[6%] right-0 rounded-full border border-gold-400/40 px-3.5 py-1.5 text-xs font-medium text-gold-400">
+                @if ($morePlaces > 0)
+                    <span class="font-semibold">+{{ $morePlaces }} more {{ Str::plural('place', $morePlaces) }}</span> ·
+                @endif
                 {{ $site->text('delivery.other_label') }}
             </span>
         </div>

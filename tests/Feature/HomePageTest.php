@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\DeliveryArea;
+
 test('the homepage renders the hero', function () {
     $this->get(route('home'))
         ->assertOk()
@@ -85,12 +87,16 @@ test('the ordering steps appear in order', function () {
     expect(array_values($positions))->toBe(collect($positions)->values()->sort()->values()->all());
 });
 
-test('the delivery section names every area it serves', function () {
-    $response = $this->get(route('home'));
+test('the delivery section draws the featured places and counts the rest', function () {
+    DeliveryArea::query()->delete();
+    DeliveryArea::factory()->featured()->create(['name' => 'Port Harcourt']);
+    DeliveryArea::factory()->create(['name' => 'Kano']);
+    DeliveryArea::factory()->create(['name' => 'London, UK']);
 
-    foreach (config('milkyway.delivery_areas') as $area) {
-        $response->assertSee($area, escape: false);
-    }
+    $response = $this->get(route('home'))
+        ->assertSee('Port Harcourt')
+        ->assertDontSee('>London, UK<', escape: false)
+        ->assertSee('+2 more places');
 
     $response->assertSee(
         'https://wa.me/'.config('milkyway.whatsapp.number').'?text='.rawurlencode(

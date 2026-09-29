@@ -119,7 +119,7 @@
             </div>
 
             <ul class="font-sub mt-6 grid gap-2 text-sm text-cosmic-900/70">
-                <li class="flex items-center gap-2"><x-icon name="truck-solid" class="size-4 text-gold-600" /> Delivery to {{ implode(', ', config('milkyway.delivery_areas')) }}</li>
+                <li class="flex items-center gap-2"><x-icon name="truck-solid" class="size-4 text-gold-600" /> Delivery across Nigeria and beyond. See the fee at checkout</li>
                 <li class="flex items-center gap-2"><x-icon name="boxes-solid" class="size-4 text-gold-600" /> Retail and bulk quantities</li>
             </ul>
         </div>

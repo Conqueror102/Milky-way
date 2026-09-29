@@ -30,6 +30,7 @@ class OrderFactory extends Factory
             'delivery_address' => fake()->address(),
             'notes' => null,
             'subtotal' => 0,
+            'delivery_fee' => null,
             'payment_status' => PaymentStatus::Unpaid,
         ];
     }

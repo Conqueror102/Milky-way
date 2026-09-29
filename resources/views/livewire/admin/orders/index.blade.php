@@ -32,7 +32,7 @@
                     </flux:table.cell>
                     <flux:table.cell>{{ $order->customer_name }}</flux:table.cell>
                     <flux:table.cell>{{ $order->items_count }}</flux:table.cell>
-                    <flux:table.cell>₦{{ number_format($order->subtotal) }}</flux:table.cell>
+                    <flux:table.cell>{{ $order->formattedTotal() }}</flux:table.cell>
                     <flux:table.cell><flux:badge size="sm">{{ __($order->status->label()) }}</flux:badge></flux:table.cell>
                     <flux:table.cell><x-admin.payment-badge :status="$order->payment_status" /></flux:table.cell>
                     <flux:table.cell>{{ $order->created_at?->diffForHumans() }}</flux:table.cell>

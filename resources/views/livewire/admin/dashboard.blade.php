@@ -104,7 +104,7 @@
                                 <flux:link :href="route('admin.orders.show', $order)" wire:navigate>{{ $order->reference }}</flux:link>
                                 <div class="text-xs text-zinc-500 dark:text-zinc-400">{{ $order->customer_name }}</div>
                             </flux:table.cell>
-                            <flux:table.cell class="tabular-nums">₦{{ number_format($order->subtotal) }}</flux:table.cell>
+                            <flux:table.cell class="tabular-nums">{{ $order->formattedTotal() }}</flux:table.cell>
                             <flux:table.cell><x-admin.payment-badge :status="$order->payment_status" /></flux:table.cell>
                             <flux:table.cell class="text-xs">{{ $order->created_at?->diffForHumans() }}</flux:table.cell>
                         </flux:table.row>

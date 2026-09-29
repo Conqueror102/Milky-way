@@ -84,6 +84,28 @@ test('the callback does not trust a short payment', function () {
     expect($order->fresh()->payment_status)->toBe(PaymentStatus::Failed);
 });
 
+test('paystack charges the delivery fee along with the items', function () {
+    Http::fake([
+        'api.paystack.test/transaction/initialize' => Http::response(['status' => true, 'data' => ['authorization_url' => 'https://checkout.paystack.com/abc']]),
+    ]);
+    $order = paystackOrder(['delivery_fee' => 3000]);
+
+    Livewire::test(OrderConfirmation::class, ['order' => $order])
+        ->assertSee('Pay ₦15,500')
+        ->call('pay');
+
+    Http::assertSent(fn ($request) => $request['amount'] === 1550000);
+});
+
+test('the callback does not accept the item price alone when delivery is charged', function () {
+    $order = paystackOrder(['delivery_fee' => 3000, 'payment_reference' => 'MW-ABC123-XYZ']);
+    Http::fake(['api.paystack.test/transaction/verify/*' => Http::response(verifyResponse('success', 1250000))]);
+
+    $this->get(route('payments.paystack.callback', ['reference' => 'MW-ABC123-XYZ']));
+
+    expect($order->fresh()->payment_status)->toBe(PaymentStatus::Failed);
+});
+
 test('a failed payment can be retried', function () {
     $order = paystackOrder(['payment_reference' => 'MW-ABC123-XYZ']);
     Http::fake(['api.paystack.test/transaction/verify/*' => Http::response(verifyResponse('failed', 1250000))]);

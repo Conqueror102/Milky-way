@@ -26,6 +26,7 @@ use Illuminate\Support\Carbon;
  * @property string $delivery_address
  * @property string|null $notes
  * @property int $subtotal
+ * @property int|null $delivery_fee
  * @property PaymentStatus $payment_status
  * @property string|null $payment_provider
  * @property string|null $payment_reference
@@ -36,7 +37,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, Payment> $payments
  * @property-read User|null $user
  */
-#[Fillable(['reference', 'user_id', 'status', 'customer_name', 'customer_phone', 'customer_email', 'delivery_area', 'delivery_address', 'notes', 'subtotal', 'payment_status', 'payment_provider', 'payment_reference', 'paid_at'])]
+#[Fillable(['reference', 'user_id', 'status', 'customer_name', 'customer_phone', 'customer_email', 'delivery_area', 'delivery_address', 'notes', 'subtotal', 'delivery_fee', 'payment_status', 'payment_provider', 'payment_reference', 'paid_at'])]
 class Order extends Model
 {
     /** @use HasFactory<OrderFactory> */
@@ -52,6 +53,7 @@ class Order extends Model
         return [
             'status' => OrderStatus::class,
             'subtotal' => 'integer',
+            'delivery_fee' => 'integer',
             'payment_status' => PaymentStatus::class,
             'paid_at' => 'datetime',
         ];
@@ -96,5 +98,30 @@ class Order extends Model
     public function formattedSubtotal(): string
     {
         return Money::format($this->subtotal);
+    }
+
+    /**
+     * What the shopper pays: the items plus delivery.
+     */
+    public function total(): int
+    {
+        return $this->subtotal + ($this->delivery_fee ?? 0);
+    }
+
+    /**
+     * How the delivery charge reads: an amount, "Free", or arranged with the shopper.
+     */
+    public function deliveryFeeLabel(): string
+    {
+        return match ($this->delivery_fee) {
+            null => 'Arranged with you',
+            0 => 'Free',
+            default => Money::format($this->delivery_fee),
+        };
+    }
+
+    public function formattedTotal(): string
+    {
+        return Money::format($this->total());
     }
 }

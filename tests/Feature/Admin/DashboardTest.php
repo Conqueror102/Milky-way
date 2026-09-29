@@ -48,6 +48,14 @@ test('sales add up paid orders by when they were paid', function () {
         ->and($sales['month'])->toMatchArray(['revenue' => 10000, 'orders' => 3]);
 });
 
+test('sales count the delivery fees customers paid', function () {
+    paidOrder(5000, now())->update(['delivery_fee' => 2500]);
+
+    $sales = Livewire::test(Dashboard::class)->instance()->sales;
+
+    expect($sales['today'])->toMatchArray(['revenue' => 7500, 'orders' => 1]);
+});
+
 test('the dashboard lists best sellers, low stock and recent orders', function () {
     paidOrder(10000, now(), ['Milk Tea' => 3, 'Waffle' => 1]);
     paidOrder(4000, now(), ['Waffle' => 4]);

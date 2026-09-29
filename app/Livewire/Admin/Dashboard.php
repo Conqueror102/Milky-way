@@ -44,7 +44,7 @@ class Dashboard extends Component
 
             return [
                 'label' => $period[0],
-                'revenue' => (int) $paid->sum('subtotal'),
+                'revenue' => (int) $paid->sum(fn (Order $order) => $order->total()),
                 'orders' => $paid->count(),
             ];
         })->all();
@@ -53,7 +53,7 @@ class Dashboard extends Component
     #[Computed]
     public function averageOrderValue(): int
     {
-        return (int) round($this->paidOrdersSince(now()->subDays(30))->avg('subtotal') ?? 0);
+        return (int) round($this->paidOrdersSince(now()->subDays(30))->avg(fn (Order $order) => $order->total()) ?? 0);
     }
 
     /**
@@ -105,7 +105,7 @@ class Dashboard extends Component
             $date = $start->copy()->addDays($offset);
             $orders = $byDay->get($date->toDateString(), collect());
 
-            return ['date' => $date, 'revenue' => (int) $orders->sum('subtotal'), 'orders' => $orders->count()];
+            return ['date' => $date, 'revenue' => (int) $orders->sum(fn (Order $order) => $order->total()), 'orders' => $orders->count()];
         });
     }
 
@@ -167,7 +167,7 @@ class Dashboard extends Component
         return Order::query()
             ->where('payment_status', PaymentStatus::Paid)
             ->where('paid_at', '>=', $since)
-            ->get(['id', 'subtotal', 'paid_at']);
+            ->get(['id', 'subtotal', 'delivery_fee', 'paid_at']);
     }
 
     public function render(): View

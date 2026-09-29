@@ -27,7 +27,7 @@
     <div class="mt-8 rounded-[1.5rem] bg-cosmic-950 p-6 text-cream-50">
         <div class="font-sub flex items-center justify-between gap-4">
             <span class="text-cream-50/75">Amount to pay</span>
-            <span class="text-2xl font-bold">{{ $order->formattedSubtotal() }}</span>
+            <span class="text-2xl font-bold">{{ $order->formattedTotal() }}</span>
         </div>
 
         @if ($order->isPaid())
@@ -42,7 +42,7 @@
                 wire:loading.attr="disabled"
                 class="font-sub mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-cream-50 px-6 py-3.5 text-sm font-bold text-cosmic-900 transition hover:bg-white disabled:opacity-60"
             >
-                Pay {{ $order->formattedSubtotal() }}
+                Pay {{ $order->formattedTotal() }}
             </button>
             @error('payment') <p class="font-sub mt-3 rounded-xl bg-red-100 px-3 py-2 text-sm text-red-800">{{ $message }}</p> @enderror
             <p class="font-sub mt-3 text-center text-xs text-cream-50/60">Secure card, bank transfer and USSD payment by Paystack.</p>
@@ -52,7 +52,7 @@
                 disabled
                 class="font-sub mt-6 flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full bg-cream-50/20 px-6 py-3.5 text-sm font-bold text-cream-50/70"
             >
-                Pay {{ $order->formattedSubtotal() }}
+                Pay {{ $order->formattedTotal() }}
             </button>
             <p class="font-sub mt-3 text-center text-xs text-cream-50/60">Online payment is being set up. Your order is saved in the meantime.</p>
         @endif
@@ -73,10 +73,20 @@
             @endforeach
         </ul>
 
-        <div class="font-sub mt-5 flex justify-between border-t border-cosmic-900/10 pt-4 text-base text-cosmic-900">
-            <span>Subtotal</span>
-            <span class="font-bold">{{ $order->formattedSubtotal() }}</span>
-        </div>
+        <dl class="font-sub mt-5 grid gap-2 border-t border-cosmic-900/10 pt-4 text-sm text-cosmic-900">
+            <div class="flex justify-between gap-4">
+                <dt class="text-cosmic-900/80">Subtotal</dt>
+                <dd class="font-semibold">{{ $order->formattedSubtotal() }}</dd>
+            </div>
+            <div class="flex justify-between gap-4">
+                <dt class="text-cosmic-900/80">Delivery</dt>
+                <dd class="font-semibold">{{ $order->deliveryFeeLabel() }}</dd>
+            </div>
+            <div class="mt-1 flex justify-between gap-4 border-t border-cosmic-900/10 pt-3 text-base">
+                <dt>Total</dt>
+                <dd class="font-bold">{{ $order->formattedTotal() }}</dd>
+            </div>
+        </dl>
 
         <dl class="font-sub mt-6 grid gap-4 text-sm sm:grid-cols-2">
             <div>

@@ -175,10 +175,6 @@ class SiteContent
         if ($saved('hours')) {
             config(['milkyway.hours' => $this->text('business.hours')]);
         }
-
-        if ($saved('delivery_areas')) {
-            config(['milkyway.delivery_areas' => $this->lines('business.delivery_areas')]);
-        }
     }
 
     /**

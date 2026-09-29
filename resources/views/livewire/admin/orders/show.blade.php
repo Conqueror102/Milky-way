@@ -56,8 +56,12 @@
                 </flux:table.row>
             @endforeach
             <flux:table.row>
+                <flux:table.cell colspan="3">{{ __('Delivery to :area', ['area' => $order->delivery_area]) }}</flux:table.cell>
+                <flux:table.cell align="end">{{ $order->delivery_fee === null ? __('Not charged, arrange with the customer') : $order->deliveryFeeLabel() }}</flux:table.cell>
+            </flux:table.row>
+            <flux:table.row>
                 <flux:table.cell colspan="3" class="font-medium">{{ __('Total') }}</flux:table.cell>
-                <flux:table.cell align="end" class="font-medium">₦{{ number_format($order->subtotal) }}</flux:table.cell>
+                <flux:table.cell align="end" class="font-medium">{{ $order->formattedTotal() }}</flux:table.cell>
             </flux:table.row>
         </flux:table.rows>
     </flux:table>

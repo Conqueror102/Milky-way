@@ -273,7 +273,6 @@ test('business details change across the site', function () {
         ->set('values.phone', '+234 800 000 0000')
         ->set('values.whatsapp', '234 800 000 0001')
         ->set('values.hours', 'Open 9am to 9pm daily')
-        ->set('values.delivery_areas', "Lagos\nIbadan")
         ->call('save');
 
     $this->get(route('home'))
@@ -281,7 +280,6 @@ test('business details change across the site', function () {
         ->assertSee('tel:+2348000000000', escape: false)
         ->assertSee('https://wa.me/2348000000001', escape: false)
         ->assertSee('Open 9am to 9pm daily')
-        ->assertSee('Ibadan')
         ->assertDontSee('+234 816 182 3482');
 });
 

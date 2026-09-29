@@ -255,19 +255,19 @@ return [
 
         'delivery' => [
             'label' => 'Delivery',
-            'description' => 'Where you deliver, drawn as orbits out from the shop.',
+            'description' => 'Where you deliver, drawn as orbits out from the shop. The places and fees themselves are set under Delivery.',
             'anchor' => 'delivery',
             'groups' => [
                 [
                     'label' => 'Text',
                     'fields' => [
                         'eyebrow' => ['type' => 'text', 'label' => 'Small label', 'default' => 'Delivery'],
-                        'heading' => ['type' => 'text', 'label' => 'Heading start', 'default' => 'We deliver well past'],
-                        'heading_accent' => ['type' => 'text', 'label' => 'Handwritten word', 'default' => 'Lagos'],
-                        'intro' => ['type' => 'textarea', 'label' => 'Intro', 'default' => 'We cater to customers within and outside Lagos, subject to arrangement and destination. Tell us where you are and we will work it out.'],
+                        'heading' => ['type' => 'text', 'label' => 'Heading start', 'default' => 'We deliver across'],
+                        'heading_accent' => ['type' => 'text', 'label' => 'Handwritten word', 'default' => 'Nigeria'],
+                        'intro' => ['type' => 'textarea', 'label' => 'Intro', 'default' => 'From our shop in Lagos to customers all over Nigeria, and further afield by arrangement. Choose your location at checkout to see the delivery fee, or tell us where you are and we will work it out.'],
                         'button' => ['type' => 'text', 'label' => 'Button', 'default' => 'Ask about delivery'],
                         'shop_label' => ['type' => 'text', 'label' => 'Label at the centre of the orbits', 'default' => 'The shop · Amuwo-Odofin'],
-                        'other_label' => ['type' => 'text', 'label' => 'Label for other places', 'default' => 'Other locations — ask us'],
+                        'other_label' => ['type' => 'text', 'label' => 'Label for other places', 'default' => 'Not listed? Ask us'],
                     ],
                 ],
             ],
@@ -368,7 +368,6 @@ return [
                         'address_line' => ['type' => 'text', 'label' => 'Street address', 'default' => 'C003 Bornu Plaza, Tradefair Complex'],
                         'address_area' => ['type' => 'text', 'label' => 'Area, city and country', 'default' => 'Amuwo-Odofin, Lagos, Nigeria'],
                         'hours' => ['type' => 'text', 'label' => 'Opening hours', 'default' => 'Open 24 Hours, Monday to Sunday'],
-                        'delivery_areas' => ['type' => 'lines', 'label' => 'Delivery areas', 'default' => "Lagos\nOgun\nAbuja\nAccra, Ghana", 'help' => 'One place per line. The first four are drawn on the delivery orbits.'],
                     ],
                 ],
             ],

@@ -4,6 +4,7 @@ namespace App\Actions\Shop;
 
 use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
+use App\Models\DeliveryArea;
 use App\Models\Order;
 use App\Models\Product;
 use App\Support\Cart;
@@ -58,6 +59,7 @@ class PlaceOrder
                 'delivery_address' => $details['delivery_address'],
                 'notes' => $details['notes'] ?? null,
                 'subtotal' => $this->cart->subtotal($lines),
+                'delivery_fee' => DeliveryArea::query()->where('name', $details['delivery_area'])->value('fee'),
             ]);
 
             $order->items()->createMany($lines->map(fn (CartLine $line) => [

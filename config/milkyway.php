@@ -34,8 +34,6 @@ return [
     */
     'map_query' => 'C003 Bornu Plaza, Tradefair Complex, Amuwo-Odofin, Lagos, Nigeria',
 
-    'delivery_areas' => ['Lagos', 'Ogun', 'Abuja', 'Accra, Ghana'],
-
     'whatsapp' => [
         'number' => '2348161823482',
         'default_message' => 'Hello Milkyway Cosmetics Stores, I would like to make an enquiry about your products.',
