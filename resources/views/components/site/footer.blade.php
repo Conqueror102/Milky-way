@@ -1,7 +1,7 @@
 @php
     $categories = [
         ['label' => 'Skincare & Facials', 'href' => route('home').'#categories'],
-        ['label' => 'Body Enhancement', 'href' => route('home').'#categories'],
+        ['label' => 'Body Enhancers', 'href' => route('home').'#categories'],
         ['label' => 'Spa & Wellness', 'href' => route('home').'#categories'],
         ['label' => 'Bulk Wholesale', 'href' => route('home').'#categories'],
     ];
@@ -17,12 +17,8 @@
         ->map(fn ($label) => ['label' => $label, 'href' => 'https://wa.me/'.config('milkyway.whatsapp.number')])
         ->all();
 
-    $socials = [
-        ['label' => 'Instagram', 'href' => config('milkyway.socials.instagram.url')],
-        ['label' => 'TikTok', 'href' => config('milkyway.socials.tiktok.url')],
-        ['label' => 'Facebook', 'href' => config('milkyway.socials.facebook.url')],
-        ['label' => 'WhatsApp', 'href' => 'https://wa.me/'.config('milkyway.whatsapp.number')],
-    ];
+    // Only the accounts an admin ticked at /admin/socials and gave a link.
+    $socials = app(\App\Support\Socials::class)->visible();
 @endphp
 
 <footer id="site-footer" class="relative w-full bg-cosmic-950 overflow-hidden pt-16 sm:pt-20 lg:pt-24 border-t border-gold-400/20">
@@ -39,8 +35,8 @@
             <div class="lg:col-span-5 flex flex-col justify-between space-y-6">
                 <div>
                     <a href="{{ route('home') }}" class="inline-flex items-center gap-3 group">
-                        <span class="grid size-9 place-items-center rounded-full bg-cosmic-900 text-gold-400 ring-1 ring-gold-400/30 group-hover:ring-gold-400/60 transition duration-200">
-                            <x-site.logo-mark class="size-5" />
+                        <span class="grid place-items-center rounded-2xl bg-cream-50 px-2 py-1.5 ring-1 ring-gold-400/30 group-hover:ring-gold-400/60 transition duration-200">
+                            <x-app-logo-icon class="h-9 w-auto" />
                         </span>
                         <span class="flex flex-col leading-none">
                             <span class="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-cream-50 uppercase">MILKYWAY</span>
@@ -109,18 +105,20 @@
                 </div>
 
                 {{-- Col 4: Social --}}
+                @if ($socials !== [])
                 <div class="flex flex-col space-y-3.5">
                     <h4 class="text-xs font-bold uppercase tracking-[0.18em] text-gold-400">Social</h4>
                     <ul class="space-y-2.5 text-[13px] text-cream-100/70">
                         @foreach ($socials as $link)
                             <li>
-                                <a href="{{ $link['href'] }}" target="_blank" rel="noopener" class="hover:text-gold-300 transition-colors duration-150">
+                                <a href="{{ $link['url'] }}" target="_blank" rel="noopener" class="hover:text-gold-300 transition-colors duration-150">
                                     {{ $link['label'] }}
                                 </a>
                             </li>
                         @endforeach
                     </ul>
                 </div>
+                @endif
 
             </div>
         </div>

@@ -79,7 +79,7 @@ class ShopPage extends Component
         $view = view('livewire.shop.shop-page');
 
         return $view->layoutData([
-            'description' => 'Shop skincare, beauty, body enhancement and spa products from Milkyway Cosmetics Stores, retail and wholesale, delivered across Lagos.',
+            'description' => 'Shop skincare, beauty, body enhancers and spa products from Milkyway Cosmetics Stores, retail and wholesale, delivered across Lagos.',
         ]);
     }
 }

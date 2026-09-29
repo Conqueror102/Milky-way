@@ -37,6 +37,9 @@
                         <flux:sidebar.item icon="swatch" :href="route('admin.colors')" :current="request()->routeIs('admin.colors')" wire:navigate>
                             {{ __('Colours') }}
                         </flux:sidebar.item>
+                        <flux:sidebar.item icon="share" :href="route('admin.socials')" :current="request()->routeIs('admin.socials')" wire:navigate>
+                            {{ __('Social links') }}
+                        </flux:sidebar.item>
                     </flux:sidebar.group>
                 @endcan
             </flux:sidebar.nav>

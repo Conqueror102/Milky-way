@@ -25,11 +25,8 @@
         ]],
         'areaServed' => \App\Models\DeliveryArea::query()->ordered()->pluck('name')->all(),
         'hasMap' => 'https://www.google.com/maps/search/?api=1&query='.rawurlencode(config('milkyway.map_query')),
-        // The Facebook link in config has not been confirmed, so it is left out of sameAs.
-        'sameAs' => array_values(array_filter([
-            config('milkyway.socials.instagram.url'),
-            config('milkyway.socials.tiktok.url'),
-        ])),
+        // The social profiles shown in the footer; a WhatsApp chat link isn't a profile.
+        'sameAs' => collect(app(\App\Support\Socials::class)->visible())->reject(fn (array $social) => $social['key'] === 'whatsapp')->pluck('url')->all(),
     ];
 
     $graph = [

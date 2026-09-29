@@ -1,7 +1,7 @@
 {
     "name": "Milky Way Cosmetics Stores",
     "short_name": "Milky Way",
-    "description": "Quality skincare, beauty, body enhancement and spa products at wholesale and retail prices.",
+    "description": "Quality skincare, beauty, body enhancers and spa products at wholesale and retail prices.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",

@@ -47,7 +47,7 @@ return [
                         'heading' => ['type' => 'text', 'label' => 'First line', 'default' => 'Your Beauty.'],
                         'heading_second' => ['type' => 'text', 'label' => 'Second line', 'default' => 'Our'],
                         'heading_accent' => ['type' => 'text', 'label' => 'Handwritten word', 'default' => 'Passion', 'help' => 'Shown in the orange handwritten style at the end of the second line.'],
-                        'intro' => ['type' => 'textarea', 'label' => 'Supporting text', 'default' => "Skincare, beauty, body enhancement and spa products at **wholesale and retail prices**. Shopping for yourself, or stocking your beauty business — we've got you covered.", 'help' => 'Put **double stars** around words to make them bold.'],
+                        'intro' => ['type' => 'textarea', 'label' => 'Supporting text', 'default' => "Skincare, beauty, body enhancers and spa products at **wholesale and retail prices**. Shopping for yourself, or stocking your beauty business — we've got you covered.", 'help' => 'Put **double stars** around words to make them bold.'],
                     ],
                 ],
                 [
@@ -290,7 +290,7 @@ return [
                         'eyebrow' => ['type' => 'text', 'label' => 'Small label', 'default' => 'About us'],
                         'heading' => ['type' => 'text', 'label' => 'Heading start', 'default' => 'Based in Lagos. Stocked for'],
                         'heading_accent' => ['type' => 'text', 'label' => 'Handwritten word', 'default' => 'everyone'],
-                        'statement' => ['type' => 'textarea', 'label' => 'Statement', 'default' => 'Milkyway Cosmetics Stores is a beauty, cosmetics and personal-care business in Amuwo-Odofin, Lagos. We distribute health, beauty, skincare, body-enhancement and spa products — wholesale and retail — to individuals and to the businesses that stock them.'],
+                        'statement' => ['type' => 'textarea', 'label' => 'Statement', 'default' => 'Milkyway Cosmetics Stores is a beauty, cosmetics and personal-care business in Amuwo-Odofin, Lagos. We distribute health, beauty, skincare, body enhancers and spa products — wholesale and retail — to individuals and to the businesses that stock them.'],
                         'goal_label' => ['type' => 'text', 'label' => 'Goal label', 'default' => 'Our goal is simple'],
                         'goal' => ['type' => 'textarea', 'label' => 'Goal', 'default' => 'To make quality beauty and personal-care products accessible, with service that suits both individual customers and beauty businesses.'],
                     ],
@@ -300,7 +300,7 @@ return [
                     'fields' => [
                         'where_title' => ['type' => 'text', 'label' => 'Location card title', 'default' => 'Where to find us'],
                         'what_title' => ['type' => 'text', 'label' => 'Products card title', 'default' => 'What we distribute'],
-                        'what_items' => ['type' => 'lines', 'label' => 'Products card list', 'default' => "Health\nBeauty\nSkincare\nBody Enhancement\nSpa"],
+                        'what_items' => ['type' => 'lines', 'label' => 'Products card list', 'default' => "Health\nBeauty\nSkincare\nBody Enhancers\nSpa"],
                         'reach_title' => ['type' => 'text', 'label' => 'Reach card title', 'default' => 'How far we reach'],
                         'reach_text' => ['type' => 'textarea', 'label' => 'Reach card text', 'default' => 'Delivery across Lagos, Ogun and Abuja.'],
                         'reach_note' => ['type' => 'textarea', 'label' => 'Reach card note', 'default' => 'Our customers go further still — as far as Accra, Ghana.', 'optional' => true],
@@ -340,7 +340,7 @@ return [
                 [
                     'label' => 'Text',
                     'fields' => [
-                        'blurb' => ['type' => 'textarea', 'label' => 'About line under the logo', 'default' => 'Milkyway Cosmetics Stores supplies quality skincare, beauty, body enhancement and spa products at wholesale and retail prices, from Amuwo-Odofin, Lagos.'],
+                        'blurb' => ['type' => 'textarea', 'label' => 'About line under the logo', 'default' => 'Milkyway Cosmetics Stores supplies quality skincare, beauty, body enhancers and spa products at wholesale and retail prices, from Amuwo-Odofin, Lagos.'],
                         'whatsapp_label' => ['type' => 'text', 'label' => 'WhatsApp chip', 'default' => 'Chat on WhatsApp · 24/7 Available'],
                         'store_info' => ['type' => 'lines', 'label' => 'Store info column', 'default' => "C003 Bornu Plaza\nTradefair, Lagos\nOpen 24/7 Mon–Sun\nLagos · Abuja · Accra"],
                         'bottom_line' => ['type' => 'text', 'label' => 'Line beside the copyright', 'default' => 'Tradefair Complex, Lagos · Wholesale & Retail', 'optional' => true],

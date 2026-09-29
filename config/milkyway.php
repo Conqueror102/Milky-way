@@ -39,10 +39,20 @@ return [
         'default_message' => 'Hello Milkyway Cosmetics Stores, I would like to make an enquiry about your products.',
     ],
 
+    /*
+    | The social accounts an admin can link in the footer at /admin/socials, with the
+    | link and whether it shows until an admin saves their own. WhatsApp without a
+    | link uses the business WhatsApp number.
+    */
     'socials' => [
-        'instagram' => ['handle' => '@milky_cosmetics_sales', 'url' => 'https://instagram.com/milky_cosmetics_sales'],
-        'tiktok' => ['handle' => '@milkywaycosmeticssales', 'url' => 'https://tiktok.com/@milkywaycosmeticssales'],
-        'facebook' => ['handle' => 'Milkyway Cosmetics', 'url' => 'https://facebook.com/Milkyway-Cosmetics'],
+        'instagram' => ['label' => 'Instagram', 'url' => 'https://instagram.com/milky_cosmetics_sales', 'show' => true],
+        'tiktok' => ['label' => 'TikTok', 'url' => 'https://tiktok.com/@milkywaycosmeticssales', 'show' => true],
+        'facebook' => ['label' => 'Facebook', 'url' => 'https://facebook.com/Milkyway-Cosmetics', 'show' => true],
+        'whatsapp' => ['label' => 'WhatsApp', 'url' => '', 'show' => true],
+        'x' => ['label' => 'X (Twitter)', 'url' => '', 'show' => false],
+        'youtube' => ['label' => 'YouTube', 'url' => '', 'show' => false],
+        'snapchat' => ['label' => 'Snapchat', 'url' => '', 'show' => false],
+        'linkedin' => ['label' => 'LinkedIn', 'url' => '', 'show' => false],
     ],
 
     /*
@@ -57,7 +67,7 @@ return [
 
     'seo' => [
         'title' => 'Milkyway Cosmetics Stores | Wholesale & Retail Beauty in Lagos',
-        'description' => 'Quality skincare, beauty, body enhancement and spa products at wholesale and retail prices. Shop with us or stock your salon, spa or beauty business from Amuwo-Odofin, Lagos.',
+        'description' => 'Quality skincare, beauty, body enhancers and spa products at wholesale and retail prices. Shop with us or stock your salon, spa or beauty business from Amuwo-Odofin, Lagos.',
         'image' => '/images/og-image.jpg',
         'image_alt' => 'Milkyway Cosmetics Stores: Your Beauty. Our Passion.',
         'locale' => 'en_NG',

@@ -20,7 +20,7 @@ test('the homepage links to whatsapp with a prefilled enquiry', function () {
 test('the category section lists every category', function () {
     $response = $this->get(route('home'));
 
-    foreach (['Skincare', 'Beauty &amp; Cosmetics', 'Health &amp; Beauty', 'Body Enhancement', 'Spa &amp; Massage', 'Wholesale'] as $category) {
+    foreach (['Skincare', 'Beauty &amp; Cosmetics', 'Health &amp; Beauty', 'Body Enhancers', 'Spa &amp; Massage', 'Wholesale'] as $category) {
         $response->assertSee($category, escape: false);
     }
 });
@@ -113,7 +113,7 @@ test('the about section states where the shop is and what it distributes', funct
         ->assertSee(config('milkyway.hours'), escape: false)
         ->assertSee('id="about"', escape: false);
 
-    foreach (['Health', 'Beauty', 'Skincare', 'Body Enhancement', 'Spa'] as $item) {
+    foreach (['Health', 'Beauty', 'Skincare', 'Body Enhancers', 'Spa'] as $item) {
         $response->assertSee($item, escape: false);
     }
 });
