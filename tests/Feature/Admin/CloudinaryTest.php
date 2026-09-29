@@ -53,6 +53,18 @@ test('a failed upload throws', function () {
     Cloudinary::fromConfig()->upload(UploadedFile::fake()->image('cream.jpg'));
 })->throws(RuntimeException::class, 'Invalid Signature');
 
+test('an upload that cannot reach cloudinary throws the same way as a refused one', function () {
+    Http::fake(['api.cloudinary.com/*' => Http::failedConnection()]);
+
+    Cloudinary::fromConfig()->upload(UploadedFile::fake()->image('cream.jpg'));
+})->throws(RuntimeException::class, 'Could not reach Cloudinary');
+
+test('deleting reports false when cloudinary cannot be reached', function () {
+    Http::fake(['api.cloudinary.com/*' => Http::failedConnection()]);
+
+    expect(Cloudinary::fromConfig()->destroy('milky-way/products/abc'))->toBeFalse();
+});
+
 test('images can be destroyed', function () {
     Http::fake(['api.cloudinary.com/v1_1/demo-cloud/image/destroy' => Http::response(['result' => 'ok'])]);
 

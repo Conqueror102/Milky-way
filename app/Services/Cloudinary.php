@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
@@ -55,9 +56,14 @@ class Cloudinary
      */
     public function upload(UploadedFile $file, ?string $folder = null): array
     {
-        $response = Http::asMultipart()
-            ->attach('file', (string) file_get_contents($file->getRealPath()), $file->getClientOriginalName())
-            ->post($this->endpoint('upload'), $this->signed(['folder' => $folder ?? $this->folder]));
+        try {
+            $response = Http::asMultipart()
+                ->attach('file', (string) file_get_contents($file->getRealPath()), $file->getClientOriginalName())
+                ->post($this->endpoint('upload'), $this->signed(['folder' => $folder ?? $this->folder]));
+        } catch (ConnectionException $e) {
+            // Callers handle a failed upload as a RuntimeException, whatever the cause.
+            throw new RuntimeException('Could not reach Cloudinary: '.$e->getMessage(), previous: $e);
+        }
 
         if ($response->failed()) {
             throw new RuntimeException('Cloudinary upload failed: '.$response->json('error.message', $response->body()));
@@ -74,7 +80,11 @@ class Cloudinary
      */
     public function destroy(string $publicId): bool
     {
-        $response = Http::asForm()->post($this->endpoint('destroy'), $this->signed(['public_id' => $publicId]));
+        try {
+            $response = Http::asForm()->post($this->endpoint('destroy'), $this->signed(['public_id' => $publicId]));
+        } catch (ConnectionException) {
+            return false;
+        }
 
         return $response->successful() && in_array($response->json('result'), ['ok', 'not found'], true);
     }
