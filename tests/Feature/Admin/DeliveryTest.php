@@ -72,6 +72,24 @@ test('admins rename, reorder and remove places', function () {
     ]);
 });
 
+test('a place can take a name another place gives up in the same save', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    DeliveryArea::factory()->create(['name' => 'Ogun', 'sort_order' => 0]);
+    DeliveryArea::factory()->create(['name' => 'Abuja', 'sort_order' => 1]);
+
+    Livewire::test(Delivery::class)
+        ->set('places.0.name', 'Abuja')
+        ->set('places.0.fee', '8000')
+        ->set('places.1.name', 'Kano')
+        ->call('save')
+        ->assertHasNoErrors();
+
+    expect(deliveryPlaces())->toBe([
+        ['Abuja', 8000, false],
+        ['Kano', null, false],
+    ]);
+});
+
 test('a place needs a name that is not already on the list', function () {
     $this->actingAs(User::factory()->admin()->create());
     DeliveryArea::factory()->create(['name' => 'Lagos']);

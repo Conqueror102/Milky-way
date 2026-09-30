@@ -74,7 +74,15 @@ class Delivery extends Component
         );
 
         DB::transaction(function () {
-            DeliveryArea::query()->whereNotIn('id', collect($this->places)->pluck('id')->filter())->delete();
+            $keptIds = collect($this->places)->pluck('id')->filter();
+
+            DeliveryArea::query()->whereNotIn('id', $keptIds)->delete();
+
+            // Names are unique, so free every kept place's name first: otherwise one
+            // place taking a name another gives up in this save would clash with it.
+            foreach ($keptIds as $id) {
+                DeliveryArea::query()->whereKey($id)->update(['name' => "__renaming-{$id}"]);
+            }
 
             foreach ($this->places as $index => $place) {
                 DeliveryArea::updateOrCreate(['id' => $place['id']], [
