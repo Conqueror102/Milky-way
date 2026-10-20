@@ -2,9 +2,12 @@
 
 namespace App\Payments;
 
+use App\Enums\OrderStatus;
 use App\Enums\TransactionStatus;
 use App\Models\Order;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use RuntimeException;
@@ -26,33 +29,41 @@ class PaystackGateway implements PaymentGateway
      */
     public function checkoutUrl(Order $order): string
     {
-        $reference = $order->reference.'-'.Str::upper(Str::random(6));
+        return DB::transaction(function () use ($order): string {
+            $order = Order::query()->lockForUpdate()->findOrFail($order->id);
 
-        $response = $this->client()->post('/transaction/initialize', [
-            'email' => $order->customer_email,
-            'amount' => $order->total() * 100,
-            'currency' => 'NGN',
-            'reference' => $reference,
-            'callback_url' => route('payments.paystack.callback'),
-            'metadata' => ['order_reference' => $order->reference],
-        ]);
+            if ($order->isPaid() || $order->status === OrderStatus::Cancelled) {
+                throw new RuntimeException('This order is already paid or cancelled.');
+            }
 
-        $url = $response->json('data.authorization_url');
+            $reference = $order->reference.'-'.Str::upper(Str::random(6));
 
-        if ($response->failed() || ! is_string($url)) {
-            throw new RuntimeException('Paystack could not start the payment: '.$response->json('message', $response->status()));
-        }
+            $response = $this->client()->post('/transaction/initialize', [
+                'email' => $order->customer_email,
+                'amount' => $order->total() * 100,
+                'currency' => 'NGN',
+                'reference' => $reference,
+                'callback_url' => route('payments.paystack.callback'),
+                'metadata' => ['order_reference' => $order->reference],
+            ]);
 
-        $order->update(['payment_provider' => 'paystack', 'payment_reference' => $reference]);
+            $url = $response->json('data.authorization_url');
 
-        $order->payments()->create([
-            'provider' => 'paystack',
-            'reference' => $reference,
-            'status' => TransactionStatus::Pending,
-            'amount' => $order->total(),
-        ]);
+            if ($response->failed() || ! is_string($url)) {
+                throw new RuntimeException('Paystack could not start the payment: '.$response->json('message', $response->status()));
+            }
 
-        return $url;
+            $order->update(['payment_provider' => 'paystack', 'payment_reference' => $reference]);
+
+            $order->payments()->create([
+                'provider' => 'paystack',
+                'reference' => $reference,
+                'status' => TransactionStatus::Pending,
+                'amount' => $order->total(),
+            ]);
+
+            return $url;
+        });
     }
 
     /**
@@ -62,7 +73,13 @@ class PaystackGateway implements PaymentGateway
      */
     public function verify(string $reference): ?array
     {
-        $response = $this->client()->get('/transaction/verify/'.rawurlencode($reference));
+        try {
+            $response = $this->client()->get('/transaction/verify/'.rawurlencode($reference));
+        } catch (ConnectionException $e) {
+            report($e);
+
+            return null;
+        }
 
         $status = $response->json('data.status');
         $amount = $response->json('data.amount');

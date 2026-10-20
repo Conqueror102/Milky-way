@@ -54,7 +54,7 @@ class RecordPayment
             $payment->update([
                 'status' => TransactionStatus::Successful,
                 'amount_paid' => intdiv($amountPaid, 100),
-                'message' => null,
+                'message' => $order->status === OrderStatus::Cancelled ? 'Payment received for a cancelled order. Review and refund in Paystack.' : null,
                 'paid_at' => now(),
             ]);
 
@@ -65,7 +65,7 @@ class RecordPayment
             }
 
             $order->update([
-                'status' => OrderStatus::Confirmed,
+                'status' => $order->status === OrderStatus::Pending ? OrderStatus::Confirmed : $order->status,
                 'payment_status' => PaymentStatus::Paid,
                 'payment_reference' => $reference,
                 'paid_at' => now(),
@@ -75,17 +75,20 @@ class RecordPayment
 
     public function failed(Order $order, string $reference, ?string $message = null): void
     {
-        $payment = $this->attempt($order, $reference);
+        DB::transaction(function () use ($order, $reference, $message): void {
+            $order = Order::query()->lockForUpdate()->findOrFail($order->id);
+            $payment = $this->attempt($order, $reference);
 
-        if ($payment->status !== TransactionStatus::Successful) {
+            if ($payment->status === TransactionStatus::Successful) {
+                return;
+            }
+
             $payment->update(['status' => TransactionStatus::Failed, 'message' => $message]);
-        }
 
-        if ($order->isPaid()) {
-            return;
-        }
-
-        $order->update(['payment_status' => PaymentStatus::Failed, 'payment_reference' => $reference]);
+            if (! $order->isPaid()) {
+                $order->update(['payment_status' => PaymentStatus::Failed, 'payment_reference' => $reference]);
+            }
+        });
     }
 
     /**
@@ -94,11 +97,14 @@ class RecordPayment
      */
     public function abandoned(Order $order, string $reference): void
     {
-        $payment = $this->attempt($order, $reference);
+        DB::transaction(function () use ($order, $reference): void {
+            $order = Order::query()->lockForUpdate()->findOrFail($order->id);
+            $payment = $this->attempt($order, $reference);
 
-        if ($payment->status === TransactionStatus::Pending) {
-            $payment->update(['status' => TransactionStatus::Abandoned]);
-        }
+            if ($payment->status === TransactionStatus::Pending) {
+                $payment->update(['status' => TransactionStatus::Abandoned]);
+            }
+        });
     }
 
     /**

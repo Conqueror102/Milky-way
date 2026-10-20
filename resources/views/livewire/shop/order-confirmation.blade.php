@@ -4,7 +4,9 @@
     </div>
 
     <x-shop.page-heading eyebrow="Order {{ $order->reference }}" class="mt-6">
-        @if ($order->isPaid())
+        @if ($order->status === \App\Enums\OrderStatus::Cancelled)
+            Order <span class="font-script tracking-[-0.03em] text-gold-500">cancelled</span>
+        @elseif ($order->isPaid())
             Thank you, <span class="font-script tracking-[-0.03em] text-gold-500">{{ Str::before($order->customer_name, ' ') ?: $order->customer_name }}</span>
         @else
             One last <span class="font-script tracking-[-0.03em] text-gold-500">step</span>
@@ -12,7 +14,9 @@
     </x-shop.page-heading>
 
     <p class="font-sub mt-4 text-base leading-relaxed text-cosmic-900/75">
-        @if ($order->isPaid())
+        @if ($order->status === \App\Enums\OrderStatus::Cancelled)
+            This order has been cancelled. @if ($order->isPaid()) Your payment was received; please contact us to arrange a refund. @else Please place a new order if you would still like these items. @endif
+        @elseif ($order->isPaid())
             Your payment is confirmed. We will get your order ready and contact you on <strong class="text-cosmic-900">{{ $order->customer_phone }}</strong> about delivery.
         @else
             Your order is saved. Pay for it below and we will get it ready for delivery.
@@ -30,7 +34,9 @@
             <span class="text-2xl font-bold">{{ $order->formattedTotal() }}</span>
         </div>
 
-        @if ($order->isPaid())
+        @if ($order->status === \App\Enums\OrderStatus::Cancelled)
+            <p class="font-sub mt-4 text-sm">Cancelled @if ($order->isPaid()) — payment received, contact us about a refund @endif</p>
+        @elseif ($order->isPaid())
             <p class="font-sub mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cream-50">
                 <x-icon name="check-circle-solid" class="size-5 text-gold-400" />
                 Paid
