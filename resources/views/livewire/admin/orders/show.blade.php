@@ -14,6 +14,14 @@
         </flux:subheading>
     </div>
 
+    @if ($paymentNotice)
+        <flux:text role="status">{{ $paymentNotice }}</flux:text>
+    @endif
+
+    @if ($order->status === \App\Enums\OrderStatus::Cancelled && $order->isPaid())
+        <flux:text>{{ __('This cancelled order has received a payment. Review and arrange any refund in Paystack.') }}</flux:text>
+    @endif
+
     <div class="grid gap-6 sm:grid-cols-2">
         <div class="space-y-1">
             <flux:heading>{{ __('Customer') }}</flux:heading>
@@ -82,6 +90,11 @@
                             <flux:table.cell class="tabular-nums">₦{{ number_format($payment->amount_paid ?? $payment->amount) }}</flux:table.cell>
                             <flux:table.cell><x-admin.transaction-badge :status="$payment->status" /></flux:table.cell>
                             <flux:table.cell class="text-sm">{{ $payment->message }}</flux:table.cell>
+                            <flux:table.cell>
+                                @if ($payment->provider === 'paystack')
+                                    <flux:button size="sm" wire:click="checkPayment({{ $payment->id }})" wire:loading.attr="disabled">{{ __('Check payment') }}</flux:button>
+                                @endif
+                            </flux:table.cell>
                         </flux:table.row>
                     @endforeach
                 </flux:table.rows>
@@ -98,4 +111,5 @@
 
         <flux:button type="submit" variant="primary">{{ __('Update status') }}</flux:button>
     </form>
+    <flux:error name="status" />
 </section>

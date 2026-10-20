@@ -45,7 +45,7 @@ class PaystackController extends Controller
             ->route('orders.show', $order)
             ->with('payment_notice', match (true) {
                 $order->isPaid() => null,
-                $result === null => 'We could not confirm your payment yet. If you were charged, it will show here shortly.',
+                $result === null || ! in_array($result['status'], ['failed', 'abandoned', 'success'], true) => 'We could not confirm your payment yet. If you were charged, it will show here shortly.',
                 default => 'Your payment did not go through. You can try again below.',
             });
     }

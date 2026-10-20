@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Shop;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Payments\PaymentGateway;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -43,13 +45,15 @@ class OrderConfirmation extends Component
 
     public function pay(): void
     {
-        if (! $this->paymentsEnabled() || $this->order->isPaid()) {
+        $this->order->refresh();
+
+        if (! $this->paymentsEnabled() || $this->order->isPaid() || $this->order->status === OrderStatus::Cancelled) {
             return;
         }
 
         try {
             $url = app(PaymentGateway::class)->checkoutUrl($this->order);
-        } catch (RuntimeException $e) {
+        } catch (ConnectionException|RuntimeException $e) {
             report($e);
             $this->addError('payment', "We couldn't start the payment just now. Please try again in a moment.");
 
